@@ -20,6 +20,7 @@ import { LawyerService } from "../../../modules/zelf-legacy/lawyers/lawyer.servi
 import { ClientService } from "../../../core/services/client.service";
 import { environment } from "../../../../environments/environment";
 import { License } from "../settings/license/license.class";
+import { LicenseService } from "../settings/license/license.service";
 import { TagsService } from "../../tags/tags.service";
 
 @Component({
@@ -72,6 +73,7 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
         private staffService: StaffService,
         private lawyerService: LawyerService,
         private clientService: ClientService,
+        private licenseService: LicenseService,
         private tagsService: TagsService,
     ) {}
 
@@ -582,7 +584,7 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
      */
     private async createLicense(licenseData: any): Promise<void> {
         try {
-            const response = await this.httpWrapper.sendRequest("post", `${environment.apiUrl}${environment.endpoints.license.create}`, licenseData);
+            const response = await this.licenseService.createOrUpdateLicense(licenseData);
 
             const license = License.fromAPIResponseWithWrapper(response);
 
@@ -778,7 +780,14 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
         }
 
         this.showBiometricModal = false;
-        this.showError(fallback);
+        this.showError(this._apiErrorMessage(error, fallback));
+    }
+
+    private _apiErrorMessage(error: unknown, fallback: string): string {
+        const body = (error as { error?: { validationError?: string; message?: string }; message?: string }) || {};
+        const fromBody = body.error?.validationError || body.error?.message || body.message;
+
+        return typeof fromBody === "string" && fromBody.trim() ? fromBody : fallback;
     }
 
     private showError(message: string): void {

@@ -1,7 +1,7 @@
 export const environment = {
 	production: true,
 	includeNonPaidDomains: false,
-	apiUrl: "https://v3.zelf.world",
+	apiUrl: "https://v4.zelf.world",
 	appName: "Zelf Dashboard",
 	version: "1.0.0",
 	debug: false,
