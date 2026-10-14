@@ -9,18 +9,9 @@ import { TranslocoModule, TranslocoService } from "@jsverse/transloco";
 
 import { SaveConfirmationService } from "../../../../core/services/save-confirmation.service";
 import { HttpWrapperService } from "../../../../http-wrapper.service";
+import { clonePlanPricing, PlanPricing } from "app/core/pricing/license-pricing.utils";
 import { DomainConfig, License, NetworkConfig } from "./license.class";
 import { LicenseService } from "./license.service";
-
-export interface PricingRow {
-	length: string;
-	oneYear: number;
-	twoYears: number;
-	threeYears: number;
-	fourYears: number;
-	fiveYears: number;
-	lifetime: number;
-}
 
 export interface WhitelistItem {
 	domain: string;
@@ -43,9 +34,10 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 	isLoading: boolean = false;
 	logoBase64: string | null = null;
 	logoPreviewUrl: string | null = null;
-	pricingTableRows: PricingRow[] = [];
-	premiumPricingRows: PricingRow[] = [];
-	unlimitedPricingRows: PricingRow[] = [];
+	/** Working copy of the license planPricing ({ plan: { lengthGroup: { duration: price } } }). */
+	planPricing: PlanPricing = {};
+	pricingTableTab = "";
+	pricingDirty = false;
 	reservedWords: string[] = ["www", "api", "admin", "support", "help"];
 	showAlert: boolean = false;
 	whitelistItems: WhitelistItem[] = [];
@@ -99,7 +91,6 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 
 	ngOnInit(): void {
 		this.initializeWhitelistItems();
-		this.initializePricingTable();
 
 		this.createEmptyForm();
 	}
@@ -399,32 +390,6 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 	}
 
 	/**
-	 * Get default pricing table
-	 */
-	getDefaultPricingTable(): { [key: string]: { [key: string]: number } } {
-		return {
-			1: { 1: 240, 2: 432, 3: 612, 4: 768, 5: 900, lifetime: 3600 },
-			2: { 1: 120, 2: 216, 3: 306, 4: 384, 5: 450, lifetime: 1800 },
-			3: { 1: 72, 2: 130, 3: 184, 4: 230, 5: 270, lifetime: 1080 },
-			4: { 1: 36, 2: 65, 3: 92, 4: 115, 5: 135, lifetime: 540 },
-			5: { 1: 30, 2: 54, 3: 76, 4: 96, 5: 112, lifetime: 450 },
-			"6-15": { 1: 24, 2: 43, 3: 61, 4: 77, 5: 90, lifetime: 360 },
-			16: { 1: 23, 2: 41, 3: 59, 4: 74, 5: 86, lifetime: 345 },
-			17: { 1: 22, 2: 40, 3: 56, 4: 70, 5: 82, lifetime: 330 },
-			18: { 1: 21, 2: 38, 3: 54, 4: 67, 5: 79, lifetime: 315 },
-			19: { 1: 20, 2: 36, 3: 51, 4: 64, 5: 75, lifetime: 300 },
-			20: { 1: 19, 2: 34, 3: 48, 4: 61, 5: 72, lifetime: 285 },
-			21: { 1: 18, 2: 32, 3: 46, 4: 58, 5: 68, lifetime: 270 },
-			22: { 1: 17, 2: 31, 3: 43, 4: 54, 5: 64, lifetime: 255 },
-			23: { 1: 16, 2: 29, 3: 41, 4: 51, 5: 60, lifetime: 240 },
-			24: { 1: 15, 2: 27, 3: 38, 4: 48, 5: 56, lifetime: 225 },
-			25: { 1: 14, 2: 25, 3: 36, 4: 45, 5: 53, lifetime: 210 },
-			26: { 1: 13, 2: 23, 3: 33, 4: 42, 5: 49, lifetime: 195 },
-			27: { 1: 12, 2: 22, 3: 31, 4: 38, 5: 45, lifetime: 180 },
-		};
-	}
-
-	/**
 	 * Check if there are any changes between current license and form data
 	 */
 	hasLicenseChanges(newDomain: string): boolean {
@@ -482,15 +447,9 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 		const newWhitelist = this.buildWhitelistFromForm();
 		if (JSON.stringify(currentWhitelist) !== JSON.stringify(newWhitelist)) return true;
 
-		// Check pricing table
-		const currentPricingTable = currentConfig.tags?.payment?.pricingTable || {};
-		const newPricingTable = this.getPricingTableFromRows(this.pricingTableRows);
-		if (JSON.stringify(currentPricingTable) !== JSON.stringify(newPricingTable)) return true;
-		const currentPlanPricing = currentConfig.tags?.payment?.planPricing || {};
-		const newPlanPricing = {
-			premium: this.getPricingTableFromRows(this.premiumPricingRows),
-			unlimited: this.getPricingTableFromRows(this.unlimitedPricingRows),
-		};
+		// Check plan pricing (the legacy pricingTable is never edited here)
+		const currentPlanPricing = clonePlanPricing(currentConfig.tags?.payment?.planPricing as PlanPricing);
+		const newPlanPricing = clonePlanPricing(this.planPricing);
 		if (JSON.stringify(currentPlanPricing) !== JSON.stringify(newPlanPricing)) return true;
 
 		// Check metadata
@@ -600,17 +559,9 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 			changes.push(`Whitelist: ${Object.keys(currentWhitelist).length} → ${Object.keys(newWhitelist).length} entries`);
 		}
 
-		// Check pricing table
-		const currentPricingTable = currentConfig.tags?.payment?.pricingTable || {};
-		const newPricingTable = this.getPricingTableFromRows(this.pricingTableRows);
-		if (JSON.stringify(currentPricingTable) !== JSON.stringify(newPricingTable)) {
-			changes.push(`Pricing Table: Updated`);
-		}
-		const currentPlanPricing = currentConfig.tags?.payment?.planPricing || {};
-		const newPlanPricing = {
-			premium: this.getPricingTableFromRows(this.premiumPricingRows),
-			unlimited: this.getPricingTableFromRows(this.unlimitedPricingRows),
-		};
+		// Check plan pricing (the legacy pricingTable is never edited here)
+		const currentPlanPricing = clonePlanPricing(currentConfig.tags?.payment?.planPricing as PlanPricing);
+		const newPlanPricing = clonePlanPricing(this.planPricing);
 		if (JSON.stringify(currentPlanPricing) !== JSON.stringify(newPlanPricing)) {
 			changes.push(`Plan pricing: Updated`);
 		}
@@ -720,17 +671,13 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 				payment: {
 					methods: this.getPaymentMethods(),
 					networks: formValue.networks,
-					discounts: {
-						yearly: 0.1,
-						lifetime: 0.2,
-					},
-					rewardPrice: 10,
+					// Preserve license values; never inject client-side defaults.
+					discounts: this.currentLicense?.domainConfig?.tags?.payment?.discounts,
+					rewardPrice: this.currentLicense?.domainConfig?.tags?.payment?.rewardPrice,
 					whitelist: whitelist,
-					pricingTable: this.getPricingTableFromRows(this.pricingTableRows),
-					planPricing: {
-						premium: this.getPricingTableFromRows(this.premiumPricingRows),
-						unlimited: this.getPricingTableFromRows(this.unlimitedPricingRows),
-					},
+					// Legacy v3 table is passed through untouched (never edited, never used for pricing).
+					pricingTable: this.currentLicense?.domainConfig?.tags?.payment?.pricingTable,
+					planPricing: clonePlanPricing(this.planPricing),
 				},
 				storage: {
 					// Moved storage inside tags
@@ -900,10 +847,7 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 			this.accountForm.setControl("networks", this.createNetworksFormGroup(networks));
 		}
 
-		if (config.tags?.payment?.pricingTable) {
-			this.loadPricingTableFromConfig(config.tags.payment.pricingTable);
-		}
-		this.loadPlanPricingFromConfig(config.tags?.payment?.planPricing, config.tags?.payment?.pricingTable);
+		this.loadPlanPricingFromLicense(config.tags?.payment?.planPricing as PlanPricing);
 
 		this.populateWhitelist(config);
 
@@ -1079,124 +1023,35 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 		return this.currentLicense?.generateHoldDomain(tagName) || "";
 	}
 
-	/**
-	 * Initialize pricing table rows
-	 */
-	initializePricingTable(): void {
-		const defaultPricing = this.getDefaultPricingTable();
-		this.pricingTableRows = this.rowsFromPricingTable(defaultPricing);
-		this.premiumPricingRows = this.clonePricingRows(this.pricingTableRows);
-		this.unlimitedPricingRows = this.clonePricingRows(this.pricingTableRows);
+
+	// ---------------------------------------------------------------------
+	// Plan pricing (v4): edited as-is from the license `tags.payment.planPricing`.
+	// Plans, length groups and durations all come from the license; nothing is assumed.
+	// ---------------------------------------------------------------------
+
+	/** Replace the in-memory plan pricing with the license's saved values. */
+	loadPlanPricingFromLicense(planPricing: PlanPricing | undefined | null): void {
+		this.planPricing = clonePlanPricing(planPricing);
+		const plans = Object.keys(this.planPricing);
+		if (!plans.includes(this.pricingTableTab)) this.pricingTableTab = plans[0] || "";
+		this.pricingDirty = false;
 	}
 
-	/**
-	 * Reset pricing table to default values
-	 */
+	/** "Reset" discards local edits and reloads the prices saved in the license (IPFS). */
 	resetPricingTable(): void {
-		this.initializePricingTable();
+		this.loadPlanPricingFromLicense(this.currentLicense?.domainConfig?.tags?.payment?.planPricing as PlanPricing);
+		(this as any)._cdr?.markForCheck?.();
 	}
 
-	/**
-	 * Track by function for pricing table rows
-	 */
-	trackByPricingRow(index: number, item: any): string {
-		return item.length;
+	onPlanPricingChange(next: PlanPricing): void {
+		this.planPricing = next;
+		this.pricingDirty = true;
+		this.accountForm?.markAsDirty?.();
+		(this as any)._cdr?.markForCheck?.();
 	}
 
-	/**
-	 * Get pricing table as object for domain config
-	 */
-	getPricingTableFromRows(rows: PricingRow[] = this.pricingTableRows): { [key: string]: { [key: string]: number } } {
-		const pricingTable: { [key: string]: { [key: string]: number } } = {};
-
-		rows.forEach((row) => {
-			pricingTable[row.length] = {
-				1: row.oneYear || 0,
-				2: row.twoYears || 0,
-				3: row.threeYears || 0,
-				4: row.fourYears || 0,
-				5: row.fiveYears || 0,
-				lifetime: row.lifetime || 0,
-			};
-		});
-
-		return pricingTable;
-	}
-
-	/**
-	 * Load pricing table from domain config
-	 */
-	loadPricingTableFromConfig(pricingTable: { [key: string]: { [key: string]: number } }): void {
-		if (!pricingTable) {
-			this.initializePricingTable();
-			return;
-		}
-
-		this.pricingTableRows = this.rowsFromPricingTable(pricingTable);
-	}
-
-	loadPlanPricingFromConfig(
-		planPricing?: {
-			premium?: { [key: string]: { [key: string]: number } };
-			unlimited?: { [key: string]: { [key: string]: number } };
-		},
-		fallback?: { [key: string]: { [key: string]: number } },
-	): void {
-		const fallbackRows = this.pricingTableRows.length
-			? this.clonePricingRows(this.pricingTableRows)
-			: this.rowsFromPricingTable(fallback || this.getDefaultPricingTable());
-		this.premiumPricingRows = this.isEmptyPricingTable(planPricing?.premium)
-			? this.clonePricingRows(fallbackRows)
-			: this.rowsFromPricingTable(planPricing?.premium);
-		this.unlimitedPricingRows = this.isEmptyPricingTable(planPricing?.unlimited)
-			? this.clonePricingRows(fallbackRows)
-			: this.rowsFromPricingTable(planPricing?.unlimited);
-	}
-
-	private isEmptyPricingTable(pricingTable?: { [key: string]: { [key: string]: number } }): boolean {
-		return !pricingTable || Object.keys(pricingTable).length === 0;
-	}
-
-	private clonePricingRows(rows: PricingRow[]): PricingRow[] {
-		return rows.map((row) => ({ ...row }));
-	}
-
-	private rowsFromPricingTable(pricingTable: { [key: string]: { [key: string]: number } } = {}): PricingRow[] {
-		const rows: PricingRow[] = [];
-		for (let i = 1; i <= 5; i++) {
-			const prices = pricingTable[i] || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, lifetime: 0 };
-			rows.push({
-				length: i.toString(),
-				oneYear: prices[1] || 0,
-				twoYears: prices[2] || 0,
-				threeYears: prices[3] || 0,
-				fourYears: prices[4] || 0,
-				fiveYears: prices[5] || 0,
-				lifetime: prices.lifetime || 0,
-			});
-		}
-		const rangePrices = pricingTable["6-15"] || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, lifetime: 0 };
-		rows.push({
-			length: "6-15",
-			oneYear: rangePrices[1] || 0,
-			twoYears: rangePrices[2] || 0,
-			threeYears: rangePrices[3] || 0,
-			fourYears: rangePrices[4] || 0,
-			fiveYears: rangePrices[5] || 0,
-			lifetime: rangePrices.lifetime || 0,
-		});
-		for (let i = 16; i <= 27; i++) {
-			const prices = pricingTable[i] || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, lifetime: 0 };
-			rows.push({
-				length: i.toString(),
-				oneYear: prices[1] || 0,
-				twoYears: prices[2] || 0,
-				threeYears: prices[3] || 0,
-				fourYears: prices[4] || 0,
-				fiveYears: prices[5] || 0,
-				lifetime: prices.lifetime || 0,
-			});
-		}
-		return rows;
+	onPricingTableTabChange(tab: string): void {
+		this.pricingTableTab = tab;
+		(this as any)._cdr?.markForCheck?.();
 	}
 }
