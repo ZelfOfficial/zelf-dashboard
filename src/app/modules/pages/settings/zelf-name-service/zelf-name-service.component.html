@@ -79,12 +79,12 @@
 
 			<!-- Pricing Table -->
 			<zns-pricing-table
-				[rows]="activePricingRows"
+				[planPricing]="planPricing"
 				[activeTab]="pricingTableTab"
 				[hasUnsavedChanges]="pricingDirty"
 				(activeTabChange)="onPricingTableTabChange($event)"
 				(resetDefault)="resetPricingTable()"
-				(cellChange)="onPricingCellChange($event)"
+				(planPricingChange)="onPlanPricingChange($event)"
 				(saveRequested)="saveLicense()"
 			></zns-pricing-table>
 

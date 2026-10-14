@@ -55,6 +55,8 @@ export class AuthSignInComponent implements OnInit {
 	signInForm: UntypedFormGroup;
 	showAlert: boolean = false;
 	showBiometricVerification: boolean = false;
+	/** True when the identifier belongs to a staff account (signs in via /api/staff/auth). */
+	private _isStaffSignIn = false;
 	showPasskeyLogin: boolean = false;
 	showPasskeyPrompt: boolean = false;
 	userData: any = {};
@@ -296,7 +298,9 @@ export class AuthSignInComponent implements OnInit {
 		this._authService.verifyClientExists(this.userData).subscribe(
 			(response) => {
 				const publicData = response.data?.publicData;
-				const isStaffAccount = publicData?.accountType === "staff_account";
+				// The API stores staff records as either "staff" or "staff_account"; accept both.
+				const isStaffAccount = publicData?.accountType === "staff_account" || publicData?.accountType === "staff";
+				this._isStaffSignIn = isStaffAccount;
 
 				// Handle both client and staff accounts
 				if (isStaffAccount) {
@@ -357,15 +361,27 @@ export class AuthSignInComponent implements OnInit {
 			faceBase64: biometricData.faceBase64,
 		};
 
-		// Sign in with biometric data
-		this._authService.signIn(signInData).then(
+		// Staff sign in through the v4 staff endpoint; clients keep using /api/clients/auth.
+		const signInRequest =
+			this._isStaffSignIn && signInData.email
+				? this._authService.signInStaff({
+						email: signInData.email,
+						faceBase64: signInData.faceBase64,
+						masterPassword: signInData.masterPassword,
+					})
+				: this._authService.signIn(signInData);
+
+		signInRequest.then(
 			async (response) => {
+				// /api/staff/auth returns the staff IPFS record as `staffAccount` (same as accept-invite).
+				const account = response.data?.zelfAccount || response.data?.staffAccount;
+
 				// Check if we have all required data for authentication
-				if (response.data?.token && response.data?.zelfProof && response.data?.zelfAccount) {
+				if (response.data?.token && response.data?.zelfProof && account) {
 					// Set session data
 					this._authService.setSession({
 						zelfProof: response.data.zelfProof,
-						zelfAccount: response.data.zelfAccount,
+						zelfAccount: account,
 					});
 
 					// Set access token

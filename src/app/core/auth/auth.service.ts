@@ -139,6 +139,14 @@ export class AuthService {
 	}
 
 	/**
+	 * Staff sign in (v4): POST /api/staff/auth { email, faceBase64, masterPassword }.
+	 * Returns the staff JWT (accountType "staff", role, ownerEmail) that /api/license and staff routes expect.
+	 */
+	signInStaff(credentials: { email: string; faceBase64: string; masterPassword: string }): Promise<any> {
+		return this._httpWrapper.sendRequest("post", `${environment.apiUrl}/api/staff/auth`, credentials);
+	}
+
+	/**
 	 * Sign out
 	 */
 	signOut(): Observable<any> {

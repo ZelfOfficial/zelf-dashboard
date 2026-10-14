@@ -9,6 +9,7 @@ import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { FormsModule } from "@angular/forms";
 import { TranslocoModule } from "@jsverse/transloco";
 import { TagsService, TagPreviewResponse } from "./tags.service";
+import { LicensePricingService } from "app/core/pricing/license-pricing.service";
 import { TagsWalletBalancesService, TagWalletBalancesData, WalletBalanceSlot } from "./tags-wallet-balances.service";
 import { SaveConfirmationService } from "../../core/services/save-confirmation.service";
 import { FuseConfigService } from "@fuse/services/config";
@@ -75,15 +76,10 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     copiedField: string | null = null;
 
     // License extension
-    licenseDuration: number = 1;
-    durationOptions: { value: number | string; label: string }[] = [
-        { value: 1, label: "1" },
-        { value: 2, label: "2" },
-        { value: 3, label: "3" },
-        { value: 4, label: "4" },
-        { value: 5, label: "5" },
-        { value: "lifetime", label: "Lifetime" },
-    ];
+    /** Duration key as in the license planPricing ("1", "2", …, "lifetime"). */
+    licenseDuration: string = "";
+    /** Durations the license prices for this name (loaded from the API; nothing hardcoded). */
+    durationOptions: { value: string; label: string }[] = [];
     paymentOptions: any = null;
     isLoadingPayment = false;
     showTechnical = false;
@@ -107,6 +103,7 @@ export class TagDetailComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private tagsService: TagsService,
+        private licensePricing: LicensePricingService,
         private tagsWalletBalancesService: TagsWalletBalancesService,
         private cdr: ChangeDetectorRef,
         private snackBar: MatSnackBar,
@@ -169,6 +166,7 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     }
 
     private _loadTag(): void {
+        void this.loadDurationOptions();
         this.isLoading = true;
         this.isNotFound = false;
         this.isAvailableForPurchase = false;
@@ -359,8 +357,22 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     }
 
     async selectDuration(duration: number | string): Promise<void> {
-        this.licenseDuration = duration === "lifetime" ? 0 : +duration;
+        this.licenseDuration = String(duration);
         await this.extendLicense();
+    }
+
+    /** Load the durations the license offers for this name length (any plan offered at that length). */
+    private async loadDurationOptions(): Promise<void> {
+        if (!this.tagName || !this.domain) return;
+        try {
+            const durations = await this.licensePricing.durationsFor(this.domain, this.tagName);
+            this.durationOptions = durations.map((d) => ({ value: d, label: d }));
+            if (!durations.includes(this.licenseDuration)) this.licenseDuration = durations[0] || "";
+        } catch (e) {
+            console.error("License durations error", e);
+            this.durationOptions = [];
+        }
+        this.cdr.markForCheck();
     }
 
     getPaymentAddress(currency: string): string {
@@ -459,7 +471,7 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     }
 
     async extendLicense(): Promise<void> {
-        if (!this.tagName || !this.domain) return;
+        if (!this.tagName || !this.domain || !this.licenseDuration) return;
         this.isLoadingPayment = true;
         this.cdr.markForCheck();
         try {
