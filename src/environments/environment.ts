@@ -12,7 +12,7 @@ export const environment = {
 		enabled: true,
 		host: "payment.zelf.world", // When window.location.host matches this, redirect root to `path`
 		path: "/portfolio/payment",
-		fallbackPath: "/analytics",
+		fallbackPath: "/tags",
 	},
 	// Development specific settings
 	enableLogging: true,

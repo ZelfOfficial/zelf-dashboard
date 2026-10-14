@@ -27,11 +27,11 @@ export class RootRedirectComponent implements OnInit {
 			const shouldMatchHost = !!cfg.host;
 			const hostMatches = shouldMatchHost ? host === cfg.host : false;
 
-			const target = enabled && hostMatches ? cfg.path || "/portfolio/payment" : cfg.fallbackPath || "/analytics";
+			const target = enabled && hostMatches ? cfg.path || "/portfolio/payment" : cfg.fallbackPath || "/tags";
 
 			this.router.navigateByUrl(target, { replaceUrl: true });
 		} catch {
-			this.router.navigateByUrl("/analytics", { replaceUrl: true });
+			this.router.navigateByUrl("/tags", { replaceUrl: true });
 		}
 	}
 }

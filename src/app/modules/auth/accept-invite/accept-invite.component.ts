@@ -193,19 +193,19 @@ export class AuthAcceptInviteComponent implements OnInit {
 							ciphertext: encrypted.ciphertext,
 						});
 					}
-					this._router.navigateByUrl("/analytics");
+					this._router.navigateByUrl("/tags");
 				})
 				.catch((err) => {
 					console.error("Passkey error", err);
-					this._router.navigateByUrl("/analytics");
+					this._router.navigateByUrl("/tags");
 				});
 		} else {
-			this._router.navigateByUrl("/analytics");
+			this._router.navigateByUrl("/tags");
 		}
 	}
 
 	onPasskeyCancel(): void {
-		this._router.navigateByUrl("/analytics");
+		this._router.navigateByUrl("/tags");
 	}
 
 	onLanguageChange(languageCode: string): void {

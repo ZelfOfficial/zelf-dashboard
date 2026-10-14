@@ -12,7 +12,7 @@ export const environment = {
 		enabled: true,
 		host: "payment.zelf.world",
 		path: "/portfolio/payment",
-		fallbackPath: "/analytics",
+		fallbackPath: "/tags",
 	},
 	// Production specific settings
 	enableLogging: false,

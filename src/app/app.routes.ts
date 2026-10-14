@@ -74,7 +74,7 @@ export const appRoutes: Route[] = [
 			layout: "empty",
 		},
 		// Fuse landing placeholder removed (#24); keep the URL working.
-		children: [{ path: "home", pathMatch: "full", redirectTo: "/analytics" }],
+		children: [{ path: "home", pathMatch: "full", redirectTo: "/tags" }],
 	},
 
 	// Public payment routes (no authentication required)
@@ -158,5 +158,5 @@ export const appRoutes: Route[] = [
 	},
 
 	// Unknown URLs: go to the default page (auth guard sends signed-out users to /sign-in) instead of a blank screen.
-	{ path: "**", redirectTo: "analytics" },
+	{ path: "**", redirectTo: "tags" },
 ];
