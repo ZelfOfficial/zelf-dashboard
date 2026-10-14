@@ -21,8 +21,6 @@ export const endpoints = {
 		subscribe: "/api/subscription-plans/subscribe",
 		mySubscription: "/api/subscription-plans/my-subscription",
 		createPortalSession: "/api/subscription-plans/create-portal-session",
-		cancelSubscription: "/api/subscription-plans/cancel-subscription",
-		upgradeSubscription: "/api/subscription-plans/upgrade-subscription",
 		reconcileZns: "/api/subscription-plans/reconcile-zns",
 	},
 	humanAuthn: {
