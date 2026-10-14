@@ -1,3 +1,4 @@
+import { ApiKeyVault, AuthStorage } from "app/core/auth/auth-storage";
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { AuthUtils } from "app/core/auth/auth.utils";
@@ -21,11 +22,11 @@ export class AuthService {
 	 * Setter & getter for access token
 	 */
 	set accessToken(token: string) {
-		localStorage.setItem("accessToken", token);
+		AuthStorage.setItem("accessToken", token);
 	}
 
 	get accessToken(): string {
-		return localStorage.getItem("accessToken") ?? "";
+		return AuthStorage.getItem("accessToken") ?? "";
 	}
 
 	/**
@@ -92,14 +93,14 @@ export class AuthService {
 	 * Getter for zelfProof
 	 */
 	get zelfProof(): string {
-		return localStorage.getItem("zelfProof") ?? "";
+		return AuthStorage.getItem("zelfProof") ?? "";
 	}
 
 	/**
 	 * Getter for zelfAccount
 	 */
 	get zelfAccount(): any {
-		const account = localStorage.getItem("zelfAccount");
+		const account = AuthStorage.getItem("zelfAccount");
 		return account ? JSON.parse(account) : null;
 	}
 
@@ -107,7 +108,7 @@ export class AuthService {
 	 * Getter for wallet
 	 */
 	get wallet(): any {
-		const wallet = localStorage.getItem("wallet");
+		const wallet = AuthStorage.getItem("wallet");
 		return wallet ? JSON.parse(wallet) : null;
 	}
 
@@ -131,8 +132,7 @@ export class AuthService {
 	}): Promise<any> {
 		// Throw error, if the user is already logged in
 		if (this._authenticated) {
-			throwError(() => new Error("User is already logged in."));
-			return Promise.resolve(false);
+			return Promise.reject(new Error("User is already logged in."));
 		}
 
 		return this._httpWrapper.sendRequest("post", `${environment.apiUrl}${environment.endpoints.auth.signIn}`, credentials);
@@ -151,11 +151,14 @@ export class AuthService {
 	 */
 	signOut(): Observable<any> {
 		// Remove all authentication data from local storage
-		localStorage.removeItem("accessToken");
-		localStorage.removeItem("zelfProof");
-		localStorage.removeItem("zelfAccount");
+		AuthStorage.clear();
+		ApiKeyVault.clear();
+		sessionStorage.removeItem("apiKey");
+		AuthStorage.removeItem("accessToken");
+		AuthStorage.removeItem("zelfProof");
+		AuthStorage.removeItem("zelfAccount");
 		localStorage.removeItem("license");
-		localStorage.removeItem("wallet");
+		AuthStorage.removeItem("wallet");
 
 		// Remove session and account-related data
 		localStorage.removeItem("sessionToken");
@@ -274,13 +277,13 @@ export class AuthService {
 	}
 
 	setSession(session: { zelfProof: string; zelfAccount: string }): void {
-		localStorage.setItem("zelfProof", session.zelfProof);
+		AuthStorage.setItem("zelfProof", session.zelfProof);
 
-		localStorage.setItem("zelfAccount", JSON.stringify(session.zelfAccount));
+		AuthStorage.setItem("zelfAccount", JSON.stringify(session.zelfAccount));
 	}
 
 	setAccessToken(token: string): void {
-		localStorage.setItem("accessToken", token);
+		AuthStorage.setItem("accessToken", token);
 	}
 
 	verifyClientExists(user: { email: string; phone: string }): Observable<any> {

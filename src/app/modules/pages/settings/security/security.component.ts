@@ -1,3 +1,4 @@
+import { ApiKeyVault, AuthStorage } from "app/core/auth/auth-storage";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, AfterViewInit, ViewEncapsulation } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
@@ -136,7 +137,7 @@ export class SettingsSecurityComponent implements OnInit, AfterViewInit {
 	 * Load JWT token from localStorage
 	 */
 	loadJwtToken(): void {
-		this.jwtToken = localStorage.getItem("accessToken") || "";
+		this.jwtToken = AuthStorage.getItem("accessToken") || "";
 		this._cdr.detectChanges();
 	}
 
@@ -144,7 +145,9 @@ export class SettingsSecurityComponent implements OnInit, AfterViewInit {
 	 * Load API key from sessionStorage
 	 */
 	loadApiKeyFromStorage(): void {
-		this.apiKey = sessionStorage.getItem("apiKey") || "";
+		// In-memory only; also drop any copy older builds left in sessionStorage.
+		sessionStorage.removeItem("apiKey");
+		this.apiKey = ApiKeyVault.get();
 		this._cdr.detectChanges();
 	}
 
@@ -250,7 +253,7 @@ export class SettingsSecurityComponent implements OnInit, AfterViewInit {
 	loadPasskeys(): void {
 		try {
 			// Get current user's email/phone from zelfAccount
-			const zelfAccount = localStorage.getItem("zelfAccount");
+			const zelfAccount = AuthStorage.getItem("zelfAccount");
 
 			if (!zelfAccount) {
 				this.passkeys = [];

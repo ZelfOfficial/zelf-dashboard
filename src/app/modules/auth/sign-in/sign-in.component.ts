@@ -1,3 +1,4 @@
+import { AuthStorage } from "app/core/auth/auth-storage";
 import { Component, OnInit, ViewChild, ViewEncapsulation, inject } from "@angular/core";
 import { debounceTime, distinctUntilChanged } from "rxjs/operators";
 import { FormsModule, NgForm, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
@@ -388,7 +389,7 @@ export class AuthSignInComponent implements OnInit {
 
 					// Save wallet data to localStorage if available
 					if (response.data?.wallet) {
-						localStorage.setItem("wallet", JSON.stringify(response.data.wallet));
+						AuthStorage.setItem("wallet", JSON.stringify(response.data.wallet));
 					}
 
 					// POC: Prompt to save with Passkey

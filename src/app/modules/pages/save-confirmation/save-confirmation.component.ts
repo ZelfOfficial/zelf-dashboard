@@ -1,3 +1,4 @@
+import { ApiKeyVault, AuthStorage } from "app/core/auth/auth-storage";
 import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -480,22 +481,22 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
             );
 
             if (response && response.data && response.data.apiKey) {
-                // Store API key in sessionStorage as requested
-                sessionStorage.setItem("apiKey", response.data.apiKey);
+                // Keep the API key in memory only (never in browser storage).
+                ApiKeyVault.set(response.data.apiKey);
 
                 // Update access token if provided
                 if (response.data.token) {
-                    localStorage.setItem("accessToken", response.data.token);
+                    AuthStorage.setItem("accessToken", response.data.token);
                 }
 
                 // Update zelfAccount if provided
                 if (response.data.zelfAccount) {
-                    localStorage.setItem("zelfAccount", JSON.stringify(response.data.zelfAccount));
+                    AuthStorage.setItem("zelfAccount", JSON.stringify(response.data.zelfAccount));
                 }
 
                 // Update zelfProof if provided
                 if (response.data.zelfProof) {
-                    localStorage.setItem("zelfProof", response.data.zelfProof);
+                    AuthStorage.setItem("zelfProof", response.data.zelfProof);
                 }
 
                 this.showSuccess(
@@ -634,7 +635,7 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
             if (response && response.data) {
                 // Update zelfAccount if provided
                 if (response.data.zelfAccount) {
-                    localStorage.setItem("zelfAccount", JSON.stringify(response.data.zelfAccount));
+                    AuthStorage.setItem("zelfAccount", JSON.stringify(response.data.zelfAccount));
                     // Update the auth service
                     this.authService.setSession({
                         zelfProof: response.data.zelfProof || this.authService.zelfProof,
@@ -644,7 +645,7 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
 
                 // Update zelfProof if provided
                 if (response.data.zelfProof) {
-                    localStorage.setItem("zelfProof", response.data.zelfProof);
+                    AuthStorage.setItem("zelfProof", response.data.zelfProof);
                 }
 
                 this.showSuccess(
