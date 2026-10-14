@@ -149,7 +149,7 @@
 						<th>{{ "tags.table.plan" | transloco }}</th>
 						<th>{{ "tags.table.expires" | transloco }}</th>
 						<th>{{ "tags.table.created" | transloco }}</th>
-						<th>{{ "tags.table.size" | transloco }}</th>
+						<th class="tags-table__col-size-cell">{{ "tags.table.size" | transloco }}</th>
 						<th class="tags-table__actions-header">{{ "tags.table.actions" | transloco }}</th>
 					</tr>
 				</thead>
@@ -168,24 +168,22 @@
 						<td>
 							<span class="tags-domain-badge">{{ licenseDomain || record.publicData?.domain }}</span>
 						</td>
-						<td>
+						<td class="tags-table__nowrap">
 							<span class="plan-badge plan-badge--{{ planOf(record) }}">{{ "tags.plan." + planOf(record) | transloco }}</span>
 						</td>
-						<td class="tags-table__meta">
+						<td class="tags-table__meta tags-table__nowrap" [title]="record.publicData?.expiresAt || ''">
 							@if (isLifetime(record)) {
-								{{ "tags.detail.lifetime" | transloco }}
-							} @else if (record.publicData?.expiresAt) {
-								{{ formatDate(record.publicData.expiresAt) }}
+								<span class="tags-lifetime">{{ "tags.detail.lifetime" | transloco }}</span>
 							} @else {
-								—
+								{{ formatShortDate(record.publicData?.expiresAt || "") }}
 							}
 						</td>
-						<td class="tags-table__meta">{{ formatDate(record.created_at) }}</td>
-						<td class="tags-table__meta">{{ formatFileSize(record.size) }}</td>
+						<td class="tags-table__meta tags-table__nowrap" [title]="formatDate(record.created_at)">{{ formatShortDate(record.created_at) }}</td>
+						<td class="tags-table__meta tags-table__nowrap tags-table__col-size-cell">{{ formatFileSize(record.size) }}</td>
 						<td class="tags-table__actions-cell">
-							<button (click)="viewTagDetails(record); $event.stopPropagation()" class="tags-action-btn">
+							<button (click)="viewTagDetails(record); $event.stopPropagation()" class="tags-action-btn" [attr.aria-label]="'tags.actions.viewDetails' | transloco">
 								<mat-icon>visibility</mat-icon>
-								{{ "tags.actions.viewDetails" | transloco }}
+								<span class="tags-action-btn__label">{{ "tags.actions.viewDetails" | transloco }}</span>
 							</button>
 						</td>
 					</tr>

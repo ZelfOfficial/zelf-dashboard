@@ -319,6 +319,14 @@ export class TagsComponent implements OnInit, OnDestroy {
 		return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 	}
 
+	/** One-line table date, e.g. "Oct 14, 2026". Full timestamp goes in the cell title. */
+	formatShortDate(dateString: string): string {
+		if (!dateString) return "—";
+		const d = new Date(String(dateString).replace(" ", "T"));
+		if (isNaN(d.getTime())) return "—";
+		return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+	}
+
 	formatDate(dateString: string): string {
 		return new Date(dateString).toLocaleDateString("en-US", {
 			year: "numeric",
