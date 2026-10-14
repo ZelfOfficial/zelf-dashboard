@@ -106,23 +106,42 @@
 	}
 
 	.tags-table__col-name {
-		width: 32%;
+		width: 24%;
 	}
 
 	.tags-table__col-domain {
-		width: 14%;
+		width: 10%;
 	}
 
 	.tags-table__col-created {
-		width: 18%;
+		width: 13%;
 	}
 
 	.tags-table__col-size {
-		width: 12%;
+		width: 10%;
+	}
+
+	.tags-table__col-plan {
+		width: 13%;
+	}
+
+	.tags-table__col-expires {
+		width: 14%;
+	}
+
+	.tags-table th,
+	.tags-table__nowrap {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.tags-lifetime {
+		@apply font-medium text-default;
 	}
 
 	.tags-table__col-actions {
-		width: 24%;
+		width: 16%;
 	}
 
 	.tags-table thead {
@@ -204,6 +223,7 @@
 	}
 
 	.tags-action-btn {
+		white-space: nowrap;
 		@apply inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium text-default transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
 
 		mat-icon {
@@ -304,6 +324,25 @@
 		.tags-table {
 			table-layout: auto;
 			min-width: 640px;
+		}
+
+		.tags-table__col-size {
+			display: none;
+		}
+
+		.tags-table__col-name {
+			width: auto;
+		}
+
+		.tags-table th,
+		.tags-table td {
+			padding-left: 0.5rem;
+			padding-right: 0.5rem;
+		}
+
+		.tags-table__col-size-cell,
+		.tags-action-btn__label {
+			display: none;
 		}
 	}
 }
