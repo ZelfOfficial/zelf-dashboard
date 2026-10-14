@@ -217,39 +217,7 @@ export class SubscriptionPlansService {
 		this._mySubscriptionInflight = null;
 	}
 
-	/**
-	 * Cancel subscription
-	 */
-	async cancelSubscription(subscriptionId: string): Promise<CancelSubscriptionResponse> {
-		try {
-			const response = await this._httpWrapper.sendRequest(
-				"post",
-				`${environment.apiUrl}${environment.endpoints.subscriptionPlans.cancelSubscription}`,
-				{ subscriptionId },
-			);
-			this._clearMySubscriptionCache();
-			return response.data || response;
-		} catch (error) {
-			throw error;
-		}
-	}
 
-	/**
-	 * Upgrade subscription to a new plan
-	 */
-	async upgradeSubscription(subscriptionId: string, newPriceId: string): Promise<SubscribeResponse> {
-		try {
-			const response = await this._httpWrapper.sendRequest(
-				"post",
-				`${environment.apiUrl}${environment.endpoints.subscriptionPlans.upgradeSubscription}`,
-				{ subscriptionId, newPriceId },
-			);
-			this._clearMySubscriptionCache();
-			return response.data || response;
-		} catch (error) {
-			throw error;
-		}
-	}
 
 	/**
 	 * Verify Stripe session payment

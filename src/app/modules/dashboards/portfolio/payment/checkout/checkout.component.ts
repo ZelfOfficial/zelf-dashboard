@@ -26,6 +26,11 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
     paymentMethod = signal<string>("ETH");
     ethAddress = signal<string>("");
     amountToPay = signal<string>("");
+    plan = signal<string>("");
+    quoteError = signal<string | null>(null);
+    isQuoting = signal<boolean>(false);
+    /** Signed quote token from the API; kept in memory only. */
+    private signedDataPrice: string | null = null;
     qrcodeUrl = signal<string>("");
     isCheckingPayment = signal<boolean>(false);
     isPaymentConfirmed = signal<boolean>(false);
@@ -68,23 +73,81 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
     }
 
     private loadQueryParams(): void {
-        this.route.queryParams.subscribe((params) => {
+        this.route.queryParams.pipe(takeUntil(this._unsubscribeAll)).subscribe((params) => {
+            // Only the selection is read from the URL. Price, amount and payment address
+            // are always re-quoted from the API (license-derived, signed server-side),
+            // so a tampered URL cannot change what is shown or paid.
             this.tagName.set(params["tagname"] || "");
             this.domain.set(params["domain"] || "");
             this.duration.set(parseInt(params["duration"], 10) || 1);
-            this.price.set(params["price"] || "");
+            this.plan.set(params["plan"] || "");
             this.paymentMethod.set(params["paymentMethod"] || "ETH");
-            this.ethAddress.set(params["ethAddress"] || "");
-            this.amountToPay.set(params["amountToPay"] || "");
 
-            // Generate QR code for payment address
-            void this.generateQRCode();
-
-            // Start payment checking
-            this.startPaymentChecking();
-
-            this.cdr.markForCheck();
+            void this.loadServerQuote();
         });
+    }
+
+    /** Fetch the server quote for name + plan + duration and populate the checkout from it. */
+    private async loadServerQuote(): Promise<void> {
+        this.isQuoting.set(true);
+        this.quoteError.set(null);
+        this.price.set("");
+        this.amountToPay.set("");
+        this.ethAddress.set("");
+        this.signedDataPrice = null;
+        this.cdr.markForCheck();
+
+        try {
+            const response: any = await this.tagsService.getPaymentOptions({
+                tagName: this.tagName(),
+                domain: this.domain(),
+                duration: this.duration(),
+                ...(this.plan() ? { plan: this.plan() } : {}),
+            });
+            const data = response?.data;
+
+            if (!data || "error" in data || !data.prices) {
+                this.quoteError.set(data?.error || response?.validationError || "quote_unavailable");
+                return;
+            }
+
+            const method = this.paymentMethod();
+            const quote = data.prices?.[method];
+            if (!quote) {
+                this.quoteError.set("payment_method_not_available");
+                return;
+            }
+
+            // Use the per-request quote only. (publicData is the stored pay record and can carry a stale price.)
+            this.price.set(quote.price ?? "");
+            this.amountToPay.set(quote.amountToSend != null ? String(quote.amountToSend) : "");
+            // v4 returns BTC/SOL under paymentAddress and EVM addresses under publicData.
+            this.ethAddress.set(this.getAddressForMethod({ ...(data.publicData || {}), ...(data.paymentAddress || {}) }, method));
+            this.signedDataPrice = data.signedDataPrice || null;
+
+            void this.generateQRCode();
+            this.startPaymentChecking();
+        } catch (error: any) {
+            console.error("Error loading checkout quote:", error);
+            this.quoteError.set(error?.error?.validationError || error?.message || "quote_unavailable");
+        } finally {
+            this.isQuoting.set(false);
+            this.cdr.markForCheck();
+        }
+    }
+
+    private getAddressForMethod(addresses: any, method: string): string {
+        if (!addresses) return "";
+        switch (method) {
+            case "BTC":
+                return addresses.btcAddress || "";
+            case "SOL":
+                return addresses.solanaAddress || "";
+            case "AVAX":
+                return addresses.avalancheAddress || addresses.ethAddress || "";
+            default:
+                return addresses.ethAddress || "";
+        }
     }
 
     startPaymentChecking(): void {
@@ -108,7 +171,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const signedDataPrice = localStorage.getItem("signedDataPrice");
+        const signedDataPrice = this.signedDataPrice;
 
         if (!signedDataPrice) {
             return;
@@ -236,9 +299,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
 
     getPriceInUSD(): string {
         const price = this.price();
-        if (typeof price === "number") {
-            return `$${price} USD`;
-        }
+        if (price === "" || price === null || price === undefined) return "—";
         return `$${price} USD`;
     }
 
@@ -271,12 +332,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
     goBack(): void {
         // If payment is confirmed, clear the localStorage cache and go back without queryParams
         if (this.isPaymentConfirmed()) {
-            // Clear the payment data from localStorage
-            localStorage.removeItem("signedDataPrice");
-            //delete the  payment options from localStorage
-            const key = `payment_options_${this.tagName()}_.${this.domain()}_${this.duration()}`;
-
-            localStorage.removeItem(key);
+            this.signedDataPrice = null;
 
             // Navigate back to payment options without any queryParams (fresh state)
             this.router.navigate(["/portfolio/payment"]);
@@ -287,6 +343,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
                     tagname: this.tagName(),
                     domain: this.domain(),
                     duration: this.duration(),
+                    ...(this.plan() ? { plan: this.plan() } : {}),
                 },
             });
         }
@@ -306,7 +363,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const signedDataPrice = localStorage.getItem("signedDataPrice");
+        const signedDataPrice = this.signedDataPrice;
         if (!signedDataPrice) {
             this.snackBar.open("Payment data not found", "Close", { duration: 3000 });
             return;
