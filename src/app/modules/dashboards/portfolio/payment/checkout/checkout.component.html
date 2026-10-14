@@ -15,7 +15,7 @@
 	}
 	@if (quoteError()) {
 		<div class="mb-6 rounded-lg border border-red-300 bg-red-50 dark:bg-red-900/20 p-4 text-sm text-red-700 dark:text-red-300">
-			This name / plan / duration can't be quoted right now ({{ quoteError() }}). Go back and pick another option.
+			{{ quoteErrorText() }}
 		</div>
 	}
 
@@ -131,6 +131,7 @@
 			</div>
 		</div>
 
+		@if (!quoteError() && !isQuoting()) {
 		<!-- Right Side: Payment QR Code and Details -->
 		<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
 			<h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
@@ -235,5 +236,6 @@
 				</div>
 			</div>
 		</div>
+		}
 	</div>
 </div>

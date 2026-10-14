@@ -1,3 +1,4 @@
+import { parseDurationParam } from "app/core/pricing/license-pricing.utils";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnInit, ViewEncapsulation, signal, ElementRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -114,7 +115,7 @@ export class PortfolioPaymentComponent implements OnInit {
 		if (initialParams["tagname"] && initialParams["domain"]) {
 			const tagName = initialParams["tagname"];
 			const domain = this.validateIncomingDomain(initialParams["domain"]).replace(".", "");
-			const duration = initialParams["duration"] ? parseInt(initialParams["duration"], 10) : 1;
+			const duration = parseDurationParam(initialParams["duration"]);
 			this.selectedPlan.set(initialParams["plan"] || "");
 
 			// Set the form values
@@ -131,7 +132,7 @@ export class PortfolioPaymentComponent implements OnInit {
 			if (params["tagname"] && params["domain"]) {
 				const tagName = params["tagname"];
 				const domain = this.validateIncomingDomain(params["domain"]).replace(".", "");
-				const duration = params["duration"] ? parseInt(params["duration"], 10) : 1;
+				const duration = parseDurationParam(params["duration"]);
 				this.selectedPlan.set(params["plan"] || "");
 
 				// Set the form values

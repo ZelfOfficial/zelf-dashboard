@@ -108,3 +108,14 @@ export function clonePlanPricing(source: PlanPricing | undefined | null): PlanPr
 	});
 	return out;
 }
+
+/** Internal duration value used for lifetime in the payment UI (the API maps it to "lifetime"). */
+export const LIFETIME_DURATION = 999;
+
+/** Parse a duration from a URL query param: "lifetime"/"999" -> 999, positive integer -> n, otherwise 1. */
+export function parseDurationParam(value: unknown): number {
+	const v = String(value ?? "").trim().toLowerCase();
+	if (v === "lifetime" || v === String(LIFETIME_DURATION)) return LIFETIME_DURATION;
+	const n = Number(v);
+	return Number.isInteger(n) && n > 0 ? n : 1;
+}
