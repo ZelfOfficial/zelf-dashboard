@@ -198,3 +198,6 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+
+# Fuse template sources (not part of the app)
+/demo
