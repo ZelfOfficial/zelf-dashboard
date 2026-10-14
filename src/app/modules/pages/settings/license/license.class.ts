@@ -1,3 +1,4 @@
+import { getLicensePrice, PlanPricing } from "app/core/pricing/license-pricing.utils";
 /**
  * License Class
  *
@@ -65,17 +66,13 @@ export interface DomainConfig {
 		payment: {
 			methods: string[];
 			networks: { [key: string]: NetworkConfig };
-			discounts: {
-				yearly: number;
-				lifetime: number;
-			};
-			rewardPrice: number;
+			discounts?: { [key: string]: number };
+			rewardPrice?: number;
 			whitelist: { [key: string]: string };
-			pricingTable: { [key: string]: { [key: string]: number } };
-			planPricing?: {
-				premium?: { [key: string]: { [key: string]: number } };
-				unlimited?: { [key: string]: { [key: string]: number } };
-			};
+			/** Legacy v3 table. Kept only so existing licenses round-trip; never used for pricing. */
+			pricingTable?: { [key: string]: { [key: string]: number } };
+			/** v4 source of truth: { [plan]: { [lengthGroup]: { [duration]: price } } } */
+			planPricing?: { [plan: string]: { [lengthGroup: string]: { [duration: string]: number } } };
 		};
 		storage: {
 			// Moved storage inside tags
@@ -378,13 +375,11 @@ export class License {
 		return {
 			methods: payment?.methods?.filter((method: string) => ["crypto", "stripe"].includes(method)) || ["crypto", "stripe"],
 			networks: this.normalizePaymentNetworks(networks),
-			discounts: payment?.discounts || {
-				yearly: 0.1,
-				lifetime: 0.2,
-			},
-			rewardPrice: payment?.rewardPrice || 10,
+			// Values come only from the license; no client-side defaults.
+			discounts: payment?.discounts,
+			rewardPrice: payment?.rewardPrice,
 			whitelist: payment?.whitelist || {},
-			pricingTable: payment?.pricingTable || this.getDefaultPricingTable(),
+			pricingTable: payment?.pricingTable || {},
 			planPricing: payment?.planPricing || {},
 		};
 	}
@@ -524,32 +519,6 @@ export class License {
 	}
 
 	/**
-	 * Get default pricing table
-	 */
-	private getDefaultPricingTable(): { [key: string]: { [key: string]: number } } {
-		return {
-			1: { 1: 240, 2: 432, 3: 612, 4: 768, 5: 900, lifetime: 3600 },
-			2: { 1: 120, 2: 216, 3: 306, 4: 384, 5: 450, lifetime: 1800 },
-			3: { 1: 72, 2: 130, 3: 184, 4: 230, 5: 270, lifetime: 1080 },
-			4: { 1: 36, 2: 65, 3: 92, 4: 115, 5: 135, lifetime: 540 },
-			5: { 1: 30, 2: 54, 3: 76, 4: 96, 5: 112, lifetime: 450 },
-			"6-15": { 1: 24, 2: 43, 3: 61, 4: 77, 5: 90, lifetime: 360 },
-			16: { 1: 23, 2: 41, 3: 59, 4: 74, 5: 86, lifetime: 345 },
-			17: { 1: 22, 2: 40, 3: 56, 4: 70, 5: 82, lifetime: 330 },
-			18: { 1: 21, 2: 38, 3: 54, 4: 67, 5: 79, lifetime: 315 },
-			19: { 1: 20, 2: 36, 3: 51, 4: 64, 5: 75, lifetime: 300 },
-			20: { 1: 19, 2: 34, 3: 48, 4: 61, 5: 72, lifetime: 285 },
-			21: { 1: 18, 2: 32, 3: 46, 4: 58, 5: 68, lifetime: 270 },
-			22: { 1: 17, 2: 31, 3: 43, 4: 54, 5: 64, lifetime: 255 },
-			23: { 1: 16, 2: 29, 3: 41, 4: 51, 5: 60, lifetime: 240 },
-			24: { 1: 15, 2: 27, 3: 38, 4: 48, 5: 56, lifetime: 225 },
-			25: { 1: 14, 2: 25, 3: 36, 4: 45, 5: 53, lifetime: 210 },
-			26: { 1: 13, 2: 23, 3: 33, 4: 42, 5: 49, lifetime: 195 },
-			27: { 1: 12, 2: 22, 3: 31, 4: 38, 5: 45, lifetime: 180 },
-		};
-	}
-
-	/**
 	 * Get IPFS data
 	 */
 	getIPFSData(): IPFSData | undefined {
@@ -637,106 +606,71 @@ export class License {
 	}
 
 	/**
-	 * Get domain price for specific tag length and duration
+	 * Get the price for a name from the license `planPricing` only.
+	 *
+	 * Returns `price: null` when the license does not offer that plan / length / duration.
+	 * There is no fallback table and no default price: the API (v4 /api/zelf-ids) is the
+	 * source of truth for checkout; this is only used for previews in the editor.
 	 */
 	getPrice(
 		tagName: string,
 		duration: string = "1",
 		referralTagName: string = "",
-		options: { plan?: "premium" | "unlimited" } = {},
+		options: { plan?: string } = {},
 	): {
-		price: number;
+		price: number | null;
 		currency: string;
-		reward: number;
+		reward: number | null;
 		discount: number;
-		priceWithoutDiscount: number;
+		priceWithoutDiscount: number | null;
 		discountType: string;
 	} {
-		if (!tagName) {
-			return {
-				price: 0,
-				currency: "USD",
-				reward: 0,
-				discount: 0,
-				priceWithoutDiscount: 0,
-				discountType: "percentage",
-			};
-		}
-
-		const splitTagName = tagName.split(".");
-		const cleanReferralTagName = referralTagName.replace(".hold", "");
-		const length = splitTagName[0].length;
-
-		if (!this.domainConfig.tags.payment.pricingTable) {
-			return {
-				price: 0,
-				currency: "USD",
-				reward: 0,
-				discount: 0,
-				priceWithoutDiscount: 0,
-				discountType: "percentage",
-			};
-		}
-
-		if (!["1", "2", "3", "4", "5", "lifetime"].includes(duration)) {
-			throw new Error("Invalid duration. Use '1', '2', '3', '4', '5' or 'lifetime'.");
-		}
-
-		const fallbackTable = this.domainConfig.tags.payment.pricingTable;
-		const requestedPlan = options?.plan;
-		const planTable =
-			(requestedPlan === "premium" || requestedPlan === "unlimited") &&
-			this.domainConfig.tags.payment.planPricing?.[requestedPlan] &&
-			Object.keys(this.domainConfig.tags.payment.planPricing[requestedPlan] || {}).length > 0
-				? this.domainConfig.tags.payment.planPricing[requestedPlan]
-				: fallbackTable;
-		const lookup = (table: { [key: string]: { [key: string]: number } } | undefined) => {
-			if (!table) return undefined;
-			if (length >= 6 && length <= 15) return table["6-15"]?.[duration];
-			return table[length]?.[duration];
+		const notOffered = {
+			price: null,
+			currency: "USD",
+			reward: null,
+			discount: 0,
+			priceWithoutDiscount: null,
+			discountType: "percentage",
 		};
 
-		let price = lookup(planTable);
-		if (price == null && planTable !== fallbackTable) {
-			price = lookup(fallbackTable);
-		}
+		if (!tagName || !options?.plan) return notOffered;
 
-		if (price == null) {
-			if (length < 1 || length > 27) {
-				throw new Error("Invalid name length. Length must be between 1 and 27.");
-			}
-			price = 24;
-		}
+		const length = tagName.split(".")[0].length;
+		const planPricing = this.domainConfig?.tags?.payment?.planPricing as PlanPricing | undefined;
+		const basePrice = getLicensePrice(planPricing, options.plan, length, String(duration));
 
-		const priceWithoutDiscount = Number(price);
+		if (basePrice === null) return notOffered;
+
+		let price = basePrice;
 		let discount = 0;
 		let discountType = "percentage";
 
+		const cleanReferralTagName = referralTagName.replace(".hold", "");
 		const whitelist = this.domainConfig.tags.payment.whitelist || {};
 
-		if (Object.keys(whitelist).length && cleanReferralTagName && whitelist[cleanReferralTagName]) {
-			const amount = whitelist[cleanReferralTagName];
+		// Only discounts explicitly configured in the license whitelist are applied.
+		if (cleanReferralTagName && whitelist[cleanReferralTagName]) {
+			const amount = String(whitelist[cleanReferralTagName]);
 
 			if (amount.includes("%")) {
-				discountType = "percentage";
-				discount = parseInt(amount);
+				discount = parseFloat(amount);
 				price = price - price * (discount / 100);
 			} else {
-				discount = parseInt(amount);
+				discount = parseFloat(amount);
 				discountType = "amount";
 				price = price - discount;
 			}
-		} else if (cleanReferralTagName) {
-			// Default discount 10%
-			price = price - price * 0.1;
 		}
+
+		const rewardPrice = Number(this.domainConfig.tags.payment.rewardPrice);
 
 		return {
 			price: Math.max(Math.ceil(price * 100) / 100, 0),
 			currency: "USD",
-			reward: Math.max(Math.ceil((price / this.domainConfig.tags.payment.rewardPrice) * 100) / 100, 0),
+			reward: rewardPrice > 0 ? Math.max(Math.ceil((price / rewardPrice) * 100) / 100, 0) : null,
 			discount,
-			priceWithoutDiscount,
+			priceWithoutDiscount: basePrice,
 			discountType,
 		};
 	}
@@ -987,11 +921,6 @@ export class License {
 								altCoins: { enabled: false, standard: null },
 							},
 						},
-						discounts: {
-							yearly: 0.1,
-							lifetime: 0.2,
-						},
-						rewardPrice: 10,
 						whitelist: {},
 						pricingTable: {},
 						planPricing: {},

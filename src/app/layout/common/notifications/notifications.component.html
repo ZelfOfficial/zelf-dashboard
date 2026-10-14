@@ -160,14 +160,12 @@
                         @if (notification.title) {
                             <div
                                 class="line-clamp-1 font-semibold"
-                                [innerHTML]="notification.title"
-                            ></div>
+                            >{{ notification.title }}</div>
                         }
                         @if (notification.description) {
                             <div
                                 class="line-clamp-2"
-                                [innerHTML]="notification.description"
-                            ></div>
+                            >{{ notification.description }}</div>
                         }
                         <div class="text-secondary mt-2 text-sm leading-none">
                             {{ notification.time | date: 'MMM dd, h:mm a' }}
