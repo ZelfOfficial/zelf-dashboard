@@ -619,7 +619,8 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
 
             let response;
 
-            const isStaff = this.authService.zelfAccount?.publicData?.accountType === "staff_account";
+            const staffType = this.authService.zelfAccount?.publicData?.accountType;
+            const isStaff = staffType === "staff_account" || staffType === "staff";
             const isLawyer = this.authService.isLawyer;
 
             if (isLawyer) {
