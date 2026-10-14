@@ -115,8 +115,8 @@ export class AnalyticsService {
 		const tagStorage = domainCfg?.tags?.storage || {};
 		const storageKeys: string[] = [];
 		if (tagStorage.ipfsEnabled !== false) storageKeys.push("IPFS");
-		if (tagStorage.arweaveEnabled) storageKeys.push("ARWEAVE");
-		if (tagStorage.walrusEnabled) storageKeys.push("WALRUS");
+		if (tagStorage.arweaveEnabled) storageKeys.push("Arweave");
+		if (tagStorage.walrusEnabled) storageKeys.push("Walrus");
 		if (storageKeys.length === 0) storageKeys.push("IPFS");
 
 		return { domain, keyPrefix, storageKeys };
