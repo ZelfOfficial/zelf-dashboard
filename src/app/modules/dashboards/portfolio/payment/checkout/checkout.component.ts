@@ -118,9 +118,11 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            this.price.set(quote.price ?? data.publicData?.price ?? "");
+            // Use the per-request quote only. (publicData is the stored pay record and can carry a stale price.)
+            this.price.set(quote.price ?? "");
             this.amountToPay.set(quote.amountToSend != null ? String(quote.amountToSend) : "");
-            this.ethAddress.set(this.getAddressForMethod(data.paymentAddress, method));
+            // v4 returns BTC/SOL under paymentAddress and EVM addresses under publicData.
+            this.ethAddress.set(this.getAddressForMethod({ ...(data.publicData || {}), ...(data.paymentAddress || {}) }, method));
             this.signedDataPrice = data.signedDataPrice || null;
 
             void this.generateQRCode();
