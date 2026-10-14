@@ -1,3 +1,4 @@
+import { AuthStorage } from "app/core/auth/auth-storage";
 import { CommonModule, NgClass } from "@angular/common";
 import { ActivatedRoute } from "@angular/router";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from "@angular/core";
@@ -300,7 +301,7 @@ export class SettingsPlanBillingComponent implements OnInit {
         if (typeof fromAuth === "string" && fromAuth.length > 0) return fromAuth;
 
         try {
-            const raw = localStorage.getItem("wallet");
+            const raw = AuthStorage.getItem("wallet");
             if (!raw) return null;
             const wallet = JSON.parse(raw) ?? {};
             const fromWallet = wallet?.solanaAddress;
