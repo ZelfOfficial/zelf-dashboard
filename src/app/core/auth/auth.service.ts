@@ -235,14 +235,6 @@ export class AuthService {
 		return this._httpWrapper.sendRequest("post", `${environment.apiUrl}/api/lawyers/accept-invite`, data);
 	}
 
-	/**
-	 * Unlock session
-	 *
-	 * @param credentials
-	 */
-	unlockSession(credentials: { email: string; password: string }): Observable<any> {
-		return this._httpClient.post(`${environment.apiUrl}${environment.endpoints.auth.unlockSession}`, credentials);
-	}
 
 	/**
 	 * Check if all required authentication data is present
