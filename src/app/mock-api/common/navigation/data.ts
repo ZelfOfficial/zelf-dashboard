@@ -1,14 +1,8 @@
 /* eslint-disable */
 import { FuseNavigationItem } from "@fuse/components/navigation";
 
+// Sidebar (Miguel): exactly Zelf IDs, Zelf Keys, Play Area, Zelf Legacy, Settings.
 export const defaultNavigation: FuseNavigationItem[] = [
-	{
-		id: "analytics",
-		title: "Analytics",
-		type: "basic",
-		icon: "heroicons_outline:chart-pie",
-		link: "/analytics",
-	},
 	{
 		id: "tags",
 		title: "Zelf IDs",
@@ -18,7 +12,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
 	},
 	{
 		id: "zelfkeys",
-		title: "ZelfKeys",
+		title: "Zelf Keys",
 		type: "basic",
 		icon: "heroicons_outline:key",
 		link: "/zelfkeys",
@@ -89,39 +83,15 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
 export const portfolioNavigation: FuseNavigationItem[] = [
 	{
-		id: "my-tags",
-		title: "My Tags",
-		type: "basic",
-		icon: "heroicons_outline:tag",
-		link: "/portfolio/my-tags",
-		hidden(item) {
-			return true;
-		},
-	},
-	{
 		id: "payment",
 		title: "Payment",
 		type: "basic",
 		icon: "heroicons_outline:credit-card",
 		link: "/portfolio/payment",
 	},
-	{
-		id: "discover",
-		title: "Discover",
-		type: "basic",
-		icon: "heroicons_outline:globe-alt",
-		link: "/portfolio/discover",
-	},
 ];
 
 export const horizontalNavigation: FuseNavigationItem[] = [
-	{
-		id: "analytics",
-		title: "Analytics",
-		type: "basic",
-		icon: "heroicons_outline:chart-pie",
-		link: "/analytics",
-	},
 	{
 		id: "tags",
 		title: "Zelf IDs",
@@ -131,7 +101,7 @@ export const horizontalNavigation: FuseNavigationItem[] = [
 	},
 	{
 		id: "zelfkeys",
-		title: "ZelfKeys",
+		title: "Zelf Keys",
 		type: "basic",
 		icon: "heroicons_outline:key",
 		link: "/zelfkeys",
@@ -202,30 +172,10 @@ export const horizontalNavigation: FuseNavigationItem[] = [
 
 export const horizontalPortfolioNavigation: FuseNavigationItem[] = [
 	{
-		id: "my-tags",
-		title: "My Tags",
-		type: "basic",
-		icon: "heroicons_outline:tag",
-		link: "/portfolio/my-tags",
-		hidden(item) {
-			return true;
-		},
-	},
-	{
 		id: "payment",
 		title: "Payment",
 		type: "basic",
 		icon: "heroicons_outline:credit-card",
 		link: "/portfolio/payment",
-	},
-	{
-		id: "discover",
-		title: "Discover",
-		type: "basic",
-		icon: "heroicons_outline:globe-alt",
-		link: "/portfolio/discover",
-		hidden(item) {
-			return true;
-		},
 	},
 ];
