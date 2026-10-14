@@ -115,7 +115,9 @@ export interface DomainSearchResponse {
 export interface PaymentOptionsParams {
     tagName: string;
     domain: string;
-    duration: number;
+    duration: number | string;
+    /** License plan (e.g. premium / unlimited). Omit to let the API pick the license default for the name length. */
+    plan?: string;
 }
 
 export interface PaymentOptionsResponse {
@@ -152,7 +154,8 @@ export interface PaymentOptionsResponse {
     providedIn: "root",
 })
 export class TagsService {
-    private readonly baseUrl = `${environment.apiUrl}/api/tags`;
+    /** v4 Zelf ID endpoints (replaces the legacy /api/tags surface). */
+    private readonly baseUrl = `${environment.apiUrl}/api/zelf-ids`;
 
     constructor(private httpWrapper: HttpWrapperService) {}
 
@@ -224,7 +227,7 @@ export class TagsService {
      */
     getPaymentOptions(params: PaymentOptionsParams): Promise<PaymentOptionsResponse> {
         const queryParams = this.buildQueryParams(params);
-        return this.httpWrapper.sendRequest("get", `${environment.apiUrl}/api/my-tags/payment-options`, queryParams);
+        return this.httpWrapper.sendRequest("get", `${this.baseUrl}/payment-options`, queryParams);
     }
 
     /**
@@ -233,7 +236,7 @@ export class TagsService {
      * @returns Promise with payment confirmation response
      */
     checkPaymentConfirmation(params: { tagName: string; domain: string; token: string; network: string }): Promise<any> {
-        return this.httpWrapper.sendRequest("post", `${environment.apiUrl}/api/my-tags/payment-confirmation`, params);
+        return this.httpWrapper.sendRequest("post", `${this.baseUrl}/payment-confirmation`, params);
     }
 
     /**
@@ -242,6 +245,7 @@ export class TagsService {
      * @returns Promise with email receipt response
      */
     emailReceipt(params: { tagName: string; domain: string; email: string; token: string; network: string }): Promise<any> {
+        // API GAP: v4 has no /api/zelf-ids/email-receipt yet; the legacy my-tags endpoint is still used.
         return this.httpWrapper.sendRequest("post", `${environment.apiUrl}/api/my-tags/email-receipt`, params);
     }
 
@@ -257,6 +261,7 @@ export class TagsService {
         faceBase64?: string;
         password?: string;
     }): Promise<any> {
+        // API GAP: v4 has no /api/zelf-ids/custom-extend yet; the legacy my-tags endpoint is still used.
         return this.httpWrapper.sendRequest("post", `${environment.apiUrl}/api/my-tags/custom-extend`, params);
     }
 

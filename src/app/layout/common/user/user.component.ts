@@ -1,3 +1,4 @@
+import { AuthStorage } from "app/core/auth/auth-storage";
 import { BooleanInput } from "@angular/cdk/coercion";
 import { CommonModule, NgClass } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
@@ -57,7 +58,7 @@ export class UserComponent implements OnInit, OnDestroy {
 	 */
 	ngOnInit(): void {
 		// Subscribe to user changes
-		const zelfAccount = localStorage.getItem("zelfAccount");
+		const zelfAccount = AuthStorage.getItem("zelfAccount");
 
 		if (zelfAccount) {
 			const _zelfAccount = JSON.parse(zelfAccount);
@@ -85,7 +86,7 @@ export class UserComponent implements OnInit, OnDestroy {
 	 * Load wallet data from localStorage
 	 */
 	loadWallet(): void {
-		const walletData = localStorage.getItem("wallet");
+		const walletData = AuthStorage.getItem("wallet");
 		if (walletData) {
 			this.wallet = JSON.parse(walletData);
 			// Set default address to Solana
