@@ -404,9 +404,7 @@
                                 <button
                                     (click)="selectDuration(opt.value)"
                                     class="duration-chip"
-                                    [class.duration-chip--active]="
-                                        licenseDuration === (+opt.value || opt.value === 'lifetime' ? +opt.value || 0 : -1)
-                                    "
+                                    [class.duration-chip--active]="licenseDuration === opt.value"
                                 >
                                     @if (opt.value === "lifetime") {
                                         {{ "tags.detail.lifetime" | transloco }}

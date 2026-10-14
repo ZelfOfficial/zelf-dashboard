@@ -5,6 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslocoModule, TranslocoService } from "@jsverse/transloco";
 import { TagsService } from "../../../tags/tags.service";
+import { LicensePricingService } from "app/core/pricing/license-pricing.service";
 import { SessionService } from "app/core/services/session.service";
 
 @Component({
@@ -29,14 +30,10 @@ export class PortfolioPaymentComponent implements OnInit {
 	/** License plan requested via ?plan=; empty lets the API choose the license default. */
 	selectedPlan = signal<string>("");
 	isDurationDropdownOpen = signal<boolean>(false);
-	leaseDurationOptions = [
-		{ value: 1, label: "1 Year" },
-		{ value: 2, label: "2 Years" },
-		{ value: 3, label: "3 Years" },
-		{ value: 4, label: "4 Years" },
-		{ value: 5, label: "5 Years" },
-		{ value: 999, label: "Lifetime" },
-	];
+	/** Plans the license offers for the searched name length (from planPricing via the API). */
+	availablePlans = signal<string[]>([]);
+	/** Durations the license prices for the selected plan. Lifetime is sent as 999 (the API maps it to "lifetime"). */
+	leaseDurationOptions = signal<{ value: number; label: string }[]>([]);
 
 	/**
 	 * Return supported domains in canonical format with leading dot and lower-case
@@ -66,6 +63,7 @@ export class PortfolioPaymentComponent implements OnInit {
 
 	constructor(
 		private tagsService: TagsService,
+		private licensePricing: LicensePricingService,
 		private cdr: ChangeDetectorRef,
 		private router: Router,
 		private route: ActivatedRoute,
@@ -153,10 +151,44 @@ export class PortfolioPaymentComponent implements OnInit {
 		this.searchError.set(null);
 		this.showNameAvailable.set(false);
 
+		// Plans / durations come from the license; the price always comes from the API quote.
+		const duration_ = await this.refreshLicenseOptions(tagName.trim(), domain, searchDuration);
+
 		// Always ask the API for a fresh, license-derived quote (no browser cache of prices).
-		await this.fetchPaymentData(tagName, domain, searchDuration);
+		await this.fetchPaymentData(tagName, domain, duration_);
 		this.isSearching.set(false);
 		this.cdr.markForCheck();
+	}
+
+	/** Load plans/durations offered by the license for this name; returns the duration to quote. */
+	private async refreshLicenseOptions(tagName: string, domain: string, duration: number): Promise<number> {
+		try {
+			const plans = await this.licensePricing.plansFor(domain, tagName);
+			this.availablePlans.set(plans);
+			if (this.selectedPlan() && !plans.includes(this.selectedPlan())) this.selectedPlan.set("");
+
+			const durations = await this.licensePricing.durationsFor(domain, tagName, this.selectedPlan() || undefined);
+			const options = durations.map((d) =>
+				d === "lifetime" ? { value: 999, label: "Lifetime" } : { value: Number(d), label: Number(d) === 1 ? "1 Year" : `${d} Years` },
+			).filter((o) => Number.isFinite(o.value));
+			this.leaseDurationOptions.set(options);
+
+			if (options.length && !options.some((o) => o.value === duration)) {
+				duration = options[0].value;
+				this.selectedDuration.set(duration);
+			}
+		} catch (error) {
+			console.error("Error loading license plans:", error);
+			this.availablePlans.set([]);
+			this.leaseDurationOptions.set([]);
+		}
+		return duration;
+	}
+
+	async onPlanChange(plan: string): Promise<void> {
+		this.selectedPlan.set(plan || "");
+		const tagName = this.searchTagName();
+		if (tagName && tagName.trim()) await this.performSearch(tagName, this.selectedDomain, this.selectedDuration());
 	}
 
 	private async fetchPaymentData(tagName: string, domain: string, duration: number): Promise<void> {
@@ -178,7 +210,19 @@ export class PortfolioPaymentComponent implements OnInit {
 		} catch (error: any) {
 			console.error("Error fetching payment options:", error);
 
-			this.handleSearchError("tag_not_found");
+			const apiError: string = error?.error?.validationError || error?.error?.message || error?.validationError || "";
+			const status = error?.status;
+
+			if (status === 404 || apiError === "tag_not_found") {
+				this.handleSearchError("tag_not_found");
+			} else if (apiError.includes("plan_not_offered_for_name")) {
+				this.handleSearchError("This plan is not offered for a name of this length.");
+			} else if (apiError.includes("plan_duration_not_offered_by_license")) {
+				this.handleSearchError("This duration is not offered for the selected plan.");
+			} else {
+				// Never report a failed quote as "name available".
+				this.handleSearchError(apiError || "Could not get a price for this name right now.");
+			}
 		}
 	}
 
