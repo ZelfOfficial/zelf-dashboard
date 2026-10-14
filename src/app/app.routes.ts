@@ -73,7 +73,8 @@ export const appRoutes: Route[] = [
 		data: {
 			layout: "empty",
 		},
-		children: [{ path: "home", loadChildren: () => import("app/modules/landing/home/home.routes") }],
+		// Fuse landing placeholder removed (#24); keep the URL working.
+		children: [{ path: "home", pathMatch: "full", redirectTo: "/analytics" }],
 	},
 
 	// Public payment routes (no authentication required)
@@ -153,7 +154,6 @@ export const appRoutes: Route[] = [
 			{ path: "play-area", canActivate: [NotLawyerGuard], loadChildren: () => import("app/modules/play-area/play-area.routes") },
 			{ path: "settings", canActivate: [NotLawyerGuard], loadChildren: () => import("app/modules/pages/settings/settings.routes") },
 			{ path: "zelf-legacy", loadChildren: () => import("app/modules/zelf-legacy/zelf-legacy.routes") },
-			{ path: "example", loadChildren: () => import("app/modules/admin/example/example.routes") },
 		],
 	},
 
