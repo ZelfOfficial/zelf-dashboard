@@ -70,6 +70,8 @@ export const appConfig: ApplicationConfig = {
 				],
 				defaultLang: "en",
 				fallbackLang: "en",
+				// Without this, fallbackLang is never used and missing keys render raw (es/fr/ja/ko/zh lack ~100 keys).
+				missingHandler: { useFallbackTranslation: true, allowEmpty: false, logMissingKey: false },
 				reRenderOnLangChange: true,
 				prodMode: !isDevMode(),
 			},
