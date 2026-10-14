@@ -9,7 +9,8 @@ import { Router } from "@angular/router";
 import { AnalyticsService, AnalyticsSnapshot } from "app/modules/dashboards/analytics/analytics.service";
 import { AnalyticsOnboardingProgress, AnalyticsOnboardingService } from "app/modules/dashboards/analytics/analytics-onboarding.service";
 import { AnalyticsOnboardingComponent } from "app/modules/dashboards/analytics/analytics-onboarding.component";
-import { TagAnalyticsRecord, buildDailySeries } from "app/modules/dashboards/analytics/analytics.utils";
+import { AnalyticsSummary, summarySeries } from "app/modules/dashboards/analytics/analytics.utils";
+import { AnalyticsRecordsComponent } from "./analytics-records.component";
 import { Subject, takeUntil } from "rxjs";
 import { TranslocoModule } from "@jsverse/transloco";
 import { AllTagsOverviewChartComponent } from "./charts/all-tags-overview-chart.component";
@@ -43,10 +44,11 @@ import { OriginChartComponent } from "./charts/origin-chart.component";
 		TagLeaseLengthsChartComponent,
 		DomainLengthChartComponent,
 		OriginChartComponent,
+		AnalyticsRecordsComponent,
 	],
 })
 export class AnalyticsComponent implements OnInit, OnDestroy {
-	records: TagAnalyticsRecord[] = [];
+	summary: AnalyticsSummary | null = null;
 	snapshot: AnalyticsSnapshot | null = null;
 	onboardingProgress: AnalyticsOnboardingProgress | null = null;
 	showLiveDashboard = false;
@@ -85,9 +87,9 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 
 		this._analyticsService.snapshot$.pipe(takeUntil(this._unsubscribeAll)).subscribe((snapshot) => {
 			this.snapshot = snapshot;
-			this.records = snapshot.records;
+			this.summary = snapshot.summary;
 			this.currentDomain = snapshot.currentDomain;
-			const seriesResult = buildDailySeries(snapshot.records);
+			const seriesResult = summarySeries(snapshot.summary, "all");
 			this.dailyStats = {
 				highestDay: seriesResult.stats.highestDay,
 				lowestDay: seriesResult.stats.lowestDay,

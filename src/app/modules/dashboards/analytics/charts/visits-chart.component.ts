@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnChanges, SimpleChanges, ViewEncapsulation } from "@angular/core";
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
-import { TagAnalyticsRecord, buildDailySeries, isActiveTag } from "../analytics.utils";
+import { AnalyticsSummary, summarySeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-visits-chart",
@@ -12,7 +12,7 @@ import { TagAnalyticsRecord, buildDailySeries, isActiveTag } from "../analytics.
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VisitsChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 
 	chartOptions: ApexOptions = {
 		chart: { type: "area" },
@@ -26,14 +26,14 @@ export class VisitsChartComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"]) {
+		if (changes["summary"]) {
 			this._updateChart();
 		}
 	}
 
 	private _updateChart(): void {
-		const activeRecords = this.records.filter((r) => isActiveTag(r));
-		const seriesResult = buildDailySeries(activeRecords);
+		// Registrations per day that are still active (server-side bucket).
+		const seriesResult = summarySeries(this.summary, "active", 30);
 		const data = seriesResult.data.map((p) => p.count);
 
 		this.chartOptions = {

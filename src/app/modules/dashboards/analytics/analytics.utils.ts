@@ -290,3 +290,103 @@ export function calculateLeaseYears(registeredAt?: string, expiresAt?: string): 
 	const diffMs = expDate.getTime() - regDate.getTime();
 	return diffMs / (1000 * 60 * 60 * 24 * 365.25);
 }
+
+/* ------------------------------------------------------------------------------------------------
+ * Server summary (GET /api/zelf-ids/analytics/summary). The API aggregates the domain snapshot so the
+ * dashboard never pages through every tag. Day buckets are UTC dates (YYYY-MM-DD), oldest first.
+ * ---------------------------------------------------------------------------------------------- */
+export interface AnalyticsDailyBucket {
+	date: string;
+	all: number;
+	paid: number;
+	active: number;
+}
+
+export interface AnalyticsSummary {
+	domain: string;
+	periodDays: number;
+	totals: { total: number; paid: number; active: number; activePreviousPeriod: number };
+	byType: Record<string, number>;
+	byPlan: Record<string, number>;
+	byOrigin: Record<string, number>;
+	byStorage: Record<string, number>;
+	byNameLength: Record<string, number>;
+	byLeaseYears: Record<string, number>;
+	daily: AnalyticsDailyBucket[];
+	recent: Array<{ name: string; type: string; plan: string | null; origin: string; storage: string; registeredAt?: string; expiresAt?: string }>;
+	generatedAt: string;
+	snapshotAgeSec: number;
+	stale: boolean;
+}
+
+function _bucketTimestamp(date: string): number {
+	const [y, m, d] = date.split("-").map(Number);
+	return new Date(y, m - 1, d).getTime();
+}
+
+/** Daily series from the summary: `days` buckets ending `offsetDays` before the latest bucket. */
+export function summarySeries(
+	summary: AnalyticsSummary | null | undefined,
+	key: "all" | "paid" | "active",
+	days: number = ANALYTICS_PERIOD_DAYS,
+	offsetDays: number = 0
+): DailySeriesResult {
+	const daily = summary?.daily || [];
+	const end = Math.max(0, daily.length - offsetDays);
+	const slice = daily.slice(Math.max(0, end - days), end);
+	const data: DailySeriesPoint[] = slice.map((b) => ({ timestamp: _bucketTimestamp(b.date), count: b[key] || 0 }));
+	const counts = data.map((p) => p.count);
+	const nonZero = counts.filter((c) => c > 0);
+	const max = Math.max(...counts, 0);
+	const min = nonZero.length ? Math.min(...nonZero) : 0;
+	return {
+		data,
+		stats: {
+			highestDay: max > 0 ? { date: slice[counts.indexOf(max)].date, count: max } : undefined,
+			lowestDay: min > 0 ? { date: slice[counts.indexOf(min)].date, count: min } : undefined,
+			totalRecords: summary?.totals?.total ?? 0,
+		},
+	};
+}
+
+/** Same KPIs as computeAnalyticsMetrics, derived from the summary's daily buckets and totals. */
+export function metricsFromSummary(summary: AnalyticsSummary | null | undefined, periodDays: number = ANALYTICS_PERIOD_DAYS): AnalyticsMetrics {
+	if (!summary) return computeAnalyticsMetrics([]);
+	const sum = (key: "all" | "paid", offset: number) => summarySeries(summary, key, periodDays, offset).data.reduce((a, p) => a + p.count, 0);
+	const paidCurrent = sum("paid", 0);
+	const paidPrevious = sum("paid", periodDays);
+	const allCurrent = sum("all", 0);
+	const allPrevious = sum("all", periodDays);
+	const { total, paid, active, activePreviousPeriod } = summary.totals;
+
+	const currentConversion = allCurrent > 0 ? (paidCurrent / allCurrent) * 100 : 0;
+	const previousConversion = allPrevious > 0 ? (paidPrevious / allPrevious) * 100 : 0;
+	const premiumAdoptionRate = allCurrent > 0 ? Math.round((paidCurrent / allCurrent) * 100) : 0;
+	const previousPremium = allPrevious > 0 ? (paidPrevious / allPrevious) * 100 : 0;
+	const paidPeriod = { current: paidCurrent, previous: paidPrevious, percentChange: percentChange(paidCurrent, paidPrevious) };
+
+	return {
+		totalCount: total,
+		paidCount: paid,
+		activeCount: active,
+		paidInPeriod: paidPeriod,
+		activeSnapshot: { current: active, previous: activePreviousPeriod, percentChange: percentChange(active, activePreviousPeriod) },
+		conversionRate: total > 0 ? Math.round((paid / total) * 100) : 0,
+		conversionRateTrend: percentChange(currentConversion, previousConversion),
+		premiumAdoptionRate,
+		premiumAdoptionTrend: percentChange(premiumAdoptionRate, Math.round(previousPremium)),
+		newPaidInPeriod: { ...paidPeriod },
+	};
+}
+
+/** Percent series for a bucket map, in the given label order (or the map's own order). */
+export function bucketsToSeries(
+	map: Record<string, number> | null | undefined,
+	order?: string[]
+): { labels: string[]; series: number[]; counts: number[] } {
+	const labels = order || Object.keys(map || {});
+	const counts = labels.map((k) => (map && map[k]) || 0);
+	const total = counts.reduce((a, b) => a + b, 0);
+	const series = total > 0 ? counts.map((c) => Math.round((c / total) * 10000) / 100) : counts;
+	return { labels, series, counts };
+}

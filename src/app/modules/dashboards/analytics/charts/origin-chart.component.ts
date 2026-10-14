@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
 import { TranslocoService } from "@jsverse/transloco";
 
-import { TagAnalyticsRecord } from "../analytics.utils";
+import { AnalyticsSummary, bucketsToSeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-origin-chart",
@@ -14,7 +14,7 @@ import { TagAnalyticsRecord } from "../analytics.utils";
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OriginChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 
 	chartOptions: ApexOptions = {
 		chart: { type: "donut" },
@@ -34,7 +34,7 @@ export class OriginChartComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"]) {
+		if (changes["summary"]) {
 			this._updateChart();
 		}
 	}
@@ -118,25 +118,6 @@ export class OriginChartComponent implements OnInit, OnChanges {
 	}
 
 	private _calculateOriginBuckets(): { labels: string[]; series: number[]; counts: number[] } {
-		const originBuckets = new Map<string, number>();
-
-		if (!this.records || this.records.length === 0) {
-			// Return empty arrays but ensure valid structure
-			return { labels: [], series: [], counts: [] };
-		}
-
-		for (const r of this.records) {
-			const origin = r.origin || "unknown";
-			originBuckets.set(origin, (originBuckets.get(origin) || 0) + 1);
-		}
-
-		const labels = Array.from(originBuckets.keys());
-		const counts = labels.map((k) => originBuckets.get(k) || 0);
-
-		// Convert to percentages
-		const total = counts.reduce((a, b) => a + b, 0);
-		const series = total > 0 ? counts.map((c) => Math.round((c / total) * 10000) / 100) : counts;
-
-		return { labels, series, counts };
+		return bucketsToSeries(this.summary?.byOrigin);
 	}
 }

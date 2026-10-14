@@ -2,12 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnChanges, SimpleChanges, ViewEncapsulation } from "@angular/core";
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
 import { TranslocoService } from "@jsverse/transloco";
-import {
-	ANALYTICS_PERIOD_DAYS,
-	TagAnalyticsRecord,
-	buildDailySeries,
-	toApexSeries,
-} from "../analytics.utils";
+import { ANALYTICS_PERIOD_DAYS, AnalyticsSummary, summarySeries, toApexSeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-all-tags-overview-chart",
@@ -18,7 +13,7 @@ import {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 	@Input() selectedPeriod: string = "this-month";
 
 	chartOptions: ApexOptions = {
@@ -35,7 +30,7 @@ export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
 	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"] || changes["selectedPeriod"]) {
+		if (changes["summary"] || changes["selectedPeriod"]) {
 			this._updateChart();
 		}
 	}
@@ -134,10 +129,8 @@ export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
 	}
 
 	private _buildSeries(): { "this-month": any[]; "previous-month": any[] } {
-		const now = new Date();
-		const thisMonth = toApexSeries(buildDailySeries(this.records, ANALYTICS_PERIOD_DAYS, now).data);
-		const previousEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ANALYTICS_PERIOD_DAYS);
-		const previousMonth = toApexSeries(buildDailySeries(this.records, ANALYTICS_PERIOD_DAYS, previousEnd).data);
+		const thisMonth = toApexSeries(summarySeries(this.summary, "all", ANALYTICS_PERIOD_DAYS, 0).data);
+		const previousMonth = toApexSeries(summarySeries(this.summary, "all", ANALYTICS_PERIOD_DAYS, ANALYTICS_PERIOD_DAYS).data);
 
 		const validThisMonth = thisMonth.filter((point) => this._isValidPoint(point));
 		const validPreviousMonth = previousMonth.filter((point) => this._isValidPoint(point));

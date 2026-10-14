@@ -1,7 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnChanges, SimpleChanges, ViewEncapsulation } from "@angular/core";
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
-import { TagAnalyticsRecord, buildDailySeries, isPaidTag } from "../analytics.utils";
+import { AnalyticsSummary, summarySeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-conversions-chart",
@@ -12,7 +12,7 @@ import { TagAnalyticsRecord, buildDailySeries, isPaidTag } from "../analytics.ut
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConversionsChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 
 	chartOptions: ApexOptions = {
 		chart: { type: "area" },
@@ -26,13 +26,13 @@ export class ConversionsChartComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"]) {
+		if (changes["summary"]) {
 			this._updateChart();
 		}
 	}
 
 	private _updateChart(): void {
-		const seriesResult = buildDailySeries(this.records, 30, undefined, isPaidTag);
+		const seriesResult = summarySeries(this.summary, "paid", 30);
 		const data = seriesResult.data.map((p) => p.count);
 
 		this.chartOptions = {

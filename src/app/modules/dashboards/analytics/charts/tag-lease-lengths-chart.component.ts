@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
 import { TranslocoService } from "@jsverse/transloco";
 
-import { TagAnalyticsRecord, calculateLeaseYears } from "../analytics.utils";
+import { AnalyticsSummary, bucketsToSeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-tag-lease-lengths-chart",
@@ -14,7 +14,7 @@ import { TagAnalyticsRecord, calculateLeaseYears } from "../analytics.utils";
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TagLeaseLengthsChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 
 	chartOptions: ApexOptions = {
 		chart: { type: "donut" },
@@ -34,7 +34,7 @@ export class TagLeaseLengthsChartComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"]) {
+		if (changes["summary"]) {
 			this._updateChart();
 		}
 	}
@@ -111,46 +111,7 @@ export class TagLeaseLengthsChartComponent implements OnInit, OnChanges {
 	}
 
 	private _calculateLeaseBuckets(): { labels: string[]; series: number[]; counts: number[] } {
-		const leaseBuckets: { [key: string]: number } = {
-			"1": 0,
-			"2": 0,
-			"3": 0,
-			"4": 0,
-			"5": 0,
-			lifetime: 0,
-		};
-
-		if (!this.records || this.records.length === 0) {
-			const labels = ["1 Year", "2 Years", "3 Years", "4 Years", "5 Years", "Lifetime"];
-			return { labels, series: [0, 0, 0, 0, 0, 0], counts: [0, 0, 0, 0, 0, 0] };
-		}
-
-		for (const r of this.records) {
-			const years = calculateLeaseYears(r.registeredAt, r.expiresAt);
-			if (years === null || years < 0.5) continue;
-
-			if (years >= 0.5 && years < 2.0) {
-				leaseBuckets["1"]++;
-			} else if (years >= 2.0 && years < 3.0) {
-				leaseBuckets["2"]++;
-			} else if (years >= 3.0 && years < 4.0) {
-				leaseBuckets["3"]++;
-			} else if (years >= 4.0 && years < 5.0) {
-				leaseBuckets["4"]++;
-			} else if (years >= 5.0 && years < 100) {
-				leaseBuckets["5"]++;
-			} else if (years >= 100) {
-				leaseBuckets.lifetime++;
-			}
-		}
-
-		const labels = ["1 Year", "2 Years", "3 Years", "4 Years", "5 Years", "Lifetime"];
-		const counts = [leaseBuckets["1"], leaseBuckets["2"], leaseBuckets["3"], leaseBuckets["4"], leaseBuckets["5"], leaseBuckets.lifetime];
-
-		// Convert to percentages
-		const total = counts.reduce((a, b) => a + b, 0);
-		const series = total > 0 ? counts.map((c) => Math.round((c / total) * 10000) / 100) : counts;
-
-		return { labels, series, counts };
+		const r = bucketsToSeries(this.summary?.byLeaseYears, ["1", "2", "3", "4", "5", "lifetime"]);
+		return { ...r, labels: ["1 Year", "2 Years", "3 Years", "4 Years", "5 Years", "Lifetime"] };
 	}
 }
