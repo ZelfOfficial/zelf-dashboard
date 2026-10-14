@@ -67,6 +67,40 @@ export interface ZelfKeysDashboardParams {
 	category?: string;
 }
 
+/** Metadata-only row from GET /api/zelf-keys/dashboard/domain (never contains secrets). */
+export interface ZelfKeyDomainItem {
+	id: string;
+	type: string;
+	owner: string;
+	label: string;
+	folder: string | null;
+	protection: string;
+	createdAt: string | null;
+	updatedAt: string | null;
+}
+
+export interface ZelfKeysDomainListResponse {
+	data: {
+		domain: string;
+		page: number;
+		pageSize: number;
+		total: number;
+		totalPages: number;
+		domainTotal: number;
+		countsByType: Record<string, number>;
+		owners: string[];
+		items: ZelfKeyDomainItem[];
+	};
+}
+
+export interface ZelfKeysDomainListParams {
+	page?: number;
+	pageSize?: number;
+	type?: string;
+	owner?: string;
+	search?: string;
+}
+
 @Injectable({
 	providedIn: "root",
 })
@@ -113,6 +147,14 @@ export class ZelfKeysService {
 	listAllDashboard(params: { identifier: string }): Promise<ZelfKeysListAllResponse> {
 		const queryParams = this.buildQueryParams(params as unknown as Record<string, unknown>);
 		return this.httpWrapper.sendRequest("get", `${this.baseUrl}/dashboard/list-all`, queryParams);
+	}
+
+	/**
+	 * Domain-wide admin list (license owner / staff). Paginated, metadata only.
+	 */
+	listDomain(params: ZelfKeysDomainListParams = {}): Promise<ZelfKeysDomainListResponse> {
+		const queryParams = this.buildQueryParams(params as unknown as Record<string, unknown>);
+		return this.httpWrapper.sendRequest("get", `${this.baseUrl}/dashboard/domain`, queryParams);
 	}
 
 	/**

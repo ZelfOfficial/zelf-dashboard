@@ -4,162 +4,176 @@
 		<div class="mb-8">
 			<h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ "zelfkeys.title" | transloco }}</h1>
 			<p class="text-gray-600 dark:text-gray-400">{{ "zelfkeys.subtitle" | transloco }}</p>
-			<p *ngIf="identifier" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-				{{ "zelfkeys.viewingFor" | transloco }}: <span class="font-medium text-primary">{{ identifier }}</span>
-			</p>
+			@if (domain) {
+				<p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+					All keys in <span class="font-medium text-primary">.{{ domain }}</span>: {{ domainTotal }} keys from {{ owners.length }} owners
+				</p>
+			}
 		</div>
 
-		<!-- No identifier - configure license -->
-		<div
-			*ngIf="!isLoadingLicense && !identifier"
-			class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-amber-200 dark:border-amber-700/50 p-8 mb-6"
-		>
-			<div class="flex items-center gap-4">
-				<div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center flex-shrink-0">
-					<mat-icon class="text-amber-600 dark:text-amber-400">info</mat-icon>
-				</div>
+		<!-- Filters -->
+		<div class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-gray-700/50 p-6 mb-6">
+			<div class="flex flex-wrap items-end gap-4">
 				<div>
-					<h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ "zelfkeys.noIdentifier.title" | transloco }}</h2>
-					<p class="text-gray-600 dark:text-gray-400 text-sm">{{ "zelfkeys.noIdentifier.message" | transloco }}</p>
-					<p class="mt-2 text-sm text-gray-500 dark:text-gray-500">
-						{{ "zelfkeys.noIdentifier.hint" | transloco }}
-					</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- Filter Card -->
-		<div
-			*ngIf="identifier"
-			class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-gray-700/50 p-6 mb-6"
-		>
-			<div class="flex flex-wrap items-center gap-4">
-				<!-- Category Filter -->
-				<div class="filter-input-container">
 					<label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 block">
 						{{ "zelfkeys.filters.category" | transloco }}
 					</label>
-					<div class="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 min-w-[160px]">
+					<div class="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 min-w-[180px]">
 						<select
 							[(ngModel)]="selectedCategory"
-							(change)="onCategoryChange()"
+							(change)="onFilterChange()"
 							class="bg-transparent border-none text-gray-900 dark:text-white font-medium w-full focus:ring-0 focus:outline-none cursor-pointer"
 						>
-							<option *ngFor="let cat of allCategories" [value]="cat.value">{{ cat.labelKey | transloco }}</option>
+							@for (cat of allCategories; track cat.value) {
+								<option [value]="cat.value">
+									{{ cat.labelKey | transloco }}@if (cat.value !== "all") { ({{ countsByType[cat.value] || 0 }})}
+								</option>
+							}
 						</select>
 					</div>
 				</div>
 
-				<!-- Refresh Button -->
-				<div class="self-end">
-					<button
-						(click)="refresh()"
-						[disabled]="isLoading"
-						class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all disabled:opacity-50"
-						[matTooltip]="'zelfkeys.actions.refresh' | transloco"
-					>
-						<mat-icon [class.animate-spin]="isLoading" class="text-gray-600 dark:text-gray-400">refresh</mat-icon>
-					</button>
-				</div>
-			</div>
-		</div>
-
-		<!-- Error State -->
-		<div
-			*ngIf="identifier && error && !isLoading"
-			class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-red-200 dark:border-red-700/50 p-8 mb-6"
-		>
-			<div class="flex items-center gap-4">
-				<div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
-					<mat-icon class="text-red-600 dark:text-red-400">error</mat-icon>
-				</div>
 				<div>
-					<h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ "zelfkeys.error.title" | transloco }}</h2>
-					<p class="text-gray-600 dark:text-gray-400 text-sm">{{ error }}</p>
-					<button
-						(click)="refresh()"
-						class="mt-4 px-4 py-2 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-all"
-					>
-						{{ "zelfkeys.actions.retry" | transloco }}
-					</button>
-				</div>
-			</div>
-		</div>
-
-		<!-- Table Card -->
-		<div
-			*ngIf="identifier && !error"
-			class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-gray-700/50 overflow-hidden"
-		>
-			<!-- Loading State -->
-			<div *ngIf="isLoading" class="p-12 text-center">
-				<div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-					<mat-icon class="text-gray-400 text-3xl animate-spin">hourglass_empty</mat-icon>
-				</div>
-				<p class="text-gray-600 dark:text-gray-400">{{ "zelfkeys.loading" | transloco }}</p>
-			</div>
-
-			<!-- Table -->
-			<div *ngIf="!isLoading && filteredData.length > 0" class="overflow-x-auto">
-				<table class="w-full">
-					<thead class="bg-gray-50 dark:bg-gray-800/50">
-						<tr>
-							<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								{{ "zelfkeys.table.type" | transloco }}
-							</th>
-							<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								{{ "zelfkeys.table.name" | transloco }}
-							</th>
-							<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								{{ "zelfkeys.table.created" | transloco }}
-							</th>
-							<th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-								{{ "zelfkeys.table.actions" | transloco }}
-							</th>
-						</tr>
-					</thead>
-					<tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
-						<tr
-							*ngFor="let record of filteredData"
-							class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors"
+					<label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 block">Owner</label>
+					<div class="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2 min-w-[220px]">
+						<select
+							[(ngModel)]="ownerFilter"
+							(change)="onFilterChange()"
+							class="bg-transparent border-none text-gray-900 dark:text-white font-medium w-full focus:ring-0 focus:outline-none cursor-pointer"
 						>
-							<td class="px-6 py-4">
-								<div class="flex items-center gap-3">
-									<span
-										class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0"
-									>
-										<mat-icon class="text-gray-600 dark:text-gray-400">{{ getCategoryIcon(record.category) }}</mat-icon>
-									</span>
-									<span class="font-medium text-gray-900 dark:text-white">{{ ('zelfkeys.filters.' + record.category) | transloco }}</span>
-								</div>
-							</td>
-							<td class="px-6 py-4">
-								<span class="font-semibold text-gray-900 dark:text-white">{{ getItemLabel(record) }}</span>
-							</td>
-							<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-								{{ formatDate(record.createdAt) }}
-							</td>
-							<td class="px-6 py-4 text-right">
-								<button
-									class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-bold hover:bg-gray-800 dark:hover:bg-gray-100 transition-all shadow-sm"
-									[matTooltip]="'zelfkeys.actions.viewDetails' | transloco"
-								>
-									<mat-icon class="text-lg w-5 h-5">visibility</mat-icon>
-									{{ "zelfkeys.actions.viewDetails" | transloco }}
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<!-- Empty State -->
-			<div *ngIf="!isLoading && filteredData.length === 0" class="p-12 text-center">
-				<div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mx-auto mb-4">
-					<mat-icon class="text-gray-400 text-3xl">vpn_key</mat-icon>
+							<option value="">All owners</option>
+							@for (o of owners; track o) {
+								<option [value]="o">{{ o }}</option>
+							}
+						</select>
+					</div>
 				</div>
-				<p class="text-gray-600 dark:text-gray-400">{{ "zelfkeys.empty" | transloco }}</p>
+
+				<div class="flex-1 min-w-[200px]">
+					<label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 block">Search</label>
+					<div class="bg-gray-50 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2">
+						<input
+							type="search"
+							[(ngModel)]="search"
+							(input)="onSearchInput()"
+							placeholder="Name, website, owner or folder"
+							class="bg-transparent border-none text-gray-900 dark:text-white w-full focus:ring-0 focus:outline-none"
+						/>
+					</div>
+				</div>
+
+				@if (hasFilters) {
+					<button (click)="clearFilters()" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+						Clear
+					</button>
+				}
+
+				<button
+					(click)="refresh()"
+					[disabled]="isLoading"
+					class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center transition-all disabled:opacity-50"
+					[matTooltip]="'zelfkeys.actions.refresh' | transloco"
+				>
+					<mat-icon [class.animate-spin]="isLoading" class="text-gray-600 dark:text-gray-400">refresh</mat-icon>
+				</button>
 			</div>
 		</div>
+
+		<!-- Error -->
+		@if (error && !isLoading) {
+			<div class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-red-200 dark:border-red-700/50 p-8 mb-6">
+				<div class="flex items-center gap-4">
+					<div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+						<mat-icon class="text-red-600 dark:text-red-400">error</mat-icon>
+					</div>
+					<div>
+						<h2 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ "zelfkeys.error.title" | transloco }}</h2>
+						<p class="text-gray-600 dark:text-gray-400 text-sm">{{ error }}</p>
+						<button
+							(click)="refresh()"
+							class="mt-4 px-4 py-2 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium"
+						>
+							{{ "zelfkeys.actions.retry" | transloco }}
+						</button>
+					</div>
+				</div>
+			</div>
+		} @else {
+			<!-- Table -->
+			<div class="rounded-3xl shadow-xl bg-white dark:bg-slate-800 border border-gray-100 dark:border-gray-700/50 overflow-hidden">
+				@if (isLoading && items.length === 0) {
+					<div class="p-12 text-center">
+						<mat-icon class="text-gray-400 text-3xl animate-spin">hourglass_empty</mat-icon>
+						<p class="text-gray-600 dark:text-gray-400 mt-3">{{ "zelfkeys.loading" | transloco }}</p>
+					</div>
+				} @else if (items.length === 0) {
+					<div class="p-12 text-center">
+						<mat-icon class="text-gray-400 text-3xl">vpn_key</mat-icon>
+						<p class="text-gray-600 dark:text-gray-400 mt-3">{{ "zelfkeys.empty" | transloco }}</p>
+					</div>
+				} @else {
+					<div class="overflow-x-auto" [class.opacity-60]="isLoading">
+						<table class="w-full">
+							<thead class="bg-gray-50 dark:bg-gray-800/50">
+								<tr>
+									<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+										{{ "zelfkeys.table.type" | transloco }}
+									</th>
+									<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+										{{ "zelfkeys.table.name" | transloco }}
+									</th>
+									<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Owner</th>
+									<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Protection</th>
+									<th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+										{{ "zelfkeys.table.created" | transloco }}
+									</th>
+								</tr>
+							</thead>
+							<tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
+								@for (record of items; track record.id) {
+									<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors">
+										<td class="px-6 py-4">
+											<div class="flex items-center gap-3">
+												<span class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+													<mat-icon class="text-gray-600 dark:text-gray-400">{{ getCategoryIcon(record.type) }}</mat-icon>
+												</span>
+												<span class="font-medium text-gray-900 dark:text-white">{{ "zelfkeys.filters." + record.type | transloco }}</span>
+											</div>
+										</td>
+										<td class="px-6 py-4">
+											<span class="font-semibold text-gray-900 dark:text-white">{{ record.label || "—" }}</span>
+											@if (record.folder) {
+												<span class="ml-2 text-xs text-gray-500">{{ record.folder }}</span>
+											}
+										</td>
+										<td class="px-6 py-4 text-sm">
+											<button class="text-primary hover:underline" (click)="ownerFilter = record.owner; onFilterChange()">{{ record.owner }}</button>
+										</td>
+										<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+											{{ record.protection === "face_password" ? "Face + password" : "Face" }}
+										</td>
+										<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{{ formatDate(record.createdAt) }}</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+
+					<!-- Pagination -->
+					<div class="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700/50 text-sm text-gray-600 dark:text-gray-400">
+						<span>{{ (page - 1) * pageSize + 1 }}–{{ (page - 1) * pageSize + items.length }} of {{ total }}</span>
+						<div class="flex items-center gap-2">
+							<button class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-40" [disabled]="page <= 1 || isLoading" (click)="goToPage(page - 1)">
+								Previous
+							</button>
+							<span>Page {{ page }} / {{ totalPages }}</span>
+							<button class="px-3 py-1 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-40" [disabled]="page >= totalPages || isLoading" (click)="goToPage(page + 1)">
+								Next
+							</button>
+						</div>
+					</div>
+				}
+			</div>
+		}
 	</div>
 </div>

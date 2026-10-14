@@ -2,17 +2,13 @@ import { Component, ViewEncapsulation, OnInit, OnDestroy, ChangeDetectorRef } fr
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
-import { MatCardModule } from "@angular/material/card";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatSelectModule } from "@angular/material/select";
 import { FormsModule } from "@angular/forms";
 import { TranslocoModule } from "@jsverse/transloco";
 import { ActivatedRoute } from "@angular/router";
-import { ZelfKeysService, ZelfKeyItem } from "./zelfkeys.service";
-import { LicenseService } from "../pages/settings/license/license.service";
+import { Subject, debounceTime, takeUntil } from "rxjs";
+import { ZelfKeysService, ZelfKeyDomainItem } from "./zelfkeys.service";
 import { AnalyticsOnboardingService } from "../dashboards/analytics/analytics-onboarding.service";
-import { Subject, takeUntil } from "rxjs";
 
 const CATEGORIES = [
 	{ value: "all", labelKey: "zelfkeys.filters.all" },
@@ -23,230 +19,135 @@ const CATEGORIES = [
 	{ value: "contact", labelKey: "zelfkeys.filters.contact" },
 ];
 
-export interface ZelfKeyRecord extends ZelfKeyItem {
-	category: string;
-}
-
+/**
+ * Domain-wide ZelfKeys (admin view): every key created in the license domain.
+ * Data: GET /api/zelf-keys/dashboard/domain (license owner / staff only, metadata only, paginated server-side).
+ */
 @Component({
 	selector: "zelfkeys",
 	standalone: true,
 	templateUrl: "./zelfkeys.component.html",
 	styleUrls: ["./zelfkeys.component.scss"],
 	encapsulation: ViewEncapsulation.None,
-	imports: [
-		CommonModule,
-		MatButtonModule,
-		MatIconModule,
-		MatCardModule,
-		MatTooltipModule,
-		MatFormFieldModule,
-		MatSelectModule,
-		FormsModule,
-		TranslocoModule,
-	],
+	imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule, FormsModule, TranslocoModule],
 })
 export class ZelfKeysComponent implements OnInit, OnDestroy {
-	dataSource: ZelfKeyRecord[] = [];
 	allCategories = CATEGORIES;
 	selectedCategory = "all";
+	ownerFilter = "";
+	search = "";
 
-	// Loading and error state
+	items: ZelfKeyDomainItem[] = [];
+	owners: string[] = [];
+	countsByType: Record<string, number> = {};
+	domain = "";
+	domainTotal = 0;
+	total = 0;
+	page = 1;
+	pageSize = 50;
+	totalPages = 1;
+
 	isLoading = true;
 	error: string | null = null;
 
-	// Identifier from URL or license (e.g. miguel.zelf)
-	identifier: string | null = null;
-	isLicenseConfigured = false;
-	isLoadingLicense = true;
-
-	// Dark mode detection
-	isDarkMode = false;
-	private darkModeObserver?: MutationObserver;
 	private destroy$ = new Subject<void>();
+	private search$ = new Subject<void>();
+	private _requestSeq = 0;
 
 	constructor(
 		private _zelfKeysService: ZelfKeysService,
 		private _route: ActivatedRoute,
-		private _licenseService: LicenseService,
 		private _cdr: ChangeDetectorRef,
 		private _analyticsOnboardingService: AnalyticsOnboardingService
 	) {}
 
 	ngOnInit(): void {
 		this._analyticsOnboardingService.markVisited("zelfKeys");
-		this._checkDarkMode();
-		this._watchDarkMode();
-		this._readQueryParams();
-		this._getMyLicense();
-	}
-
-	private _readQueryParams(): void {
-		this._route.queryParamMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-			const identifierFromUrl = params.get("identifier");
-			const valid = identifierFromUrl && identifierFromUrl.trim() && identifierFromUrl !== "undefined";
-			if (valid) {
-				this.identifier = identifierFromUrl!.trim();
-				this._cdr.markForCheck();
-				this.loadKeys();
-			}
-		});
-	}
-
-	private async _getMyLicense(): Promise<void> {
-		this.isLoadingLicense = true;
-		try {
-			const licenseStr = localStorage.getItem("license");
-			if (licenseStr) {
-				const licenseData = JSON.parse(licenseStr);
-				const domainCfg = licenseData?.domainConfig || licenseData;
-				const owner = domainCfg?.owner;
-				const domainName = domainCfg?.name || licenseData?.domain;
-				if (owner && domainName && owner.trim() && domainName.trim()) {
-					this.identifier = this.identifier || `${owner}.${domainName}`;
-					this.isLicenseConfigured = true;
-				}
-			}
-			if (!this.identifier) {
-				const response = await this._licenseService.getMyLicense(true);
-				if (response?.data?.myLicense?.domainConfig) {
-					const domainCfg = response.data.myLicense.domainConfig;
-					const owner = domainCfg?.owner;
-					const domainName = domainCfg?.name;
-					if (owner && domainName && owner.trim() && domainName.trim()) {
-						this.identifier = this.identifier || `${owner}.${domainName}`;
-						this.isLicenseConfigured = true;
-						if (licenseStr) {
-							const parsed = JSON.parse(licenseStr);
-							localStorage.setItem("license", JSON.stringify({ ...parsed, domainConfig: domainCfg }));
-						}
-					}
-				}
-			}
-		} catch {
-			// Ignore
-		} finally {
-			this.isLoadingLicense = false;
-			this._cdr.markForCheck();
+		// Deep link: /zelfkeys?owner=alice.zelf
+		const owner = this._route.snapshot.queryParamMap.get("owner");
+		if (owner) this.ownerFilter = owner;
+		this.search$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => {
+			this.page = 1;
 			this.loadKeys();
-		}
-	}
-
-	private _checkDarkMode(): void {
-		const wasDarkMode = this.isDarkMode;
-		this.isDarkMode = document.body.classList.contains("dark") || document.documentElement.classList.contains("dark");
-		if (wasDarkMode !== this.isDarkMode) {
-			this._cdr.markForCheck();
-		}
-	}
-
-	private _watchDarkMode(): void {
-		this.darkModeObserver = new MutationObserver(() => {
-			this._checkDarkMode();
 		});
-		this.darkModeObserver.observe(document.body, {
-			attributes: true,
-			attributeFilter: ["class"],
-		});
-		this.darkModeObserver.observe(document.documentElement, {
-			attributes: true,
-			attributeFilter: ["class"],
-		});
+		this.loadKeys();
 	}
 
 	ngOnDestroy(): void {
 		this.destroy$.next();
 		this.destroy$.complete();
-		if (this.darkModeObserver) {
-			this.darkModeObserver.disconnect();
-		}
 	}
 
-	loadKeys(): void {
-		const id = this.identifier && this.identifier.trim() && this.identifier !== "undefined" ? this.identifier.trim() : null;
-		if (!id) {
-			this.isLoading = false;
-			this.isLoadingLicense = false;
-			this.dataSource = [];
-			this.error = null;
-			this._cdr.markForCheck();
-			return;
-		}
-
+	async loadKeys(): Promise<void> {
+		const seq = ++this._requestSeq;
 		this.isLoading = true;
 		this.error = null;
-
-		this._zelfKeysService
-			.listAllDashboard({ identifier: id })
-			.then((response) => {
-				const data = response?.data?.data;
-				if (data) {
-					const flat: ZelfKeyRecord[] = [];
-					(Object.keys(data) as Array<keyof typeof data>).forEach((category) => {
-						const items = data[category] || [];
-						items.forEach((item) => {
-							flat.push({ ...item, category });
-						});
-					});
-					this.dataSource = flat;
-				} else {
-					this.dataSource = [];
-				}
-			})
-			.catch((err) => {
-				console.error("ZelfKeys list error:", err);
-				this.error = err?.error?.message || err?.message || "Failed to load ZelfKeys";
-				this.dataSource = [];
-			})
-			.finally(() => {
+		this._cdr.markForCheck();
+		try {
+			const res = await this._zelfKeysService.listDomain({
+				page: this.page,
+				pageSize: this.pageSize,
+				type: this.selectedCategory === "all" ? undefined : this.selectedCategory,
+				owner: this.ownerFilter || undefined,
+				search: this.search.trim() || undefined,
+			});
+			if (seq !== this._requestSeq) return; // a newer request is in flight
+			const d = res?.data;
+			this.items = d?.items || [];
+			this.owners = d?.owners || [];
+			this.countsByType = d?.countsByType || {};
+			this.domain = d?.domain || "";
+			this.domainTotal = d?.domainTotal || 0;
+			this.total = d?.total || 0;
+			this.totalPages = d?.totalPages || 1;
+		} catch (err: any) {
+			if (seq !== this._requestSeq) return;
+			console.error("ZelfKeys domain list error:", err);
+			const status = err?.status;
+			this.error =
+				status === 403
+					? "Only the license owner or staff of this domain can see its ZelfKeys."
+					: err?.error?.message || err?.message || "Failed to load ZelfKeys";
+			this.items = [];
+		} finally {
+			if (seq === this._requestSeq) {
 				this.isLoading = false;
 				this._cdr.markForCheck();
-			});
-	}
-
-	onCategoryChange(): void {
-		this._cdr.markForCheck();
-	}
-
-	get filteredData(): ZelfKeyRecord[] {
-		if (this.selectedCategory === "all") {
-			return this.dataSource;
-		}
-		return this.dataSource.filter((item) => item.category === this.selectedCategory);
-	}
-
-	formatDate(dateString: string | undefined): string {
-		if (!dateString) return "—";
-		return new Date(dateString).toLocaleDateString("en-US", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "2-digit",
-			minute: "2-digit",
-		});
-	}
-
-	getItemLabel(item: ZelfKeyRecord): string {
-		const pd = item.publicData || {};
-		switch (item.category) {
-			case "password":
-				return (pd.website as string) || (pd.username as string) || item.id || "Password";
-			case "notes":
-				return (pd.title as string) || item.id || "Note";
-			case "zotp":
-				return (pd.issuer as string) || (pd.username as string) || item.id || "ZOTP";
-			case "credit_card": {
-				try {
-					const card = typeof pd.card === "string" ? JSON.parse(pd.card) : pd.card;
-					return card?.name || item.id || "Card";
-				} catch {
-					return item.id || "Card";
-				}
 			}
-			case "contact":
-				return (pd.username as string) || item.id || "Contact";
-			default:
-				return item.id || "Item";
 		}
+	}
+
+	onFilterChange(): void {
+		this.page = 1;
+		this.loadKeys();
+	}
+
+	onSearchInput(): void {
+		this.search$.next();
+	}
+
+	clearFilters(): void {
+		this.selectedCategory = "all";
+		this.ownerFilter = "";
+		this.search = "";
+		this.onFilterChange();
+	}
+
+	goToPage(p: number): void {
+		if (p < 1 || p > this.totalPages || p === this.page) return;
+		this.page = p;
+		this.loadKeys();
+	}
+
+	get hasFilters(): boolean {
+		return this.selectedCategory !== "all" || !!this.ownerFilter || !!this.search.trim();
+	}
+
+	formatDate(dateString: string | null | undefined): string {
+		if (!dateString) return "—";
+		const d = new Date(dateString);
+		if (isNaN(d.getTime())) return "—";
+		return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
 	}
 
 	getCategoryIcon(category: string): string {
