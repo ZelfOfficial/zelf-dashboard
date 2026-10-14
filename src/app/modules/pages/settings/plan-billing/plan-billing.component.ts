@@ -67,7 +67,7 @@ export class SettingsPlanBillingComponent implements OnInit {
     mySubscription: any = null;
     showPlanComparison: boolean = false;
     selectedUpgradePlan: SubscriptionPlan | null = null;
-    showBillingHistory: boolean = false;
+    /** Invoices are not exposed by the v4 API; they are shown in the Stripe customer portal. */
     billingHistory: any[] = [];
     initialLoading: boolean = true;
     subscribingPlanId: string | null = null;
@@ -521,82 +521,9 @@ export class SettingsPlanBillingComponent implements OnInit {
         }
     }
 
-    async cancelSubscription(): Promise<void> {
-        if (!confirm("Are you sure you want to cancel your subscription? This action cannot be undone.")) {
-            return;
-        }
 
-        try {
-            const subscription = this.getCurrentSubscription();
-            if (!subscription) {
-                throw new Error("No active subscription found");
-            }
 
-            const response = await this._subscriptionPlansService.cancelSubscription(subscription.id);
 
-            if (response && response.success) {
-                await this.loadMyPlan();
-                alert("Subscription cancelled successfully.");
-            } else {
-                throw new Error(response?.message || "Failed to cancel subscription");
-            }
-        } catch (error: any) {
-            this.error = `Failed to cancel subscription: ${error.message || "Unknown error"}`;
-            this._cdr.detectChanges();
-        }
-    }
-
-    async upgradeToPlan(plan: SubscriptionPlan): Promise<void> {
-        try {
-            const subscription = this.getCurrentSubscription();
-            if (!subscription) {
-                throw new Error("No active subscription found");
-            }
-
-            const cheapestPrice = this.getCheapestPrice(plan);
-            if (!cheapestPrice) {
-                throw new Error("No valid price found for this plan");
-            }
-
-            const response = await this._subscriptionPlansService.upgradeSubscription(subscription.id, cheapestPrice.id);
-
-            if (response && response.success && response.url) {
-                window.location.href = response.url;
-                return;
-            }
-
-            throw new Error("Failed to create upgrade session");
-        } catch (error: any) {
-            this.error = `Failed to upgrade plan: ${error.message || "Unknown error"}`;
-            this._cdr.detectChanges();
-        }
-    }
-
-    toggleBillingHistory(): void {
-        this.showBillingHistory = !this.showBillingHistory;
-        if (this.showBillingHistory && this.billingHistory.length === 0) {
-            this.loadBillingHistory();
-        }
-        this._cdr.detectChanges();
-    }
-
-    async loadBillingHistory(): Promise<void> {
-        try {
-            this.billingHistory = [
-                {
-                    id: "in_1SIBhPFO6i3ofqGHMzmmHGNA",
-                    amount: 99900,
-                    currency: "usd",
-                    status: "paid",
-                    date: 1760461667,
-                    description: "Zelf Business - Monthly subscription",
-                },
-            ];
-            this._cdr.detectChanges();
-        } catch (error) {
-            console.error("Failed to load billing history:", error);
-        }
-    }
 
     getPlanUsage(): any {
         if (!this.mySubscription || !this.mySubscription.domainConfig) return null;
@@ -636,5 +563,21 @@ export class SettingsPlanBillingComponent implements OnInit {
         if (!plan) return 0;
 
         return plan.metadata.zelfPlan === "zelfBasic" ? 50 : "Unlimited";
+    }
+
+    /**
+     * Cancel: v4 has no cancel-subscription endpoint, so cancellation goes through the
+     * Stripe customer portal (POST /api/subscription-plans/create-portal-session).
+     */
+    async cancelSubscription(): Promise<void> {
+        await this.openStripePortal();
+    }
+
+    /**
+     * Upgrade: v4 has no upgrade-subscription endpoint; plan changes are done in the
+     * Stripe customer portal so Stripe handles proration.
+     */
+    async upgradeToPlan(_plan: SubscriptionPlan): Promise<void> {
+        await this.openStripePortal();
     }
 }
