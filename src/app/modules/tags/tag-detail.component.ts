@@ -263,6 +263,7 @@ export class TagDetailComponent implements OnInit, OnDestroy {
                     hasPassword: tagObjPub.hasPassword === "true",
                     extraPublicData: Object.keys(extra).length > 0 ? extra : undefined,
                 };
+                if (this.planOptions.length) void this.loadDurationOptions();
 
                 // Trigger payment options fetch automatically on load
                 this.extendLicense();
@@ -378,9 +379,8 @@ export class TagDetailComponent implements OnInit, OnDestroy {
         try {
             if (!this.planOptions.length) {
                 this.planOptions = await this.licensePricing.plansFor(this.domain, this.tagName);
-                const current = this.currentPlan();
-                this.selectedPlan = this.planOptions.includes(current) ? current : this.planOptions[0] || "";
             }
+            this.syncSelectedPlan();
             const durations = await this.licensePricing.durationsFor(this.domain, this.tagName, this.selectedPlan || undefined);
             this.durationOptions = durations.map((d) => ({ value: d, label: d }));
             if (!durations.includes(this.licenseDuration)) this.licenseDuration = durations[0] || "";
@@ -493,6 +493,25 @@ export class TagDetailComponent implements OnInit, OnDestroy {
         return this.previewData?.plan || "unknown";
     }
 
+    /**
+     * Default the plan picker to the current plan, and never leave a disabled (lower) plan selected.
+     * Runs again once the Zelf ID data arrives, since the license plans may load first.
+     */
+    private syncSelectedPlan(): void {
+        const current = this.currentPlan();
+        if (!this.selectedPlan || this.isDowngrade(this.selectedPlan) || !this.planOptions.includes(this.selectedPlan)) {
+            this.selectedPlan = this.planOptions.includes(current) ? current : this.planOptions[0] || "";
+        }
+    }
+
+    /** Active lifetime lease on the selected (same or lower) plan: there is nothing to buy. */
+    nothingToExtend(): boolean {
+        if (!this.isLifetimeLease() || this.isExpired()) return false;
+        const cur = this.planOptions.indexOf(this.currentPlan());
+        const sel = this.planOptions.indexOf(this.selectedPlan);
+        return cur >= 0 && sel >= 0 && sel <= cur;
+    }
+
     isLifetimeLease(): boolean {
         return String(this.previewData?.duration || "").toLowerCase() === "lifetime";
     }
@@ -521,6 +540,13 @@ export class TagDetailComponent implements OnInit, OnDestroy {
 
     async extendLicense(): Promise<void> {
         if (!this.tagName || !this.domain || !this.licenseDuration) return;
+        this.syncSelectedPlan();
+        if (this.nothingToExtend()) {
+            this.paymentOptions = null;
+            this.quoteError = "";
+            this.cdr.markForCheck();
+            return;
+        }
         this.isLoadingPayment = true;
         this.cdr.markForCheck();
         try {

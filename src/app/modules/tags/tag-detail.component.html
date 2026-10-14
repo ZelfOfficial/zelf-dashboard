@@ -417,7 +417,7 @@
                                     <button
                                         (click)="selectPlan(plan)"
                                         class="duration-chip"
-                                        [class.duration-chip--active]="selectedPlan === plan"
+                                        [class.duration-chip--active]="selectedPlan === plan && !isDowngrade(plan)"
                                         [disabled]="isDowngrade(plan)"
                                         [title]="isDowngrade(plan) ? ('tags.detail.downgradeBlocked' | transloco) : ''"
                                     >
@@ -429,7 +429,10 @@
                                 }
                             </div>
                         }
-                        <div class="flex flex-wrap gap-2">
+                        @if (nothingToExtend()) {
+                            <p class="text-sm text-secondary" data-testid="nothing-to-extend">{{ "tags.detail.quoteErrors.lifetime_already_owned" | transloco }}</p>
+                        }
+                        <div class="flex flex-wrap gap-2" [class.hidden]="nothingToExtend()">
                             @for (opt of durationOptions; track opt.value) {
                                 <button
                                     (click)="selectDuration(opt.value)"
