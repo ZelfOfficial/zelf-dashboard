@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpWrapperService } from "../../http-wrapper.service";
 import { environment } from "../../../environments/environment";
 
-/** Native balance slot from GET /api/tags/wallet-balances */
+/** Native balance slot from GET /api/zelf-ids/wallet-balances */
 export interface WalletBalanceSlot {
     value: string | number | null;
     unit: string;
@@ -23,14 +23,14 @@ export interface TagWalletBalancesResponse {
 }
 
 /**
- * Wallet balance aggregation for tag detail (GET /api/tags/wallet-balances).
+ * Wallet balance aggregation for tag detail (GET /api/zelf-ids/wallet-balances).
  * Kept separate from TagsService when that file is not writable in the workspace.
  */
 @Injectable({
     providedIn: "root",
 })
 export class TagsWalletBalancesService {
-    private readonly baseUrl = `${environment.apiUrl}/api/tags/wallet-balances`;
+    private readonly baseUrl = `${environment.apiUrl}/api/zelf-ids/wallet-balances`;
 
     constructor(private httpWrapper: HttpWrapperService) {}
 

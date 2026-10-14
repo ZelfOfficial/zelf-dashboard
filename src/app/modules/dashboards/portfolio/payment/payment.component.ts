@@ -5,6 +5,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { Router, ActivatedRoute } from "@angular/router";
 import { TranslocoModule, TranslocoService } from "@jsverse/transloco";
 import { TagsService } from "../../../tags/tags.service";
+import { LicensePricingService } from "app/core/pricing/license-pricing.service";
 import { SessionService } from "app/core/services/session.service";
 
 @Component({
@@ -26,15 +27,13 @@ export class PortfolioPaymentComponent implements OnInit {
 	showNameAvailable = signal<boolean>(false);
 	selectedPaymentMethod = signal<string>("ETH");
 	selectedDuration = signal<number>(1); // Duration in years, default 1
+	/** License plan requested via ?plan=; empty lets the API choose the license default. */
+	selectedPlan = signal<string>("");
 	isDurationDropdownOpen = signal<boolean>(false);
-	leaseDurationOptions = [
-		{ value: 1, label: "1 Year" },
-		{ value: 2, label: "2 Years" },
-		{ value: 3, label: "3 Years" },
-		{ value: 4, label: "4 Years" },
-		{ value: 5, label: "5 Years" },
-		{ value: 999, label: "Lifetime" },
-	];
+	/** Plans the license offers for the searched name length (from planPricing via the API). */
+	availablePlans = signal<string[]>([]);
+	/** Durations the license prices for the selected plan. Lifetime is sent as 999 (the API maps it to "lifetime"). */
+	leaseDurationOptions = signal<{ value: number; label: string }[]>([]);
 
 	/**
 	 * Return supported domains in canonical format with leading dot and lower-case
@@ -64,6 +63,7 @@ export class PortfolioPaymentComponent implements OnInit {
 
 	constructor(
 		private tagsService: TagsService,
+		private licensePricing: LicensePricingService,
 		private cdr: ChangeDetectorRef,
 		private router: Router,
 		private route: ActivatedRoute,
@@ -115,6 +115,7 @@ export class PortfolioPaymentComponent implements OnInit {
 			const tagName = initialParams["tagname"];
 			const domain = this.validateIncomingDomain(initialParams["domain"]).replace(".", "");
 			const duration = initialParams["duration"] ? parseInt(initialParams["duration"], 10) : 1;
+			this.selectedPlan.set(initialParams["plan"] || "");
 
 			// Set the form values
 			this.searchTagName.set(tagName);
@@ -131,6 +132,7 @@ export class PortfolioPaymentComponent implements OnInit {
 				const tagName = params["tagname"];
 				const domain = this.validateIncomingDomain(params["domain"]).replace(".", "");
 				const duration = params["duration"] ? parseInt(params["duration"], 10) : 1;
+				this.selectedPlan.set(params["plan"] || "");
 
 				// Set the form values
 				this.searchTagName.set(tagName);
@@ -149,51 +151,78 @@ export class PortfolioPaymentComponent implements OnInit {
 		this.searchError.set(null);
 		this.showNameAvailable.set(false);
 
-		const cacheKey = `payment_options_${tagName.trim()}_${domain}_${searchDuration}`;
-		const cachedData = this.getCachedPaymentOptions(cacheKey);
+		// Plans / durations come from the license; the price always comes from the API quote.
+		const duration_ = await this.refreshLicenseOptions(tagName.trim(), domain, searchDuration);
 
-		if (cachedData) {
-			this.useCachedPaymentData(cachedData, searchDuration);
-			this.isSearching.set(false);
-			this.cdr.markForCheck();
-			return;
-		}
-
-		await this.fetchAndSavePaymentData(tagName, domain, searchDuration, cacheKey);
+		// Always ask the API for a fresh, license-derived quote (no browser cache of prices).
+		await this.fetchPaymentData(tagName, domain, duration_);
 		this.isSearching.set(false);
 		this.cdr.markForCheck();
 	}
 
-	private useCachedPaymentData(cachedData: any, fallbackDuration: number): void {
-		this.paymentOptions.set(cachedData);
-		this.selectedPaymentMethod.set("ETH");
-		this.selectedDuration.set(cachedData.duration || fallbackDuration);
+	/** Load plans/durations offered by the license for this name; returns the duration to quote. */
+	private async refreshLicenseOptions(tagName: string, domain: string, duration: number): Promise<number> {
+		try {
+			const plans = await this.licensePricing.plansFor(domain, tagName);
+			this.availablePlans.set(plans);
+			if (this.selectedPlan() && !plans.includes(this.selectedPlan())) this.selectedPlan.set("");
 
-		if (cachedData.signedDataPrice) {
-			localStorage.setItem("signedDataPrice", cachedData.signedDataPrice);
+			const durations = await this.licensePricing.durationsFor(domain, tagName, this.selectedPlan() || undefined);
+			const options = durations.map((d) =>
+				d === "lifetime" ? { value: 999, label: "Lifetime" } : { value: Number(d), label: Number(d) === 1 ? "1 Year" : `${d} Years` },
+			).filter((o) => Number.isFinite(o.value));
+			this.leaseDurationOptions.set(options);
+
+			if (options.length && !options.some((o) => o.value === duration)) {
+				duration = options[0].value;
+				this.selectedDuration.set(duration);
+			}
+		} catch (error) {
+			console.error("Error loading license plans:", error);
+			this.availablePlans.set([]);
+			this.leaseDurationOptions.set([]);
 		}
+		return duration;
 	}
 
-	private async fetchAndSavePaymentData(tagName: string, domain: string, duration: number, cacheKey: string): Promise<void> {
+	async onPlanChange(plan: string): Promise<void> {
+		this.selectedPlan.set(plan || "");
+		const tagName = this.searchTagName();
+		if (tagName && tagName.trim()) await this.performSearch(tagName, this.selectedDomain, this.selectedDuration());
+	}
+
+	private async fetchPaymentData(tagName: string, domain: string, duration: number): Promise<void> {
 		this.paymentOptions.set(null);
-		localStorage.removeItem("signedDataPrice");
 
 		try {
 			const response = await this.tagsService.getPaymentOptions({
 				tagName: tagName.trim(),
 				domain: domain.replace(".", ""),
 				duration: duration,
+				...(this.selectedPlan() ? { plan: this.selectedPlan() } : {}),
 			});
 
 			if ("error" in response.data) {
 				this.handleSearchError(response.data.error);
 			} else {
-				this.processPaymentResponse(response.data, duration, cacheKey);
+				this.processPaymentResponse(response.data, duration);
 			}
 		} catch (error: any) {
 			console.error("Error fetching payment options:", error);
 
-			this.handleSearchError("tag_not_found");
+			const apiError: string = error?.error?.validationError || error?.error?.message || error?.validationError || "";
+			const status = error?.status;
+
+			if (status === 404 || apiError === "tag_not_found") {
+				this.handleSearchError("tag_not_found");
+			} else if (apiError.includes("plan_not_offered_for_name")) {
+				this.handleSearchError("This plan is not offered for a name of this length.");
+			} else if (apiError.includes("plan_duration_not_offered_by_license")) {
+				this.handleSearchError("This duration is not offered for the selected plan.");
+			} else {
+				// Never report a failed quote as "name available".
+				this.handleSearchError(apiError || "Could not get a price for this name right now.");
+			}
 		}
 	}
 
@@ -209,52 +238,10 @@ export class PortfolioPaymentComponent implements OnInit {
 		}
 	}
 
-	private processPaymentResponse(data: any, duration: number, cacheKey: string): void {
+	private processPaymentResponse(data: any, duration: number): void {
 		this.paymentOptions.set(data);
 		this.selectedPaymentMethod.set("ETH");
 		this.selectedDuration.set(duration);
-
-		this.saveCachedPaymentOptions(cacheKey, data);
-		this.saveSignedDataPrice(data);
-	}
-
-	private saveSignedDataPrice(data: any): void {
-		if (data.signedDataPrice) {
-			localStorage.setItem("signedDataPrice", data.signedDataPrice);
-		}
-	}
-
-	private getCachedPaymentOptions(cacheKey: string): any | null {
-		try {
-			const cached = localStorage.getItem(cacheKey);
-
-			if (!cached) return null;
-
-			const data = JSON.parse(cached);
-
-			// Check if the cached data has expired based on TTL
-			if (data.ttl && data.ttl > 0) {
-				const currentTimestamp = Math.floor(Date.now() / 1000);
-				if (currentTimestamp >= data.ttl) {
-					// Cache expired, remove it
-					localStorage.removeItem(cacheKey);
-					return null;
-				}
-			}
-
-			return data;
-		} catch (error) {
-			console.error("Error reading cached payment options:", error);
-			return null;
-		}
-	}
-
-	private saveCachedPaymentOptions(cacheKey: string, data: any): void {
-		try {
-			localStorage.setItem(cacheKey, JSON.stringify(data));
-		} catch (error) {
-			console.error("Error saving cached payment options:", error);
-		}
 	}
 
 	async loadDomains(): Promise<void> {
@@ -372,19 +359,14 @@ export class PortfolioPaymentComponent implements OnInit {
 
 		if (!options) return;
 
-		const price = this.getPrice();
-		const ethAddress = options.paymentAddress?.ethAddress || "";
-		const amountToPay = options.prices?.[paymentMethod]?.amountToSend || "";
-
-		// Build query params
+		// Only the selection goes in the URL. Checkout re-quotes price, amount and
+		// payment address from the API; nothing client-computed is passed along.
 		const queryParams: any = {
 			tagname: tagName,
 			domain: domain.replace(".", ""),
 			duration: duration,
-			price: price,
 			paymentMethod: paymentMethod,
-			ethAddress: ethAddress,
-			amountToPay: amountToPay,
+			...(this.selectedPlan() ? { plan: this.selectedPlan() } : {}),
 		};
 
 		// Navigate to checkout with all the details
