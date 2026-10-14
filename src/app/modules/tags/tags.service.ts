@@ -115,7 +115,9 @@ export interface DomainSearchResponse {
 export interface PaymentOptionsParams {
     tagName: string;
     domain: string;
-    duration: number;
+    duration: number | string;
+    /** License plan (e.g. premium / unlimited). Omit to let the API pick the license default for the name length. */
+    plan?: string;
 }
 
 export interface PaymentOptionsResponse {
