@@ -1,14 +1,24 @@
 <div class="fixed inset-0 z-50 flex h-full w-full flex-col items-center justify-center overflow-auto bg-gray-50 dark:bg-gray-900">
 	<div class="w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-xl dark:bg-gray-800">
-		<div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
-			<mat-icon class="text-6xl text-green-600 dark:text-green-400" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
-		</div>
+		@if (status === "verifying") {
+			<h1 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white">Verifying payment…</h1>
+		} @else if (status === "confirmed") {
+			<div class="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+				<mat-icon class="text-6xl text-green-600 dark:text-green-400" [svgIcon]="'heroicons_outline:check-circle'"></mat-icon>
+			</div>
 
-		<h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">Payment Successful!</h1>
+			<h1 class="mb-4 text-3xl font-extrabold text-gray-900 dark:text-white">Payment Successful!</h1>
 
-		<p class="mb-8 text-lg text-gray-600 dark:text-gray-300">
-			Your subscription to Zelf Keys has been confirmed. You now have full access to create and manage your portfolio keys.
-		</p>
+			<p class="mb-8 text-lg text-gray-600 dark:text-gray-300">
+				Your subscription to Zelf Keys has been confirmed. You now have full access to create and manage your portfolio keys.
+			</p>
+
+		} @else {
+			<h1 class="mb-4 text-2xl font-bold text-gray-900 dark:text-white">We couldn't confirm your payment yet</h1>
+			<p class="mb-8 text-base text-gray-600 dark:text-gray-300">
+				If you completed checkout, it can take a minute to process. Check Plan &amp; Billing, or contact support if it doesn't show up.
+			</p>
+		}
 
 		<div class="space-y-4">
 			<button

@@ -16,6 +16,8 @@ export class ZelfKeysSuccessComponent implements OnInit {
     private _sessionId: string | null = null;
     isLoading = true;
     message = "Verifying payment...";
+    /** Only "confirmed" after the API verified the Stripe session as paid. */
+    status: "verifying" | "confirmed" | "unconfirmed" = "verifying";
 
     constructor(
         private _route: ActivatedRoute,
@@ -30,6 +32,7 @@ export class ZelfKeysSuccessComponent implements OnInit {
             this.checkSession(this._sessionId);
         } else {
             this.isLoading = false;
+            this.status = "unconfirmed";
         }
     }
 
@@ -37,9 +40,13 @@ export class ZelfKeysSuccessComponent implements OnInit {
         this._http.post(`${environment.apiUrl}/api/subscription/check-session`, { sessionId }).subscribe({
             next: (response: any) => {
                 this.isLoading = false;
+                // API: { success, data: { success:false, message:"session_not_paid_yet" } } when not paid.
+                const paid = !!response?.success && response?.data?.success !== false;
+                this.status = paid ? "confirmed" : "unconfirmed";
             },
             error: (err) => {
                 this.isLoading = false;
+                this.status = "unconfirmed";
                 console.error("Error checking session:", err);
             },
         });
