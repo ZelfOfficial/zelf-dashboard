@@ -56,7 +56,8 @@ export const appRoutes: Route[] = [
 		},
 		children: [
 			{ path: "sign-out", loadChildren: () => import("app/modules/auth/sign-out/sign-out.routes") },
-			{ path: "unlock-session", loadChildren: () => import("app/modules/auth/unlock-session/unlock-session.routes") },
+			// Unlock-session had no v4 endpoint (/auth/unlock-session); send users to sign-in instead.
+			{ path: "unlock-session", redirectTo: "/sign-in", pathMatch: "full" },
 			{
 				path: "save-confirmation",
 				loadComponent: () =>
