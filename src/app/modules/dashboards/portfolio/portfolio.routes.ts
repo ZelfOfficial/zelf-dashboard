@@ -1,24 +1,8 @@
 import { Routes } from "@angular/router";
-import { PortfolioComponent } from "app/modules/dashboards/portfolio/portfolio.component";
 
+// The old My Tags / Discover placeholders were removed (#36); keep old links working.
 export default [
-	{
-		path: "",
-		component: PortfolioComponent,
-		children: [
-			{
-				path: "",
-				redirectTo: "my-tags",
-				pathMatch: "full",
-			},
-			{
-				path: "my-tags",
-				loadComponent: () => import("app/modules/dashboards/portfolio/my-tags/my-tags.component").then((m) => m.PortfolioMyTagsComponent),
-			},
-			{
-				path: "discover",
-				loadComponent: () => import("app/modules/dashboards/portfolio/discover/discover.component").then((m) => m.PortfolioDiscoverComponent),
-			},
-		],
-	},
+	{ path: "", pathMatch: "full", redirectTo: "/tags" },
+	{ path: "my-tags", redirectTo: "/tags" },
+	{ path: "discover", redirectTo: "/tags" },
 ] as Routes;
