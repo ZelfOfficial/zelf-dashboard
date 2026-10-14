@@ -34,6 +34,10 @@ export interface TagRecord {
 		ethAddress: string;
 		extraParams: string;
 		solanaAddress: string;
+		/** Zelf ID plan stamped by the API: free | premium | unlimited (license plans). */
+		plan?: string;
+		expiresAt?: string;
+		duration?: string | number;
 	};
 }
 
@@ -283,8 +287,28 @@ export class TagsComponent implements OnInit, OnDestroy {
 				ethAddress: pd?.ethAddress ?? "",
 				extraParams: pd?.extraParams ?? "",
 				solanaAddress: pd?.solanaAddress ?? "",
+				plan: pd?.plan ?? "",
+				expiresAt: pd?.expiresAt ?? "",
+				duration: pd?.duration ?? "",
 			},
 		};
+	}
+
+	/** `.zelfpay`-style rows are internal payment records, not Zelf IDs. */
+	isPaymentRecord(row: TagRecord): boolean {
+		const name = String(row?.name || "");
+		const domain = String(row?.publicData?.domain || this.licenseDomain || "").replace(/^\./, "");
+		return /pay$/i.test(name.split(".").pop() || "") && (!domain || name.toLowerCase().endsWith(`.${domain.toLowerCase()}pay`));
+	}
+
+	/** Plan label for the list badge; hold rows are reservations, not a plan. */
+	planOf(row: TagRecord): string {
+		if (row?.name?.includes(".hold")) return "hold";
+		return String(row?.publicData?.plan || "").toLowerCase() || "unknown";
+	}
+
+	isLifetime(row: TagRecord): boolean {
+		return String(row?.publicData?.duration ?? "").toLowerCase() === "lifetime";
 	}
 
 	formatFileSize(bytes: number): string {
@@ -522,7 +546,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 			.then((response) => {
 				if (response.data && Array.isArray(response.data)) {
 					this.lastNamePatternFetchKey = key;
-					this.lastNamePatternRows = response.data.map((row) => this.normalizeDomainSearchRow(row));
+					this.lastNamePatternRows = response.data.map((row) => this.normalizeDomainSearchRow(row)).filter((row) => !this.isPaymentRecord(row));
 					this.showPurchaseMessage = false;
 					this.purchaseData = null;
 					this.applyNamePatternPaging();
@@ -619,7 +643,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 			.searchByDomain(domainParams)
 			.then((response) => {
 				if (response.data && Array.isArray(response.data)) {
-					this.dataSource = response.data.map((row) => this.normalizeDomainSearchRow(row));
+					this.dataSource = response.data.map((row) => this.normalizeDomainSearchRow(row)).filter((row) => !this.isPaymentRecord(row));
 
 					// Update pagination info if provided
 					if (response.total !== undefined) {

@@ -136,6 +136,8 @@
 				<colgroup>
 					<col class="tags-table__col-name" />
 					<col class="tags-table__col-domain" />
+					<col class="tags-table__col-plan" />
+					<col class="tags-table__col-expires" />
 					<col class="tags-table__col-created" />
 					<col class="tags-table__col-size" />
 					<col class="tags-table__col-actions" />
@@ -144,6 +146,8 @@
 					<tr>
 						<th>{{ "tags.table.tagName" | transloco }}</th>
 						<th>{{ "tags.table.domain" | transloco }}</th>
+						<th>{{ "tags.table.plan" | transloco }}</th>
+						<th>{{ "tags.table.expires" | transloco }}</th>
 						<th>{{ "tags.table.created" | transloco }}</th>
 						<th>{{ "tags.table.size" | transloco }}</th>
 						<th class="tags-table__actions-header">{{ "tags.table.actions" | transloco }}</th>
@@ -163,6 +167,18 @@
 						</td>
 						<td>
 							<span class="tags-domain-badge">{{ licenseDomain || record.publicData?.domain }}</span>
+						</td>
+						<td>
+							<span class="plan-badge plan-badge--{{ planOf(record) }}">{{ "tags.plan." + planOf(record) | transloco }}</span>
+						</td>
+						<td class="tags-table__meta">
+							@if (isLifetime(record)) {
+								{{ "tags.detail.lifetime" | transloco }}
+							} @else if (record.publicData?.expiresAt) {
+								{{ formatDate(record.publicData.expiresAt) }}
+							} @else {
+								—
+							}
 						</td>
 						<td class="tags-table__meta">{{ formatDate(record.created_at) }}</td>
 						<td class="tags-table__meta">{{ formatFileSize(record.size) }}</td>
