@@ -26,6 +26,8 @@ export class PortfolioPaymentComponent implements OnInit {
 	showNameAvailable = signal<boolean>(false);
 	selectedPaymentMethod = signal<string>("ETH");
 	selectedDuration = signal<number>(1); // Duration in years, default 1
+	/** License plan requested via ?plan=; empty lets the API choose the license default. */
+	selectedPlan = signal<string>("");
 	isDurationDropdownOpen = signal<boolean>(false);
 	leaseDurationOptions = [
 		{ value: 1, label: "1 Year" },
@@ -115,6 +117,7 @@ export class PortfolioPaymentComponent implements OnInit {
 			const tagName = initialParams["tagname"];
 			const domain = this.validateIncomingDomain(initialParams["domain"]).replace(".", "");
 			const duration = initialParams["duration"] ? parseInt(initialParams["duration"], 10) : 1;
+			this.selectedPlan.set(initialParams["plan"] || "");
 
 			// Set the form values
 			this.searchTagName.set(tagName);
@@ -131,6 +134,7 @@ export class PortfolioPaymentComponent implements OnInit {
 				const tagName = params["tagname"];
 				const domain = this.validateIncomingDomain(params["domain"]).replace(".", "");
 				const duration = params["duration"] ? parseInt(params["duration"], 10) : 1;
+				this.selectedPlan.set(params["plan"] || "");
 
 				// Set the form values
 				this.searchTagName.set(tagName);
@@ -149,46 +153,27 @@ export class PortfolioPaymentComponent implements OnInit {
 		this.searchError.set(null);
 		this.showNameAvailable.set(false);
 
-		const cacheKey = `payment_options_${tagName.trim()}_${domain}_${searchDuration}`;
-		const cachedData = this.getCachedPaymentOptions(cacheKey);
-
-		if (cachedData) {
-			this.useCachedPaymentData(cachedData, searchDuration);
-			this.isSearching.set(false);
-			this.cdr.markForCheck();
-			return;
-		}
-
-		await this.fetchAndSavePaymentData(tagName, domain, searchDuration, cacheKey);
+		// Always ask the API for a fresh, license-derived quote (no browser cache of prices).
+		await this.fetchPaymentData(tagName, domain, searchDuration);
 		this.isSearching.set(false);
 		this.cdr.markForCheck();
 	}
 
-	private useCachedPaymentData(cachedData: any, fallbackDuration: number): void {
-		this.paymentOptions.set(cachedData);
-		this.selectedPaymentMethod.set("ETH");
-		this.selectedDuration.set(cachedData.duration || fallbackDuration);
-
-		if (cachedData.signedDataPrice) {
-			localStorage.setItem("signedDataPrice", cachedData.signedDataPrice);
-		}
-	}
-
-	private async fetchAndSavePaymentData(tagName: string, domain: string, duration: number, cacheKey: string): Promise<void> {
+	private async fetchPaymentData(tagName: string, domain: string, duration: number): Promise<void> {
 		this.paymentOptions.set(null);
-		localStorage.removeItem("signedDataPrice");
 
 		try {
 			const response = await this.tagsService.getPaymentOptions({
 				tagName: tagName.trim(),
 				domain: domain.replace(".", ""),
 				duration: duration,
+				...(this.selectedPlan() ? { plan: this.selectedPlan() } : {}),
 			});
 
 			if ("error" in response.data) {
 				this.handleSearchError(response.data.error);
 			} else {
-				this.processPaymentResponse(response.data, duration, cacheKey);
+				this.processPaymentResponse(response.data, duration);
 			}
 		} catch (error: any) {
 			console.error("Error fetching payment options:", error);
@@ -209,52 +194,10 @@ export class PortfolioPaymentComponent implements OnInit {
 		}
 	}
 
-	private processPaymentResponse(data: any, duration: number, cacheKey: string): void {
+	private processPaymentResponse(data: any, duration: number): void {
 		this.paymentOptions.set(data);
 		this.selectedPaymentMethod.set("ETH");
 		this.selectedDuration.set(duration);
-
-		this.saveCachedPaymentOptions(cacheKey, data);
-		this.saveSignedDataPrice(data);
-	}
-
-	private saveSignedDataPrice(data: any): void {
-		if (data.signedDataPrice) {
-			localStorage.setItem("signedDataPrice", data.signedDataPrice);
-		}
-	}
-
-	private getCachedPaymentOptions(cacheKey: string): any | null {
-		try {
-			const cached = localStorage.getItem(cacheKey);
-
-			if (!cached) return null;
-
-			const data = JSON.parse(cached);
-
-			// Check if the cached data has expired based on TTL
-			if (data.ttl && data.ttl > 0) {
-				const currentTimestamp = Math.floor(Date.now() / 1000);
-				if (currentTimestamp >= data.ttl) {
-					// Cache expired, remove it
-					localStorage.removeItem(cacheKey);
-					return null;
-				}
-			}
-
-			return data;
-		} catch (error) {
-			console.error("Error reading cached payment options:", error);
-			return null;
-		}
-	}
-
-	private saveCachedPaymentOptions(cacheKey: string, data: any): void {
-		try {
-			localStorage.setItem(cacheKey, JSON.stringify(data));
-		} catch (error) {
-			console.error("Error saving cached payment options:", error);
-		}
 	}
 
 	async loadDomains(): Promise<void> {
@@ -372,19 +315,14 @@ export class PortfolioPaymentComponent implements OnInit {
 
 		if (!options) return;
 
-		const price = this.getPrice();
-		const ethAddress = options.paymentAddress?.ethAddress || "";
-		const amountToPay = options.prices?.[paymentMethod]?.amountToSend || "";
-
-		// Build query params
+		// Only the selection goes in the URL. Checkout re-quotes price, amount and
+		// payment address from the API; nothing client-computed is passed along.
 		const queryParams: any = {
 			tagname: tagName,
 			domain: domain.replace(".", ""),
 			duration: duration,
-			price: price,
 			paymentMethod: paymentMethod,
-			ethAddress: ethAddress,
-			amountToPay: amountToPay,
+			...(this.selectedPlan() ? { plan: this.selectedPlan() } : {}),
 		};
 
 		// Navigate to checkout with all the details
