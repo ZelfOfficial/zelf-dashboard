@@ -183,3 +183,26 @@ body.dark .fuse-horizontal-navigation-menu-panel.mat-mdc-menu-panel {
 		}
 	}
 }
+
+/* Zelf ID plan badges (list + detail). Plan names come from the license; unknown plans fall back to the neutral style. */
+.plan-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    background: rgba(100, 116, 139, 0.12);
+    color: #475569;
+    white-space: nowrap;
+}
+.plan-badge--free { background: rgba(100, 116, 139, 0.12); color: #475569; }
+.plan-badge--premium { background: rgba(59, 130, 246, 0.14); color: #1d4ed8; }
+.plan-badge--unlimited { background: rgba(168, 85, 247, 0.16); color: #7e22ce; }
+.plan-badge--hold { background: rgba(245, 158, 11, 0.16); color: #b45309; }
+.dark .plan-badge--free { color: #cbd5e1; }
+.dark .plan-badge--premium { color: #93c5fd; }
+.dark .plan-badge--unlimited { color: #d8b4fe; }
+.dark .plan-badge--hold { color: #fcd34d; }

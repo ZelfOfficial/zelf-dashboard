@@ -27,6 +27,10 @@ export interface TagPreviewData {
     solanaAddress?: string;
     zelfName?: string;
     leaseExpiresAt?: string;
+    /** free | premium | unlimited, as stamped by the API (plans come from the license). */
+    plan?: string;
+    /** Years purchased, or "lifetime". */
+    duration?: string;
     evm?: string;
     passwordLayer?: string;
     requireLiveness?: boolean;
@@ -81,6 +85,11 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     /** Durations the license prices for this name (loaded from the API; nothing hardcoded). */
     durationOptions: { value: string; label: string }[] = [];
     paymentOptions: any = null;
+    /** Paid plans the license prices for this name length (cheapest first). */
+    planOptions: string[] = [];
+    selectedPlan: string = "";
+    /** API refusal for the selected plan/duration (e.g. plan_downgrade_not_allowed). */
+    quoteError: string = "";
     isLoadingPayment = false;
     showTechnical = false;
 
@@ -238,6 +247,8 @@ export class TagDetailComponent implements OnInit, OnDestroy {
                     btcAddress: previewPub.btcAddress || tagObjPub.btcAddress || "",
                     solanaAddress: previewPub.solanaAddress || tagObjPub.solanaAddress || "",
                     zelfName: previewPub.zelfName || tagObjPub.zelfName || this.tagId,
+                    plan: String(tagObjPub.plan || previewPub.plan || "").toLowerCase(),
+                    duration: String(tagObjPub.duration ?? previewPub.duration ?? ""),
                     leaseExpiresAt: previewPub.leaseExpiresAt || tagObjPub.leaseExpiresAt || previewPub.expiresAt || tagObjPub.expiresAt || "",
                     evm: previewPub.evm || tagObjPub.evm || "",
                     passwordLayer: preview?.passwordLayer || "",
@@ -365,7 +376,12 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     private async loadDurationOptions(): Promise<void> {
         if (!this.tagName || !this.domain) return;
         try {
-            const durations = await this.licensePricing.durationsFor(this.domain, this.tagName);
+            if (!this.planOptions.length) {
+                this.planOptions = await this.licensePricing.plansFor(this.domain, this.tagName);
+                const current = this.currentPlan();
+                this.selectedPlan = this.planOptions.includes(current) ? current : this.planOptions[0] || "";
+            }
+            const durations = await this.licensePricing.durationsFor(this.domain, this.tagName, this.selectedPlan || undefined);
             this.durationOptions = durations.map((d) => ({ value: d, label: d }));
             if (!durations.includes(this.licenseDuration)) this.licenseDuration = durations[0] || "";
         } catch (e) {
@@ -470,6 +486,39 @@ export class TagDetailComponent implements OnInit, OnDestroy {
         }
     }
 
+    /** Plan the Zelf ID has now; expired paid plans read as free. */
+    currentPlan(): string {
+        if (this.previewData?.tagType === "hold") return "hold";
+        if (this.isExpired()) return "free";
+        return this.previewData?.plan || "unknown";
+    }
+
+    isLifetimeLease(): boolean {
+        return String(this.previewData?.duration || "").toLowerCase() === "lifetime";
+    }
+
+    /** Plans ranked like the license (cheapest first); a lower rank than the current plan is a downgrade. */
+    isDowngrade(plan: string): boolean {
+        const cur = this.planOptions.indexOf(this.currentPlan());
+        const idx = this.planOptions.indexOf(plan);
+        return cur >= 0 && idx >= 0 && idx < cur;
+    }
+
+    async selectPlan(plan: string): Promise<void> {
+        if (this.selectedPlan === plan) return;
+        this.selectedPlan = plan;
+        this.paymentOptions = null;
+        this.quoteError = "";
+        await this.loadDurationOptions();
+    }
+
+    /** USD list price of the quote (same for every network). */
+    quoteUsd(): number | null {
+        const prices = this.paymentOptions?.prices || {};
+        const hit = Object.values(prices).find((p: any) => p && typeof p.price === "number") as any;
+        return hit ? hit.price : null;
+    }
+
     async extendLicense(): Promise<void> {
         if (!this.tagName || !this.domain || !this.licenseDuration) return;
         this.isLoadingPayment = true;
@@ -479,14 +528,20 @@ export class TagDetailComponent implements OnInit, OnDestroy {
                 tagName: this.tagName,
                 domain: this.domain,
                 duration: this.licenseDuration,
+                ...(this.selectedPlan ? { plan: this.selectedPlan } : {}),
             });
+            this.quoteError = "";
             this.paymentOptions = res?.data;
             this.revealedAddresses.clear();
 
             // Wait a bit longer for DOM to update then generate QR codes
             setTimeout(() => this.generateAllQRCodes(), 300);
-        } catch (e) {
+        } catch (e: any) {
             console.error("Payment options error", e);
+            this.paymentOptions = null;
+            const code = String(e?.error?.message || e?.error?.validationError || "").trim();
+            const known = ["plan_downgrade_not_allowed", "lifetime_already_owned", "plan_not_offered_for_name", "plan_duration_not_offered_by_license"];
+            this.quoteError = known.includes(code) ? code : "quote_failed";
         } finally {
             this.isLoadingPayment = false;
             this.cdr.markForCheck();

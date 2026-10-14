@@ -69,6 +69,14 @@
                                 <span class="tag-detail-badge__dot"></span>
                                 {{ previewData.tagType === "hold" ? ("tags.detail.hold" | transloco) : ("tags.detail.purchased" | transloco) }}
                             </span>
+                            @if (previewData.tagType !== "hold") {
+                                <span class="plan-badge plan-badge--{{ currentPlan() }}">
+                                    {{ "tags.plan." + currentPlan() | transloco }}
+                                    @if (isLifetimeLease()) {
+                                        · {{ "tags.detail.lifetime" | transloco }}
+                                    }
+                                </span>
+                            }
                             @if (previewData.hasPassword) {
                                 <span class="tag-detail-badge tag-detail-badge--muted">
                                     <mat-icon class="!h-3.5 !w-3.5">lock</mat-icon>
@@ -113,6 +121,9 @@
                         <div class="text-sm">
                             <span class="font-medium">{{ "tags.detail.leaseExpires" | transloco }}</span>
                             <span class="ml-2">{{ formatDate(previewData.leaseExpiresAt) }}</span>
+                            @if (isLifetimeLease()) {
+                                <span class="ml-2 text-xs opacity-80">({{ "tags.detail.lifetime" | transloco }})</span>
+                            }
                             @if (daysUntilExpiry() !== null) {
                                 <span class="ml-2 text-xs opacity-80">({{ daysUntilExpiry() }} {{ "tags.detail.daysLeft" | transloco }})</span>
                             }
@@ -399,6 +410,25 @@
                     </div>
                     <div class="tag-detail-panel__body">
                         <p class="mb-3 text-sm text-secondary">{{ "tags.detail.extendDescription" | transloco }}</p>
+                        @if (planOptions.length) {
+                            <div class="mb-3 flex flex-wrap items-center gap-2">
+                                <span class="text-sm font-medium">{{ "tags.detail.plan" | transloco }}</span>
+                                @for (plan of planOptions; track plan) {
+                                    <button
+                                        (click)="selectPlan(plan)"
+                                        class="duration-chip"
+                                        [class.duration-chip--active]="selectedPlan === plan"
+                                        [disabled]="isDowngrade(plan)"
+                                        [title]="isDowngrade(plan) ? ('tags.detail.downgradeBlocked' | transloco) : ''"
+                                    >
+                                        {{ "tags.plan." + plan | transloco }}
+                                        @if (plan === currentPlan()) {
+                                            ({{ "tags.detail.currentPlan" | transloco }})
+                                        }
+                                    </button>
+                                }
+                            </div>
+                        }
                         <div class="flex flex-wrap gap-2">
                             @for (opt of durationOptions; track opt.value) {
                                 <button
@@ -420,7 +450,25 @@
                             <div class="mt-8 flex justify-center py-8">
                                 <div class="loading-ring"></div>
                             </div>
+                        } @else if (quoteError) {
+                            <p class="mt-4 text-sm text-red-600">{{ "tags.detail.quoteErrors." + quoteError | transloco }}</p>
                         } @else if (paymentOptions && !paymentOptions.error) {
+                            <div class="mt-4 rounded border p-3 text-sm" data-testid="quote-summary">
+                                <span class="plan-badge plan-badge--{{ paymentOptions.plan || selectedPlan }}">{{ "tags.plan." + (paymentOptions.plan || selectedPlan) | transloco }}</span>
+                                <span class="ml-2">
+                                    @if (licenseDuration === "lifetime") {
+                                        {{ "tags.detail.lifetime" | transloco }}
+                                    } @else {
+                                        {{ licenseDuration }} {{ +licenseDuration > 1 ? ("tags.detail.years" | transloco) : ("tags.detail.year" | transloco) }}
+                                    }
+                                </span>
+                                @if (quoteUsd() !== null) {
+                                    <span class="ml-2 font-semibold">${{ quoteUsd() }} USD</span>
+                                }
+                                @if (paymentOptions.newExpiresAt) {
+                                    <span class="ml-2 text-secondary">→ {{ "tags.detail.newExpiry" | transloco }} {{ formatDate(paymentOptions.newExpiresAt) }}</span>
+                                }
+                            </div>
                             <div class="mt-6 border-t pt-6">
                                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                                     @if (paymentOptions.prices?.ETH) {
