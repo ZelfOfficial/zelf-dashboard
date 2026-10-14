@@ -90,7 +90,8 @@ export class TagsComponent implements OnInit, OnDestroy {
 	selectedStorage: string = "IPFS";
 	searchQuery: string = "";
 	license: License | null = null;
-	availableStorage: string[] = ["IPFS", "Arweave", "Walrus", "NFT"];
+	// Must match the v4 search-by-domain enum exactly (case-sensitive): IPFS | Arweave | Walrus.
+	availableStorage: string[] = ["IPFS", "Arweave", "Walrus"];
 	licenseDomain: string | null = null;
 	isLicenseConfigured: boolean = false;
 	isLoadingLicense: boolean = true;
