@@ -399,32 +399,6 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 	}
 
 	/**
-	 * Get default pricing table
-	 */
-	getDefaultPricingTable(): { [key: string]: { [key: string]: number } } {
-		return {
-			1: { 1: 240, 2: 432, 3: 612, 4: 768, 5: 900, lifetime: 3600 },
-			2: { 1: 120, 2: 216, 3: 306, 4: 384, 5: 450, lifetime: 1800 },
-			3: { 1: 72, 2: 130, 3: 184, 4: 230, 5: 270, lifetime: 1080 },
-			4: { 1: 36, 2: 65, 3: 92, 4: 115, 5: 135, lifetime: 540 },
-			5: { 1: 30, 2: 54, 3: 76, 4: 96, 5: 112, lifetime: 450 },
-			"6-15": { 1: 24, 2: 43, 3: 61, 4: 77, 5: 90, lifetime: 360 },
-			16: { 1: 23, 2: 41, 3: 59, 4: 74, 5: 86, lifetime: 345 },
-			17: { 1: 22, 2: 40, 3: 56, 4: 70, 5: 82, lifetime: 330 },
-			18: { 1: 21, 2: 38, 3: 54, 4: 67, 5: 79, lifetime: 315 },
-			19: { 1: 20, 2: 36, 3: 51, 4: 64, 5: 75, lifetime: 300 },
-			20: { 1: 19, 2: 34, 3: 48, 4: 61, 5: 72, lifetime: 285 },
-			21: { 1: 18, 2: 32, 3: 46, 4: 58, 5: 68, lifetime: 270 },
-			22: { 1: 17, 2: 31, 3: 43, 4: 54, 5: 64, lifetime: 255 },
-			23: { 1: 16, 2: 29, 3: 41, 4: 51, 5: 60, lifetime: 240 },
-			24: { 1: 15, 2: 27, 3: 38, 4: 48, 5: 56, lifetime: 225 },
-			25: { 1: 14, 2: 25, 3: 36, 4: 45, 5: 53, lifetime: 210 },
-			26: { 1: 13, 2: 23, 3: 33, 4: 42, 5: 49, lifetime: 195 },
-			27: { 1: 12, 2: 22, 3: 31, 4: 38, 5: 45, lifetime: 180 },
-		};
-	}
-
-	/**
 	 * Check if there are any changes between current license and form data
 	 */
 	hasLicenseChanges(newDomain: string): boolean {
@@ -720,11 +694,9 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 				payment: {
 					methods: this.getPaymentMethods(),
 					networks: formValue.networks,
-					discounts: {
-						yearly: 0.1,
-						lifetime: 0.2,
-					},
-					rewardPrice: 10,
+					// Preserve license values; never inject client-side defaults.
+					discounts: this.currentLicense?.domainConfig?.tags?.payment?.discounts,
+					rewardPrice: this.currentLicense?.domainConfig?.tags?.payment?.rewardPrice,
 					whitelist: whitelist,
 					pricingTable: this.getPricingTableFromRows(this.pricingTableRows),
 					planPricing: {
@@ -1083,8 +1055,8 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 	 * Initialize pricing table rows
 	 */
 	initializePricingTable(): void {
-		const defaultPricing = this.getDefaultPricingTable();
-		this.pricingTableRows = this.rowsFromPricingTable(defaultPricing);
+		// Start empty: prices only ever come from the loaded license.
+		this.pricingTableRows = this.rowsFromPricingTable({});
 		this.premiumPricingRows = this.clonePricingRows(this.pricingTableRows);
 		this.unlimitedPricingRows = this.clonePricingRows(this.pricingTableRows);
 	}
@@ -1093,7 +1065,13 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 	 * Reset pricing table to default values
 	 */
 	resetPricingTable(): void {
-		this.initializePricingTable();
+		// "Reset" discards local edits and reloads the prices saved in the license (IPFS).
+		// It never seeds made-up default prices.
+		const payment: any = this.currentLicense?.domainConfig?.tags?.payment || {};
+		this.pricingTableRows = this.rowsFromPricingTable(payment.pricingTable || {});
+		this.loadPlanPricingFromConfig(payment.planPricing, payment.pricingTable);
+		this.accountForm?.markAsPristine?.();
+		(this as any)._cdr?.markForCheck?.();
 	}
 
 	/**
@@ -1142,15 +1120,9 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 		},
 		fallback?: { [key: string]: { [key: string]: number } },
 	): void {
-		const fallbackRows = this.pricingTableRows.length
-			? this.clonePricingRows(this.pricingTableRows)
-			: this.rowsFromPricingTable(fallback || this.getDefaultPricingTable());
-		this.premiumPricingRows = this.isEmptyPricingTable(planPricing?.premium)
-			? this.clonePricingRows(fallbackRows)
-			: this.rowsFromPricingTable(planPricing?.premium);
-		this.unlimitedPricingRows = this.isEmptyPricingTable(planPricing?.unlimited)
-			? this.clonePricingRows(fallbackRows)
-			: this.rowsFromPricingTable(planPricing?.unlimited);
+		// No fallback to the legacy pricingTable: a plan with no prices in the license is shown empty (not offered).
+		this.premiumPricingRows = this.rowsFromPricingTable(planPricing?.premium || {});
+		this.unlimitedPricingRows = this.rowsFromPricingTable(planPricing?.unlimited || {});
 	}
 
 	private isEmptyPricingTable(pricingTable?: { [key: string]: { [key: string]: number } }): boolean {
