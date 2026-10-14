@@ -90,6 +90,7 @@ export const appRoutes: Route[] = [
 			{
 				path: "portfolio",
 				children: [
+					{ path: "", pathMatch: "full", redirectTo: "payment" },
 					{
 						path: "payment",
 						loadComponent: () =>
@@ -155,4 +156,7 @@ export const appRoutes: Route[] = [
 			{ path: "example", loadChildren: () => import("app/modules/admin/example/example.routes") },
 		],
 	},
+
+	// Unknown URLs: go to the default page (auth guard sends signed-out users to /sign-in) instead of a blank screen.
+	{ path: "**", redirectTo: "analytics" },
 ];
