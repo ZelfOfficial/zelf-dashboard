@@ -5,6 +5,7 @@ import { HumanAuthnPreviewComponent } from "app/modules/play-area/human-authn-pr
 import { HumanAuthnDecryptComponent } from "app/modules/play-area/human-authn-decrypt/human-authn-decrypt.component";
 
 export default [
+	{ path: "", redirectTo: "human-authn/create", pathMatch: "full" },
 	{ path: "zelfproofs", redirectTo: "human-authn/create", pathMatch: "full" },
 	{ path: "human-authn/create", component: ZelfProofsComponent },
 	{ path: "human-authn/encrypt-qr", component: HumanAuthnEncryptQrComponent },
