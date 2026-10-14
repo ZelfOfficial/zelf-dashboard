@@ -1,3 +1,4 @@
+import { parseDurationParam } from "app/core/pricing/license-pricing.utils";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, ViewEncapsulation, signal, ElementRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -72,6 +73,16 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
         });
     }
 
+    /** Human-readable text for a quote failure (never the raw HTTP error). */
+    quoteErrorText(): string {
+        const code = this.quoteError() || "";
+        if (code === "missing_selection") return "No name selected. Go back and search for a name first.";
+        if (code.includes("tag_not_found")) return "This name hasn't been created yet. Create it in the Zelf app or extension first, then come back to pay.";
+        if (code.includes("plan_duration_not_offered_by_license")) return "This plan and duration are not offered for this name. Go back and pick another option.";
+        if (code === "payment_method_not_available") return "This payment method isn't available for this name. Go back and pick another one.";
+        return "This name / plan / duration can't be quoted right now. Go back and pick another option.";
+    }
+
     private loadQueryParams(): void {
         this.route.queryParams.pipe(takeUntil(this._unsubscribeAll)).subscribe((params) => {
             // Only the selection is read from the URL. Price, amount and payment address
@@ -79,7 +90,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
             // so a tampered URL cannot change what is shown or paid.
             this.tagName.set(params["tagname"] || "");
             this.domain.set(params["domain"] || "");
-            this.duration.set(parseInt(params["duration"], 10) || 1);
+            this.duration.set(parseDurationParam(params["duration"]));
             this.plan.set(params["plan"] || "");
             this.paymentMethod.set(params["paymentMethod"] || "ETH");
 
@@ -89,6 +100,12 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
 
     /** Fetch the server quote for name + plan + duration and populate the checkout from it. */
     private async loadServerQuote(): Promise<void> {
+        if (!this.tagName() || !this.domain()) {
+            this.quoteError.set("missing_selection");
+            this.isQuoting.set(false);
+            this.cdr.markForCheck();
+            return;
+        }
         this.isQuoting.set(true);
         this.quoteError.set(null);
         this.price.set("");
@@ -129,7 +146,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
             this.startPaymentChecking();
         } catch (error: any) {
             console.error("Error loading checkout quote:", error);
-            this.quoteError.set(error?.error?.validationError || error?.message || "quote_unavailable");
+            this.quoteError.set(error?.error?.message || error?.error?.validationError || "quote_unavailable");
         } finally {
             this.isQuoting.set(false);
             this.cdr.markForCheck();
