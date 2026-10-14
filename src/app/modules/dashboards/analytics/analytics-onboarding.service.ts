@@ -198,10 +198,13 @@ export class AnalyticsOnboardingService {
 		this._progress.next({ ...this._progress.value, loading: true });
 
 		try {
-			const domainCfg = await this._resolveDomainConfig();
-			const hasSubscription = await this._checkActiveSubscription();
+			// Independent lookups: run them in parallel so the dashboard isn't gated on three sequential round trips.
+			const [domainCfg, hasSubscription, humanAuthnProgress] = await Promise.all([
+				this._resolveDomainConfig(),
+				this._checkActiveSubscription(),
+				this._fetchHumanAuthnProgress(),
+			]);
 			const tagCount = analyticsSnapshot?.summary?.totals?.total ?? 0;
-			const humanAuthnProgress = await this._fetchHumanAuthnProgress();
 
 			this._clearStalePlayVisitFlags();
 
