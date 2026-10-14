@@ -200,7 +200,7 @@ export class AnalyticsOnboardingService {
 		try {
 			const domainCfg = await this._resolveDomainConfig();
 			const hasSubscription = await this._checkActiveSubscription();
-			const tagCount = analyticsSnapshot?.records?.length ?? 0;
+			const tagCount = analyticsSnapshot?.summary?.totals?.total ?? 0;
 			const humanAuthnProgress = await this._fetchHumanAuthnProgress();
 
 			this._clearStalePlayVisitFlags();

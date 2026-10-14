@@ -36,7 +36,7 @@
 					</div>
 				}
 				<div class="mt-3 h-12">
-					<app-conversions-chart [records]="records"></app-conversions-chart>
+					<app-conversions-chart [summary]="summary"></app-conversions-chart>
 				</div>
 			</div>
 
@@ -57,7 +57,7 @@
 					</div>
 				}
 				<div class="mt-3 h-12">
-					<app-visits-chart [records]="records"></app-visits-chart>
+					<app-visits-chart [summary]="summary"></app-visits-chart>
 				</div>
 			</div>
 
@@ -121,7 +121,7 @@
 			}
 			<div class="analytics-chart-section__body h-72">
 				<app-all-tags-overview-chart
-					[records]="records"
+					[summary]="summary"
 					[selectedPeriod]="visitorsYearSelector.value || 'this-month'"
 				></app-all-tags-overview-chart>
 			</div>
@@ -146,7 +146,7 @@
 				}
 			</div>
 			<div class="analytics-chart-section__body h-64">
-				<app-visitors-vs-page-views-chart [records]="records"></app-visitors-vs-page-views-chart>
+				<app-visitors-vs-page-views-chart [summary]="summary"></app-visitors-vs-page-views-chart>
 			</div>
 		</div>
 
@@ -163,7 +163,7 @@
 					<span class="text-xs text-secondary">{{ "analytics.timePeriods.30days" | transloco }}</span>
 				</div>
 				<div class="analytics-chart-section__body h-40">
-					<app-tag-lease-lengths-chart [records]="records" #tagLeaseChart></app-tag-lease-lengths-chart>
+					<app-tag-lease-lengths-chart [summary]="summary" #tagLeaseChart></app-tag-lease-lengths-chart>
 				</div>
 				<div class="border-t px-4 py-3 sm:px-5">
 					@for (dataset of tagLeaseChart.series; track i; let i = $index) {
@@ -200,7 +200,7 @@
 					<span class="text-xs text-secondary">{{ "analytics.timePeriods.30days" | transloco }}</span>
 				</div>
 				<div class="analytics-chart-section__body h-40">
-					<app-domain-length-chart [records]="records" [currentDomain]="currentDomain" #domainLengthChart></app-domain-length-chart>
+					<app-domain-length-chart [summary]="summary" [currentDomain]="currentDomain" #domainLengthChart></app-domain-length-chart>
 				</div>
 				<div class="border-t px-4 py-3 sm:px-5">
 					@for (dataset of domainLengthChart.series; track i; let i = $index) {
@@ -233,7 +233,7 @@
 					<span class="text-xs text-secondary">{{ "analytics.timePeriods.30days" | transloco }}</span>
 				</div>
 				<div class="analytics-chart-section__body h-40">
-					<app-origin-chart [records]="records" #originChart></app-origin-chart>
+					<app-origin-chart [summary]="summary" #originChart></app-origin-chart>
 				</div>
 				<div class="border-t px-4 py-3 sm:px-5">
 					@for (dataset of originChart.series; track i; let i = $index) {
@@ -255,5 +255,8 @@
 				</div>
 			</div>
 		</div>
+
+		<!-- Drill-down: loaded only when expanded -->
+		<analytics-records class="mt-6 block" [summary]="summary"></analytics-records>
 	}
 </div>

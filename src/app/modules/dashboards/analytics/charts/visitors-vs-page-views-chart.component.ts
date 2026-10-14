@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, OnChanges, SimpleChanges, ViewEncapsulation } from "@angular/core";
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
 import { TranslocoService } from "@jsverse/transloco";
-import { TagAnalyticsRecord, buildDailySeries, isPaidTag, toApexSeries } from "../analytics.utils";
+import { AnalyticsSummary, summarySeries, toApexSeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-visitors-vs-page-views-chart",
@@ -13,7 +13,7 @@ import { TagAnalyticsRecord, buildDailySeries, isPaidTag, toApexSeries } from ".
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VisitorsVsPageViewsChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 
 	chartOptions: ApexOptions = {
 		chart: { type: "area" },
@@ -33,7 +33,7 @@ export class VisitorsVsPageViewsChartComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"]) {
+		if (changes["summary"]) {
 			this._updateChart();
 		}
 	}
@@ -93,8 +93,8 @@ export class VisitorsVsPageViewsChartComponent implements OnInit, OnChanges {
 	}
 
 	private _buildSeries(): any[] {
-		const allTags = toApexSeries(buildDailySeries(this.records).data);
-		const paidTags = toApexSeries(buildDailySeries(this.records, 30, undefined, isPaidTag).data);
+		const allTags = toApexSeries(summarySeries(this.summary, "all", 30).data);
+		const paidTags = toApexSeries(summarySeries(this.summary, "paid", 30).data);
 
 		const validAllTags = allTags.filter((point) => this._isValidPoint(point));
 		const validPaidTags = paidTags.filter((point) => this._isValidPoint(point));

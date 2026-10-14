@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { ApexOptions, NgApexchartsModule } from "ng-apexcharts";
 import { TranslocoService } from "@jsverse/transloco";
 
-import { TagAnalyticsRecord, getBaseName } from "../analytics.utils";
+import { AnalyticsSummary, bucketsToSeries } from "../analytics.utils";
 
 @Component({
 	selector: "app-domain-length-chart",
@@ -14,7 +14,7 @@ import { TagAnalyticsRecord, getBaseName } from "../analytics.utils";
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DomainLengthChartComponent implements OnInit, OnChanges {
-	@Input() records: TagAnalyticsRecord[] = [];
+	@Input() summary: AnalyticsSummary | null = null;
 	@Input() currentDomain: string | null = null;
 
 	chartOptions: ApexOptions = {
@@ -35,7 +35,7 @@ export class DomainLengthChartComponent implements OnInit, OnChanges {
 	}
 
 	ngOnChanges(changes: SimpleChanges): void {
-		if (changes["records"] || changes["currentDomain"]) {
+		if (changes["summary"] || changes["currentDomain"]) {
 			this._updateChart();
 		}
 	}
@@ -112,33 +112,7 @@ export class DomainLengthChartComponent implements OnInit, OnChanges {
 		this._cdr.markForCheck();
 	}
 
-	private _getBaseName(tagName: string): string {
-		return getBaseName(tagName, this.currentDomain);
-	}
-
 	private _calculateRangeBuckets(): { labels: string[]; series: number[]; counts: number[] } {
-		const rangeBuckets = { "1-3": 0, "4-10": 0, "11-20": 0, "21-27": 0 };
-
-		if (!this.records || this.records.length === 0) {
-			const labels = ["1-3", "4-10", "11-20", "21-27"];
-			return { labels, series: [0, 0, 0, 0], counts: [0, 0, 0, 0] };
-		}
-
-		for (const r of this.records) {
-			const len = this._getBaseName(r.name).length;
-			if (len >= 1 && len <= 3) rangeBuckets["1-3"]++;
-			else if (len >= 4 && len <= 10) rangeBuckets["4-10"]++;
-			else if (len >= 11 && len <= 20) rangeBuckets["11-20"]++;
-			else rangeBuckets["21-27"]++;
-		}
-
-		const labels = ["1-3", "4-10", "11-20", "21-27"];
-		const counts = [rangeBuckets["1-3"], rangeBuckets["4-10"], rangeBuckets["11-20"], rangeBuckets["21-27"]];
-
-		// Convert to percentages
-		const total = counts.reduce((a, b) => a + b, 0);
-		const series = total > 0 ? counts.map((c) => Math.round((c / total) * 10000) / 100) : counts;
-
-		return { labels, series, counts };
+		return bucketsToSeries(this.summary?.byNameLength, ["1-3", "4-10", "11-20", "21-27"]);
 	}
 }
