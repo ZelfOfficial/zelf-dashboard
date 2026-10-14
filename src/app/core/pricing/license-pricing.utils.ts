@@ -92,3 +92,19 @@ export function getLicensePrice(
 	const num = Number(value);
 	return value === undefined || value === null || !Number.isFinite(num) ? null : num;
 }
+
+/** Deep copy of a planPricing object (only numeric cells are kept). */
+export function clonePlanPricing(source: PlanPricing | undefined | null): PlanPricing {
+	const out: PlanPricing = {};
+	Object.entries(source || {}).forEach(([plan, table]) => {
+		out[plan] = {};
+		Object.entries(table || {}).forEach(([group, row]) => {
+			out[plan][group] = {};
+			Object.entries(row || {}).forEach(([duration, value]) => {
+				const num = Number(value);
+				if (value !== null && value !== undefined && value !== ("" as any) && Number.isFinite(num)) out[plan][group][duration] = num;
+			});
+		});
+	});
+	return out;
+}

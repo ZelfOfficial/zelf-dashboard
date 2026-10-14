@@ -9,24 +9,15 @@ import { TranslocoModule, TranslocoService } from "@jsverse/transloco";
 
 import { SaveConfirmationService } from "app/core/services/save-confirmation.service";
 import { HttpWrapperService } from "app/http-wrapper.service";
+import { clonePlanPricing, PlanPricing } from "app/core/pricing/license-pricing.utils";
 import { DomainConfig, License, NetworkConfig } from "../license/license.class";
 import { LicenseService } from "../license/license.service";
 import { ValidationRulesComponent } from "./components/validation-rules/validation-rules.component";
 import { BlockchainNetworksComponent } from "./components/blockchain-networks/blockchain-networks.component";
 import { PaymentConfigurationComponent } from "./components/payment-configuration/payment-configuration.component";
-import { PricingColumnKey, PricingTableComponent, PricingTableTab } from "./components/pricing-table/pricing-table.component";
+import { PricingTableComponent } from "./components/pricing-table/pricing-table.component";
 import { StorageOptionsComponent } from "./components/storage-options/storage-options.component";
 import { AnalyticsOnboardingService } from "app/modules/dashboards/analytics/analytics-onboarding.service";
-
-export interface PricingRow {
-	length: string;
-	oneYear: number;
-	twoYears: number;
-	threeYears: number;
-	fourYears: number;
-	fiveYears: number;
-	lifetime: number;
-}
 
 export interface WhitelistItem {
 	domain: string;
@@ -60,10 +51,9 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 	alertType: "success" | "error" = "success";
 	currentLicense: License | null = null;
 	isLoading: boolean = false;
-	pricingTableRows: PricingRow[] = [];
-	premiumPricingRows: PricingRow[] = [];
-	unlimitedPricingRows: PricingRow[] = [];
-	pricingTableTab: PricingTableTab = "tags";
+	/** Working copy of the license planPricing ({ plan: { lengthGroup: { duration: price } } }). */
+	planPricing: PlanPricing = {};
+	pricingTableTab = "";
 	pricingDirty = false;
 	reservedWords: string[] = ["www", "api", "admin", "support", "help"];
 	showAlert: boolean = false;
@@ -126,7 +116,6 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 	ngOnInit(): void {
 		this._analyticsOnboardingService.markVisited("zelfNameService");
 		this.initializeWhitelistItems();
-		this.initializePricingTable();
 		this.createEmptyForm();
 	}
 
@@ -434,11 +423,9 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 					discounts: this.currentLicense?.domainConfig?.tags?.payment?.discounts,
 					rewardPrice: this.currentLicense?.domainConfig?.tags?.payment?.rewardPrice,
 					whitelist: whitelist,
-					pricingTable: this.getPricingTableFromRows(this.pricingTableRows),
-					planPricing: {
-						premium: this.getPricingTableFromRows(this.premiumPricingRows),
-						unlimited: this.getPricingTableFromRows(this.unlimitedPricingRows),
-					},
+					// Legacy v3 table is passed through untouched (never edited, never used for pricing).
+					pricingTable: this.currentLicense?.domainConfig?.tags?.payment?.pricingTable,
+					planPricing: clonePlanPricing(this.planPricing),
 				},
 				storage: {
 					keyPrefix: formValue.keyPrefix,
@@ -557,10 +544,7 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 				this.accountForm.setControl("walletNetworks", this.createNetworksFormGroup(walletNetworks, true));
 			}
 
-			if (config.tags?.payment?.pricingTable) {
-				this.loadPricingTableFromConfig(config.tags.payment.pricingTable);
-			}
-			this.loadPlanPricingFromConfig(config.tags?.payment?.planPricing, config.tags?.payment?.pricingTable);
+			this.loadPlanPricingFromLicense(config.tags?.payment?.planPricing as PlanPricing);
 
 			this.populateWhitelist(config);
 
@@ -658,125 +642,35 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 		return whitelist;
 	}
 
-	get activePricingRows(): PricingRow[] {
-		if (this.pricingTableTab === "premium") return this.premiumPricingRows;
-		if (this.pricingTableTab === "unlimited") return this.unlimitedPricingRows;
-		return this.pricingTableRows;
-	}
 
-	onPricingTableTabChange(tab: PricingTableTab): void {
-		this.pricingTableTab = tab;
-		this._cdr.markForCheck();
-	}
+	// ---------------------------------------------------------------------
+	// Plan pricing (v4): edited as-is from the license `tags.payment.planPricing`.
+	// Plans, length groups and durations all come from the license; nothing is assumed.
+	// ---------------------------------------------------------------------
 
-	onPricingCellChange(change: { length: string; column: PricingColumnKey; value: number }): void {
-		const rows = this.activePricingRows;
-		const row = rows.find((item) => item.length === change.length);
-		if (!row) return;
-		row[change.column] = Number.isFinite(change.value) ? change.value : 0;
-		this.pricingDirty = true;
-		this.accountForm.markAsDirty();
-		this._cdr.markForCheck();
-	}
-
-	initializePricingTable(): void {
-		// Start empty: prices only ever come from the loaded license.
-		this.pricingTableRows = this.rowsFromPricingTable({});
-		this.premiumPricingRows = this.clonePricingRows(this.pricingTableRows);
-		this.unlimitedPricingRows = this.clonePricingRows(this.pricingTableRows);
+	/** Replace the in-memory plan pricing with the license's saved values. */
+	loadPlanPricingFromLicense(planPricing: PlanPricing | undefined | null): void {
+		this.planPricing = clonePlanPricing(planPricing);
+		const plans = Object.keys(this.planPricing);
+		if (!plans.includes(this.pricingTableTab)) this.pricingTableTab = plans[0] || "";
 		this.pricingDirty = false;
 	}
 
+	/** "Reset" discards local edits and reloads the prices saved in the license (IPFS). */
 	resetPricingTable(): void {
-		// "Reset" discards local edits and reloads the prices saved in the license (IPFS).
-		// It never seeds made-up default prices.
-		const payment: any = this.currentLicense?.domainConfig?.tags?.payment || {};
-		this.pricingTableRows = this.rowsFromPricingTable(payment.pricingTable || {});
-		this.loadPlanPricingFromConfig(payment.planPricing, payment.pricingTable);
-		this.accountForm?.markAsPristine?.();
+		this.loadPlanPricingFromLicense(this.currentLicense?.domainConfig?.tags?.payment?.planPricing as PlanPricing);
 		(this as any)._cdr?.markForCheck?.();
 	}
 
-	getPricingTableFromRows(rows: PricingRow[] = this.pricingTableRows): { [key: string]: { [key: string]: number } } {
-		const pricingTable: { [key: string]: { [key: string]: number } } = {};
-		rows.forEach((row) => {
-			pricingTable[row.length] = {
-				1: Number(row.oneYear) || 0,
-				2: Number(row.twoYears) || 0,
-				3: Number(row.threeYears) || 0,
-				4: Number(row.fourYears) || 0,
-				5: Number(row.fiveYears) || 0,
-				lifetime: Number(row.lifetime) || 0,
-			};
-		});
-		return pricingTable;
+	onPlanPricingChange(next: PlanPricing): void {
+		this.planPricing = next;
+		this.pricingDirty = true;
+		this.accountForm?.markAsDirty?.();
+		(this as any)._cdr?.markForCheck?.();
 	}
 
-	loadPricingTableFromConfig(pricingTable: { [key: string]: { [key: string]: number } }): void {
-		if (!pricingTable) {
-			this.initializePricingTable();
-			return;
-		}
-		this.pricingTableRows = this.rowsFromPricingTable(pricingTable);
-	}
-
-	loadPlanPricingFromConfig(
-		planPricing?: {
-			premium?: { [key: string]: { [key: string]: number } };
-			unlimited?: { [key: string]: { [key: string]: number } };
-		},
-		fallback?: { [key: string]: { [key: string]: number } },
-	): void {
-		// No fallback to the legacy pricingTable: a plan with no prices in the license is shown empty (not offered).
-		this.premiumPricingRows = this.rowsFromPricingTable(planPricing?.premium || {});
-		this.unlimitedPricingRows = this.rowsFromPricingTable(planPricing?.unlimited || {});
-		this.pricingDirty = false;
-	}
-
-	private isEmptyPricingTable(pricingTable?: { [key: string]: { [key: string]: number } }): boolean {
-		return !pricingTable || Object.keys(pricingTable).length === 0;
-	}
-
-	private clonePricingRows(rows: PricingRow[]): PricingRow[] {
-		return rows.map((row) => ({ ...row }));
-	}
-
-	private rowsFromPricingTable(pricingTable: { [key: string]: { [key: string]: number } }): PricingRow[] {
-		const rows: PricingRow[] = [];
-		for (let i = 1; i <= 5; i++) {
-			const prices = pricingTable[i] || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, lifetime: 0 };
-			rows.push({
-				length: i.toString(),
-				oneYear: prices[1] || 0,
-				twoYears: prices[2] || 0,
-				threeYears: prices[3] || 0,
-				fourYears: prices[4] || 0,
-				fiveYears: prices[5] || 0,
-				lifetime: prices.lifetime || 0,
-			});
-		}
-		const rangePrices = pricingTable["6-15"] || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, lifetime: 0 };
-		rows.push({
-			length: "6-15",
-			oneYear: rangePrices[1] || 0,
-			twoYears: rangePrices[2] || 0,
-			threeYears: rangePrices[3] || 0,
-			fourYears: rangePrices[4] || 0,
-			fiveYears: rangePrices[5] || 0,
-			lifetime: rangePrices.lifetime || 0,
-		});
-		for (let i = 16; i <= 27; i++) {
-			const prices = pricingTable[i] || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, lifetime: 0 };
-			rows.push({
-				length: i.toString(),
-				oneYear: prices[1] || 0,
-				twoYears: prices[2] || 0,
-				threeYears: prices[3] || 0,
-				fourYears: prices[4] || 0,
-				fiveYears: prices[5] || 0,
-				lifetime: prices.lifetime || 0,
-			});
-		}
-		return rows;
+	onPricingTableTabChange(tab: string): void {
+		this.pricingTableTab = tab;
+		(this as any)._cdr?.markForCheck?.();
 	}
 }
