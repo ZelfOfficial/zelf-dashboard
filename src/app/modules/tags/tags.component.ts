@@ -650,7 +650,15 @@ export class TagsComponent implements OnInit, OnDestroy {
 		this.tagsService
 			.searchByDomain(domainParams)
 			.then((response) => {
-				if (response.data && Array.isArray(response.data)) {
+				if (response.data && Array.isArray(response.data) && response.data.length > this.pageSize) {
+					// v4 search-by-domain ignores limit/pageOffset and returns the whole capped list,
+					// so page it here (same path as the name-pattern search).
+					this.lastNamePatternRows = response.data
+						.map((row) => this.normalizeDomainSearchRow(row))
+						.filter((row) => !this.isPaymentRecord(row));
+					this.applyNamePatternPaging();
+					this.lastNamePatternFetchKey = null;
+				} else if (response.data && Array.isArray(response.data)) {
 					this.dataSource = response.data.map((row) => this.normalizeDomainSearchRow(row)).filter((row) => !this.isPaymentRecord(row));
 
 					// Update pagination info if provided
