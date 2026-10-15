@@ -6,6 +6,9 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatDrawer, MatSidenavModule } from "@angular/material/sidenav";
 import { FuseMediaWatcherService } from "@fuse/services/media-watcher";
 import { Subject, takeUntil, filter } from "rxjs";
+import { ensureLicenseCached } from "app/core/auth/guards/license.guard";
+import { LicenseService } from "app/modules/pages/settings/license/license.service";
+import { inject } from "@angular/core";
 
 @Component({
 	selector: "settings",
@@ -25,6 +28,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
 	/**
 	 * Constructor
 	 */
+	private readonly _licenseService = inject(LicenseService);
+
 	constructor(
 		private _changeDetectorRef: ChangeDetectorRef,
 		private _fuseMediaWatcherService: FuseMediaWatcherService,
@@ -88,6 +93,15 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
 		// Filter out theme-styles panel if no license is set
 		this.panels = this.getFilteredPanels();
+		if (!this.hasLicense()) {
+			// Fresh session: load the license so Theme & Styles shows up without visiting License first.
+			ensureLicenseCached(this._licenseService).then((ok) => {
+				if (ok) {
+					this.panels = this.getFilteredPanels();
+					this._changeDetectorRef.markForCheck();
+				}
+			});
+		}
 
 		// Check initial route and redirect if needed
 		const currentUrl = this._router.url;
