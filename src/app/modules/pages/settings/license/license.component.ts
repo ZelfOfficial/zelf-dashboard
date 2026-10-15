@@ -752,6 +752,14 @@ export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 			}
 
 			const remoteLicense = License.fromAPIResponseWithWrapper(response.data.myLicense.domainConfig);
+			// System dates live on the license record (created_at / expires_at), not inside domainConfig.
+			const toDay = (v: any) => (v ? String(v).slice(0, 10) : "");
+			if (remoteLicense.domainConfig && !remoteLicense.domainConfig.startDate) {
+				remoteLicense.domainConfig.startDate = toDay(response.data.myLicense.created_at);
+			}
+			if (remoteLicense.domainConfig && !remoteLicense.domainConfig.endDate) {
+				remoteLicense.domainConfig.endDate = toDay(response.data.myLicense.expires_at);
+			}
 			if (License.isRemoteLicenseStale(this.currentLicense?.domainConfig, remoteLicense.domainConfig)) {
 				return;
 			}
