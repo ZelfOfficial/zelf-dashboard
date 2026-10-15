@@ -474,7 +474,7 @@
                             </div>
                             <div class="mt-6 border-t pt-6">
                                 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                                    @if (paymentOptions.prices?.ETH) {
+                                    @if (paymentOptions.prices?.ETH && getPaymentAddress("ETH")) {
                                         <div class="payment-option" (click)="toggleAddressReveal('ETH', getPaymentAddress('ETH'))">
                                             <div class="payment-option__header">
                                                 <span class="payment-option__label">ETH</span>
@@ -492,7 +492,7 @@
                                             </div>
                                         </div>
                                     }
-                                    @if (paymentOptions.prices?.SOL) {
+                                    @if (paymentOptions.prices?.SOL && getPaymentAddress("SOL")) {
                                         <div class="payment-option" (click)="toggleAddressReveal('SOL', getPaymentAddress('SOL'))">
                                             <div class="payment-option__header">
                                                 <span class="payment-option__label">SOL</span>
@@ -510,7 +510,7 @@
                                             </div>
                                         </div>
                                     }
-                                    @if (paymentOptions.prices?.AVAX) {
+                                    @if (paymentOptions.prices?.AVAX && getPaymentAddress("AVAX")) {
                                         <div class="payment-option" (click)="toggleAddressReveal('AVAX', getPaymentAddress('AVAX'))">
                                             <div class="payment-option__header">
                                                 <span class="payment-option__label">AVAX</span>
