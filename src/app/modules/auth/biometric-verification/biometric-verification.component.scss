@@ -1,7 +1,7 @@
 .data-biometrics-container {
 	min-height: 100vh;
 	background: #ffffff;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+	font-family: "Inter var", Inter, Helvetica, Arial, sans-serif;
 	padding: 20px;
 
 	// Modal-specific styling
@@ -56,7 +56,7 @@
 				margin: 0 auto 24px;
 				border-radius: 16px;
 				overflow: hidden;
-				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+				box-shadow: 0 0 0 1px rgba(14, 15, 12, 0.12);
 				background: #000;
 
 				webcam {
@@ -98,8 +98,8 @@
 				margin-bottom: 24px;
 
 				.biometric__error {
-					background: #fee;
-					border: 1px solid #fcc;
+					background: #fbeaea;
+					border: 1px solid #f3c4c6;
 					border-radius: 8px;
 					padding: 16px;
 					margin-bottom: 16px;
@@ -111,25 +111,25 @@
 					}
 
 					.biometric__error-subtitle {
-						color: #742a2a;
+						color: #8c1b21;
 						font-size: 14px;
 					}
 				}
 
 				.biometric__instructions {
-					background: #f0f9ff;
-					border: 1px solid #bae6fd;
+					background: #e2f6d5;
+					border: 1px solid #c5f1a5;
 					border-radius: 8px;
 					padding: 16px;
 
 					.biometric__instruction-title {
 						font-weight: 600;
-						color: #0369a1;
+						color: #163300;
 						margin-bottom: 4px;
 					}
 
 					.biometric__instruction-subtitle {
-						color: #0c4a6e;
+						color: #163300;
 						font-size: 14px;
 					}
 				}
@@ -231,7 +231,7 @@
 					input {
 						width: 100%;
 						padding: 12px 16px;
-						border: 1px solid #e0e0e0;
+						border: 1px solid #d4d9d0;
 						border-radius: 8px;
 						font-size: 14px;
 						transition: all 0.2s ease;
@@ -239,7 +239,7 @@
 						&:focus {
 							outline: none;
 							border-color: #163300;
-							box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+							box-shadow: 0 0 0 3px rgba(159, 232, 112, 0.45);
 						}
 					}
 
@@ -258,8 +258,8 @@
 			padding: 40px 20px;
 
 			.api-error-card {
-				background: #fff5f5;
-				border: 2px solid #fed7d7;
+				background: #fbeaea;
+				border: 1px solid #f3c4c6;
 				border-radius: 16px;
 				padding: 32px;
 				max-width: 400px;
@@ -293,29 +293,29 @@
 					.btn-back-error {
 						padding: 12px 24px;
 						border: none;
-						border-radius: 8px;
+						border-radius: 9999px;
 						font-size: 14px;
-						font-weight: 500;
+						font-weight: 600;
 						cursor: pointer;
 						transition: all 0.2s ease;
 					}
 
 					.btn-retry {
-						background: #163300;
-						color: white;
+						background: #9fe870;
+						color: #163300;
 
 						&:hover {
-							background: #5a67d8;
+							background: #b8ef94;
 						}
 					}
 
 					.btn-back-error {
-						background: #f7fafc;
-						color: #4a5568;
-						border: 1px solid #e8ebe6;
+						background: #ffffff;
+						color: #163300;
+						border: 1px solid #163300;
 
 						&:hover {
-							background: #edf2f7;
+							background: #e2f6d5;
 						}
 					}
 				}
