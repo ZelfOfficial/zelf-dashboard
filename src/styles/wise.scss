@@ -1,6 +1,7 @@
 /* ----------------------------------------------------------------------------------------------------- */
-/*  Wise design system for the Zelf Dashboard
-/*  "Deep moss with lime voltage": Forest Ink carries weight, Lime Voltage punctuates,
+/*  Zelf x Wise hybrid design system for the Zelf Dashboard
+/*  Wise structure, Zelf colours: Zelf Night (#1a1a2e) carries weight, Zelf Orange (#ff5721) punctuates
+/*  (token names keep their Wise aliases: forest-ink = Zelf Night, lime-voltage = Zelf Orange, linen-mist = Peach Mist),
 /*  Inter 900 shouts the display type, everything else stays flat on a Paper canvas.
 /*  Tokens mirror the Wise style reference 1:1; component rules below restyle the shared
 /*  primitives (Material + Fuse) once so pages inherit the system.
@@ -237,7 +238,7 @@ a:not([class]) {
     color: #fff !important;
 
     &:hover:not([disabled]) {
-        background: var(--color-spruce);
+        background: #2a2a45;
     }
 
     .dark & {
@@ -283,7 +284,7 @@ a:not([class]) {
     border-radius: 10px;
 }
 
-/* Inverted section: Forest Ink with lime punctuation */
+/* Inverted section: Zelf Night with orange punctuation */
 .wise-inverse {
     background: var(--color-forest-ink);
     color: #fff;
