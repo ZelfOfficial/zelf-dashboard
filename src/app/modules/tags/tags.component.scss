@@ -1,20 +1,21 @@
 .tags-page {
-	@apply mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10;
+	@apply mx-auto w-full max-w-[1200px] px-4 py-8 sm:px-6 sm:py-12;
 
 	.tags-page__title {
-		@apply text-2xl font-semibold tracking-tight text-default;
+		@apply font-display text-[36px] font-black leading-none tracking-display text-default md:text-heading-sm md:leading-none;
+		color: var(--wise-ink);
 	}
 
 	.tags-page__subtitle {
-		@apply mt-1 text-sm text-secondary;
+		@apply mt-3 text-body-sm text-secondary;
 	}
 
 	.tags-section-label {
-		@apply mb-1.5 block text-xs font-medium uppercase tracking-wide text-secondary;
+		@apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-secondary;
 	}
 
 	.tags-panel {
-		@apply rounded-lg border bg-card;
+		@apply rounded-wise-card border bg-card;
 	}
 
 	.tags-panel--padded {
@@ -22,11 +23,11 @@
 	}
 
 	.tags-panel--warning {
-		@apply border-orange-200 dark:border-orange-700/50;
+		@apply border-amber-300 bg-amber-50 dark:border-amber-700/50 dark:bg-transparent;
 	}
 
 	.tags-panel--success {
-		@apply border-green-200 dark:border-green-700/50;
+		@apply border-linen-mist bg-linen-mist dark:border-lime-voltage/30 dark:bg-transparent;
 	}
 
 	.tags-panel__section {
@@ -46,8 +47,8 @@
 	}
 
 	.tags-filter-input {
-		@apply rounded-md border bg-card px-3 py-2;
-		min-height: 2.5rem;
+		@apply rounded-wise-input border border-gray-300 bg-card px-3 py-2 dark:border-gray-600;
+		min-height: 2.75rem;
 	}
 
 	.tags-filter-input select {
@@ -55,7 +56,7 @@
 	}
 
 	.tags-filter-search {
-		@apply flex min-h-[2.5rem] items-center gap-2 rounded-md border bg-card px-3 py-2 focus-within:ring-1 focus-within:ring-primary;
+		@apply flex min-h-[2.75rem] items-center gap-2 rounded-wise-input border border-gray-300 bg-card px-3 py-2 focus-within:ring-1 focus-within:ring-primary dark:border-gray-600 dark:focus-within:ring-lime-voltage;
 	}
 
 	.tags-filter-search input {
@@ -72,7 +73,7 @@
 	}
 
 	.tags-filter-clear {
-		@apply flex h-10 w-10 items-center justify-center rounded-md border text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply flex h-11 w-11 items-center justify-center rounded-full border border-gray-300 text-default transition-colors hover:bg-linen-mist dark:border-gray-600 dark:hover:bg-hover;
 
 		mat-icon {
 			font-size: 18px;
@@ -86,7 +87,7 @@
 	}
 
 	.tags-filter-chip {
-		@apply inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-sm font-medium text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply inline-flex items-center gap-1 rounded-full bg-linen-mist px-3 py-1 text-sm font-semibold text-forest-ink transition-colors hover:bg-lime-voltage dark:bg-hover dark:text-lime-voltage;
 
 		mat-icon {
 			font-size: 14px;
@@ -157,7 +158,7 @@
 		padding: 0.75rem 1rem;
 		text-align: left;
 		font-size: 0.75rem;
-		font-weight: 500;
+		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		color: var(--fuse-text-secondary);
@@ -180,7 +181,7 @@
 	}
 
 	.tags-table tbody tr:hover {
-		background-color: rgba(var(--fuse-bg-hover-rgb, 148 163 184), 0.08);
+		background-color: rgba(226, 246, 213, 0.45);
 	}
 
 	.tags-table td {
@@ -203,11 +204,11 @@
 	}
 
 	.tags-table__status-dot--hold {
-		background-color: #22c55e;
+		background-color: #3d8a1c;
 	}
 
 	.tags-table__status-dot--active {
-		background-color: #ef4444;
+		background-color: #cb272f;
 	}
 
 	.tags-table__name {
@@ -219,12 +220,12 @@
 	}
 
 	.tags-domain-badge {
-		@apply inline-flex rounded-md border px-2 py-0.5 text-xs font-medium text-secondary;
+		@apply inline-flex rounded-full bg-fog px-2.5 py-0.5 text-xs font-semibold text-charcoal dark:bg-hover dark:text-linen-mist;
 	}
 
 	.tags-action-btn {
 		white-space: nowrap;
-		@apply inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium text-default transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply inline-flex items-center gap-1.5 rounded-full border border-forest-ink px-3.5 py-1.5 text-sm font-semibold text-forest-ink transition-colors hover:bg-linen-mist dark:border-lime-voltage dark:text-lime-voltage dark:hover:bg-hover;
 
 		mat-icon {
 			font-size: 16px;
@@ -238,7 +239,7 @@
 	}
 
 	.tags-empty__icon {
-		@apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800;
+		@apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-linen-mist dark:bg-hover;
 
 		mat-icon {
 			@apply text-secondary;
@@ -249,7 +250,7 @@
 	}
 
 	.tags-empty__title {
-		@apply text-sm font-medium text-default;
+		@apply text-body-sm font-semibold text-default;
 	}
 
 	.tags-empty__hint {
@@ -269,15 +270,15 @@
 	}
 
 	.tags-pagination__btn {
-		@apply flex h-8 w-8 items-center justify-center rounded-md text-secondary transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-gray-800;
+		@apply flex h-9 w-9 items-center justify-center rounded-full text-default transition-colors hover:bg-linen-mist disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-hover;
 	}
 
 	.tags-pagination__page {
-		@apply flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium text-secondary transition-colors hover:bg-gray-100 dark:hover:bg-gray-800;
+		@apply flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold text-secondary transition-colors hover:bg-linen-mist dark:hover:bg-hover;
 	}
 
 	.tags-pagination__page--active {
-		@apply bg-primary text-on-primary hover:bg-primary;
+		@apply bg-forest-ink text-white hover:bg-forest-ink dark:bg-lime-voltage dark:text-forest-ink;
 	}
 
 	.tags-pagination__size-wrap {
@@ -285,7 +286,7 @@
 	}
 
 	.tags-pagination__size {
-		@apply rounded-md border bg-card px-2 py-1;
+		@apply rounded-full border border-gray-300 bg-card px-3 py-1 dark:border-gray-600;
 	}
 
 	.tags-pagination__size select {
@@ -293,7 +294,7 @@
 	}
 
 	.tags-purchase-price {
-		@apply rounded-lg border bg-gray-50 p-5 dark:bg-gray-900/30;
+		@apply rounded-wise-card bg-white p-5 dark:bg-forest-ink;
 	}
 
 	.tags-purchase-actions {
@@ -301,16 +302,16 @@
 	}
 
 	.tags-btn-primary {
-		@apply inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary transition-opacity hover:opacity-90;
+		@apply inline-flex min-h-[44px] items-center gap-2 rounded-full bg-lime-voltage px-6 py-2 text-sm font-semibold text-forest-ink transition-colors hover:bg-lime-500;
 	}
 
 	.tags-btn-secondary {
-		@apply inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply inline-flex min-h-[44px] items-center gap-2 rounded-full border border-forest-ink px-6 py-2 text-sm font-semibold text-forest-ink transition-colors hover:bg-linen-mist dark:border-lime-voltage dark:text-lime-voltage dark:hover:bg-hover;
 	}
 
 	@media (max-width: 959px) {
 		.tags-filters__grid {
-			grid-template-columns: 1fr 1fr;
+			grid-template-columns: 1fr 1fr auto;
 		}
 
 		.tags-filters__field--search {
@@ -351,20 +352,20 @@
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23163300' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
 	background-repeat: no-repeat;
 	background-position: right 0 center;
 	padding-right: 20px;
 
 	option {
 		background: white;
-		color: #1f2937;
+		color: #0e0f0c;
 	}
 }
 
 .dark .tags-page select option {
-	background: #1e293b;
-	color: #f1f5f9;
+	background: #163300;
+	color: #ffffff;
 }
 
 .animate-spin {
@@ -382,4 +383,8 @@
 
 .tags-page .tags-table tbody tr:active {
 	transform: scale(0.998);
+}
+
+.dark .tags-page .tags-table tbody tr:hover {
+	background-color: rgba(159, 232, 112, 0.08);
 }

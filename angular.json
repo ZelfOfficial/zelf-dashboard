@@ -52,6 +52,7 @@
 							"src/styles/vendors.scss",
 							"src/@fuse/styles/main.scss",
 							"src/styles/styles.scss",
+							"src/styles/wise.scss",
 							"src/styles/tailwind.scss"
 						],
 						"scripts": []

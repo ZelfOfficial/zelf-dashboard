@@ -1,0 +1,734 @@
+/* ----------------------------------------------------------------------------------------------------- */
+/*  Wise design system for the Zelf Dashboard
+/*  "Deep moss with lime voltage": Forest Ink carries weight, Lime Voltage punctuates,
+/*  Inter 900 shouts the display type, everything else stays flat on a Paper canvas.
+/*  Tokens mirror the Wise style reference 1:1; component rules below restyle the shared
+/*  primitives (Material + Fuse) once so pages inherit the system.
+/* ----------------------------------------------------------------------------------------------------- */
+
+:root {
+    /* Colors */
+    --color-forest-ink: #163300;
+    --color-lime-voltage: #9fe870;
+    --color-spruce: #054d28;
+    --color-linen-mist: #e2f6d5;
+    --color-signal-blue: #0b4c72;
+    --color-alarm-red: #cb272f;
+    --color-charcoal: #454745;
+    --color-obsidian: #0e0f0c;
+    --color-pebble: #868685;
+    --color-slate: #6a6c6a;
+    --color-fog: #e8ebe6;
+    --color-paper: #ffffff;
+
+    /* Typography */
+    --font-inter: 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-wise-sans: 'Inter var', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* Wise Sans substitute (Inter 900) */
+    --font-monospace: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Typography scale */
+    --text-micro: 12px;
+    --leading-micro: 1.63;
+    --tracking-micro: -0.036px;
+    --text-caption: 14px;
+    --leading-caption: 1.55;
+    --tracking-caption: -0.07px;
+    --text-body-sm: 16px;
+    --leading-body-sm: 1.5;
+    --tracking-body-sm: -0.096px;
+    --text-body: 18px;
+    --leading-body: 1.5;
+    --tracking-body: -0.126px;
+    --text-body-lg: 25px;
+    --leading-body-lg: 1.3;
+    --tracking-body-lg: -0.225px;
+    --text-subheading: 36px;
+    --leading-subheading: 1.25;
+    --tracking-subheading: -0.396px;
+    --text-heading-sm: 45px;
+    --leading-heading-sm: 1.1;
+    --tracking-heading-sm: -0.495px;
+    --text-heading: 61px;
+    --leading-heading: 1.1;
+    --tracking-heading: -0.915px;
+    --text-heading-lg: 89px;
+    --leading-heading-lg: 0.85;
+    --tracking-heading-lg: -2.67px;
+    --text-display: 105px;
+    --leading-display: 0.85;
+    --tracking-display: -3.15px;
+
+    /* Spacing */
+    --spacing-4: 4px;
+    --spacing-8: 8px;
+    --spacing-12: 12px;
+    --spacing-16: 16px;
+    --spacing-20: 20px;
+    --spacing-24: 24px;
+    --spacing-28: 28px;
+    --spacing-32: 32px;
+    --spacing-40: 40px;
+    --spacing-44: 44px;
+    --spacing-48: 48px;
+    --spacing-56: 56px;
+    --spacing-64: 64px;
+    --spacing-100: 100px;
+    --spacing-124: 124px;
+
+    /* Layout */
+    --page-max-width: 1200px;
+    --section-gap: 64px;
+    --card-padding: 24px;
+    --element-gap: 12px;
+
+    /* Border radius */
+    --radius-sm: 2px;
+    --radius-lg: 10px;
+    --radius-2xl: 16px;
+    --radius-3xl: 28px;
+    --radius-full: 9999px;
+    --radius-tags: 9999px;
+    --radius-cards: 10px;
+    --radius-inputs: 10px;
+    --radius-buttons: 9999px;
+    --radius-imagemasks: 1000px;
+    --radius-largecards: 28px;
+    --radius-navsegments: 9999px;
+
+    /* Shadows */
+    --shadow-subtle: rgba(14, 15, 12, 0.12) 0px 0px 0px 1px;
+    --shadow-subtle-2: rgb(134, 134, 133) 0px 0px 0px 1px inset;
+    --shadow-xl: rgba(0, 0, 0, 0.15) 0px 10px 32px 0px, rgba(0, 0, 0, 0.04) 0px 40px 40px 0px;
+    --shadow-lg: rgba(0, 0, 0, 0.08) 0px 6px 20px 0px;
+
+    /* Surfaces */
+    --surface-paper: #ffffff;
+    --surface-fog: #e8ebe6;
+    --surface-linen-mist: #e2f6d5;
+    --surface-lime-voltage: #9fe870;
+    --surface-forest-ink: #163300;
+
+    /* Semantic aliases (flip in dark mode) */
+    --wise-ink: var(--color-forest-ink);
+    --wise-text: var(--color-obsidian);
+    --wise-text-body: var(--color-charcoal);
+    --wise-text-muted: var(--color-slate);
+    --wise-surface: var(--color-paper);
+    --wise-surface-soft: var(--color-fog);
+    --wise-surface-tint: var(--color-linen-mist);
+    --wise-hairline: rgba(14, 15, 12, 0.12);
+    --wise-cta-bg: var(--color-lime-voltage);
+    --wise-cta-text: var(--color-forest-ink);
+    --wise-cta-hover: #8fdc5d;
+    --wise-focus: var(--color-forest-ink);
+
+    /* Angular Material shape tokens */
+    --mdc-filled-button-container-shape: 9999px;
+    --mdc-outlined-button-container-shape: 9999px;
+    --mdc-text-button-container-shape: 9999px;
+    --mdc-protected-button-container-shape: 9999px;
+    --mdc-dialog-container-shape: 28px;
+    --mdc-outlined-card-container-shape: 10px;
+    --mdc-elevated-card-container-shape: 10px;
+    --mat-menu-container-shape: 16px;
+    --mdc-plain-tooltip-container-shape: 8px;
+    --mat-select-container-elevation-shadow: var(--shadow-xl);
+    --mat-menu-container-elevation-shadow: var(--shadow-xl);
+}
+
+.dark {
+    --wise-ink: var(--color-lime-voltage);
+    --wise-text: #ffffff;
+    --wise-text-body: rgba(226, 246, 213, 0.86);
+    --wise-text-muted: rgba(226, 246, 213, 0.64);
+    --wise-surface: var(--color-forest-ink);
+    --wise-surface-soft: #1c3d06;
+    --wise-surface-tint: rgba(159, 232, 112, 0.12);
+    --wise-hairline: rgba(226, 246, 213, 0.14);
+    --wise-focus: var(--color-lime-voltage);
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/*  Base typography
+/* ----------------------------------------------------------------------------------------------------- */
+body {
+    font-family: var(--font-inter);
+    font-feature-settings: 'salt' 0, 'cv11' 1;
+    letter-spacing: -0.006em;
+}
+
+.font-display,
+.wise-display {
+    font-family: var(--font-wise-sans);
+    font-weight: 900 !important;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+}
+
+::selection {
+    background: var(--color-lime-voltage);
+    color: var(--color-forest-ink);
+}
+
+a:not([class]) {
+    color: var(--wise-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/*  Primitives — usable as plain classes in templates
+/* ----------------------------------------------------------------------------------------------------- */
+
+/* Primary CTA: lime pill, Forest Ink label */
+.wise-btn,
+.wise-btn-primary,
+.wise-btn-secondary,
+.wise-btn-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 24px;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &[disabled],
+    &.disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+.wise-btn,
+.wise-btn-primary {
+    background: var(--wise-cta-bg);
+    color: var(--wise-cta-text) !important;
+
+    &:hover:not([disabled]) {
+        background: var(--wise-cta-hover);
+    }
+}
+
+.wise-btn-secondary {
+    background: transparent;
+    color: var(--wise-ink) !important;
+    box-shadow: inset 0 0 0 1px var(--wise-ink);
+
+    &:hover:not([disabled]) {
+        background: var(--wise-surface-tint);
+    }
+}
+
+.wise-btn-dark {
+    background: var(--color-forest-ink);
+    color: #fff !important;
+
+    &:hover:not([disabled]) {
+        background: var(--color-spruce);
+    }
+
+    .dark & {
+        background: var(--color-lime-voltage);
+        color: var(--color-forest-ink) !important;
+    }
+}
+
+.wise-link {
+    color: var(--wise-ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+
+    &:hover {
+        text-decoration-thickness: 2px;
+    }
+}
+
+.wise-card {
+    background: var(--wise-surface);
+    border-radius: 10px;
+    box-shadow: var(--shadow-subtle);
+
+    .dark & {
+        box-shadow: 0 0 0 1px var(--wise-hairline);
+    }
+}
+
+.wise-card-lg {
+    background: var(--wise-surface);
+    border-radius: 28px;
+    box-shadow: var(--shadow-subtle);
+
+    .dark & {
+        box-shadow: 0 0 0 1px var(--wise-hairline);
+    }
+}
+
+.wise-card-soft {
+    background: var(--wise-surface-soft);
+    border-radius: 10px;
+}
+
+/* Inverted section: Forest Ink with lime punctuation */
+.wise-inverse {
+    background: var(--color-forest-ink);
+    color: #fff;
+
+    .wise-accent,
+    .text-accent {
+        color: var(--color-lime-voltage);
+    }
+}
+
+.wise-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--wise-surface-soft);
+    color: var(--wise-ink);
+}
+
+.wise-tag-lime {
+    background: var(--color-lime-voltage);
+    color: var(--color-forest-ink);
+}
+
+.wise-tag-mist {
+    background: var(--color-linen-mist);
+    color: var(--color-forest-ink);
+}
+
+.wise-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--wise-text-muted);
+}
+
+/* Segmented control (pill nav segments) */
+.wise-segments {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 9999px;
+    background: var(--wise-surface-soft);
+
+    > * {
+        border-radius: 9999px;
+        padding: 8px 16px;
+        font-weight: 600;
+        font-size: 14px;
+        color: var(--wise-text-body);
+        transition: background-color 0.15s ease;
+    }
+
+    > .active,
+    > [aria-selected='true'] {
+        background: var(--color-forest-ink);
+        color: #fff;
+
+        .dark & {
+            background: var(--color-lime-voltage);
+            color: var(--color-forest-ink);
+        }
+    }
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/*  Angular Material
+/* ----------------------------------------------------------------------------------------------------- */
+
+/* Buttons: primary/accent filled = lime pill w/ Forest Ink label */
+.mat-mdc-unelevated-button,
+.mat-mdc-raised-button {
+    &.mat-primary,
+    &.mat-accent {
+        --mdc-filled-button-container-color: var(--color-lime-voltage);
+        --mdc-filled-button-label-text-color: var(--color-forest-ink);
+        --mdc-protected-button-container-color: var(--color-lime-voltage);
+        --mdc-protected-button-label-text-color: var(--color-forest-ink);
+        --mat-filled-button-state-layer-color: var(--color-forest-ink);
+        --mat-protected-button-state-layer-color: var(--color-forest-ink);
+        --mat-filled-button-ripple-color: rgba(22, 51, 0, 0.12);
+        --mat-protected-button-ripple-color: rgba(22, 51, 0, 0.12);
+
+        .mat-icon {
+            color: var(--color-forest-ink) !important;
+        }
+    }
+
+    &.mat-warn {
+        --mdc-filled-button-container-color: var(--color-alarm-red);
+        --mdc-protected-button-container-color: var(--color-alarm-red);
+    }
+}
+
+.mat-mdc-raised-button {
+    box-shadow: none !important;
+}
+
+.mat-mdc-button-base:not(.mat-mdc-icon-button):not(.mat-mdc-fab):not(.mat-mdc-mini-fab) {
+    min-height: 40px;
+    letter-spacing: -0.01em;
+}
+
+/* Secondary = outlined pill in Forest Ink */
+.mat-mdc-outlined-button:not(.mat-warn) {
+    --mdc-outlined-button-outline-color: var(--wise-ink);
+    --mdc-outlined-button-label-text-color: var(--wise-ink);
+    --mat-outlined-button-state-layer-color: var(--color-lime-voltage);
+}
+
+/* Text buttons read as links */
+.mat-mdc-button:not(.mat-warn):not(.mat-accent) {
+    --mdc-text-button-label-text-color: var(--wise-ink);
+}
+
+/* Form fields: 10px, Fog/Pebble border, Forest Ink focus (lime in dark) */
+.mat-mdc-form-field {
+    .mat-mdc-floating-label,
+    .mat-mdc-form-field-label,
+    mat-label {
+        font-weight: 600 !important;
+    }
+}
+
+.dark .mat-mdc-form-field.mat-focused:not(.mat-form-field-invalid) .mat-mdc-text-field-wrapper {
+    border-color: var(--color-lime-voltage) !important;
+}
+
+.mat-mdc-form-field.mat-focused:not(.mat-form-field-invalid) .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 0 1px var(--wise-focus) !important;
+}
+
+/* Cards */
+.mat-mdc-card {
+    border-radius: 10px !important;
+    box-shadow: var(--shadow-subtle) !important;
+
+    .dark & {
+        box-shadow: 0 0 0 1px var(--wise-hairline) !important;
+    }
+}
+
+/* Dialogs: large-card radius */
+.mat-mdc-dialog-container .mat-mdc-dialog-surface,
+.mat-mdc-dialog-surface {
+    border-radius: 28px !important;
+}
+
+.mat-mdc-dialog-container .mat-mdc-dialog-title {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+/* Menus / select panels */
+.mat-mdc-menu-panel,
+.mat-mdc-select-panel,
+.mat-mdc-autocomplete-panel {
+    border-radius: 16px !important;
+    box-shadow: var(--shadow-xl) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled),
+.mat-mdc-option.mat-mdc-option-active {
+    background: var(--wise-surface-tint) !important;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+    color: var(--wise-ink) !important;
+    font-weight: 600;
+}
+
+/* Tabs → pill segments */
+.mat-mdc-tab-group {
+    .mat-mdc-tab-header {
+        border-bottom: none !important;
+    }
+
+    .mat-mdc-tab-labels {
+        display: inline-flex;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 9999px;
+        background: var(--wise-surface-soft);
+        width: fit-content;
+    }
+
+    .mat-mdc-tab {
+        border-radius: 9999px !important;
+        min-width: 0 !important;
+        height: 40px !important;
+        padding: 0 18px !important;
+        opacity: 1 !important;
+
+        .mdc-tab__text-label {
+            color: var(--wise-text-body) !important;
+            font-weight: 600;
+        }
+
+        .mdc-tab-indicator {
+            display: none;
+        }
+
+        &.mdc-tab--active {
+            background: var(--color-forest-ink);
+
+            .mdc-tab__text-label {
+                color: #fff !important;
+            }
+
+            .dark & {
+                background: var(--color-lime-voltage);
+
+                .mdc-tab__text-label {
+                    color: var(--color-forest-ink) !important;
+                }
+            }
+        }
+    }
+}
+
+/* Button toggles → pill segments */
+.mat-button-toggle-group {
+    border-radius: 9999px !important;
+    border: none !important;
+    padding: 4px;
+    gap: 4px;
+    background: var(--wise-surface-soft);
+
+    .mat-button-toggle {
+        border: none !important;
+        border-radius: 9999px !important;
+        background: transparent;
+        font-weight: 600;
+
+        &.mat-button-toggle-checked {
+            background: var(--color-forest-ink);
+            color: #fff;
+
+            .dark & {
+                background: var(--color-lime-voltage);
+                color: var(--color-forest-ink);
+            }
+        }
+    }
+}
+
+/* Slide toggles: Forest Ink track when on (lime in dark), lime handle */
+.mat-mdc-slide-toggle {
+    --mdc-switch-selected-track-color: var(--color-forest-ink);
+    --mdc-switch-selected-hover-track-color: var(--color-forest-ink);
+    --mdc-switch-selected-focus-track-color: var(--color-forest-ink);
+    --mdc-switch-selected-pressed-track-color: var(--color-forest-ink);
+    --mdc-switch-selected-handle-color: var(--color-lime-voltage);
+    --mdc-switch-selected-hover-handle-color: var(--color-lime-voltage);
+    --mdc-switch-selected-focus-handle-color: var(--color-lime-voltage);
+    --mdc-switch-selected-pressed-handle-color: var(--color-lime-voltage);
+    --mdc-switch-selected-icon-color: var(--color-forest-ink);
+    --mdc-switch-unselected-track-color: #d4d9d0;
+    --mdc-switch-unselected-handle-color: #ffffff;
+    --mdc-switch-unselected-hover-handle-color: #ffffff;
+    --mdc-switch-unselected-focus-handle-color: #ffffff;
+
+    .dark & {
+        --mdc-switch-selected-track-color: var(--color-lime-voltage);
+        --mdc-switch-selected-hover-track-color: var(--color-lime-voltage);
+        --mdc-switch-selected-focus-track-color: var(--color-lime-voltage);
+        --mdc-switch-selected-pressed-track-color: var(--color-lime-voltage);
+        --mdc-switch-selected-handle-color: var(--color-forest-ink);
+        --mdc-switch-selected-hover-handle-color: var(--color-forest-ink);
+        --mdc-switch-selected-focus-handle-color: var(--color-forest-ink);
+        --mdc-switch-selected-pressed-handle-color: var(--color-forest-ink);
+        --mdc-switch-selected-icon-color: var(--color-lime-voltage);
+        --mdc-switch-unselected-track-color: #2a5e0c;
+    }
+}
+
+/* Checkboxes / radios in dark mode use lime */
+.dark {
+    .mat-mdc-checkbox {
+        --mdc-checkbox-selected-icon-color: var(--color-lime-voltage);
+        --mdc-checkbox-selected-hover-icon-color: var(--color-lime-voltage);
+        --mdc-checkbox-selected-focus-icon-color: var(--color-lime-voltage);
+        --mdc-checkbox-selected-checkmark-color: var(--color-forest-ink);
+    }
+
+    .mat-mdc-radio-button {
+        --mdc-radio-selected-icon-color: var(--color-lime-voltage);
+        --mdc-radio-selected-hover-icon-color: var(--color-lime-voltage);
+        --mdc-radio-selected-focus-icon-color: var(--color-lime-voltage);
+    }
+
+    .mat-mdc-progress-spinner {
+        --mdc-circular-progress-active-indicator-color: var(--color-lime-voltage);
+    }
+}
+
+/* Chips / badges → pills */
+.mat-mdc-chip {
+    border-radius: 9999px !important;
+}
+
+/* Tooltips: Forest Ink */
+.mat-mdc-tooltip {
+    --mdc-plain-tooltip-container-color: var(--color-forest-ink);
+    --mdc-plain-tooltip-supporting-text-color: #ffffff;
+
+    .dark & {
+        --mdc-plain-tooltip-container-color: var(--color-linen-mist);
+        --mdc-plain-tooltip-supporting-text-color: var(--color-forest-ink);
+    }
+}
+
+/* Snackbars: Forest Ink with lime action */
+.mat-mdc-snack-bar-container {
+    --mdc-snackbar-container-color: var(--color-forest-ink);
+    --mdc-snackbar-supporting-text-color: #ffffff;
+    --mat-snack-bar-button-color: var(--color-lime-voltage);
+    --mdc-snackbar-container-shape: 10px;
+}
+
+/* Tables */
+.mat-mdc-table {
+    background: transparent !important;
+
+    .mat-mdc-header-cell {
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--wise-text-muted);
+    }
+}
+
+/* Drawers (settings side menu) */
+.mat-drawer {
+    background: var(--wise-surface) !important;
+}
+
+.mat-drawer-container {
+    background: transparent !important;
+}
+
+/* ----------------------------------------------------------------------------------------------------- */
+/*  Fuse navigation → Wise pill nav segments
+/* ----------------------------------------------------------------------------------------------------- */
+body fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
+    gap: 4px;
+
+    fuse-horizontal-navigation-basic-item,
+    fuse-horizontal-navigation-branch-item {
+        .fuse-horizontal-navigation-item-wrapper {
+            border-radius: 9999px !important;
+
+            .fuse-horizontal-navigation-item {
+                height: 40px;
+                padding: 0 16px !important;
+                border-radius: 9999px;
+
+                .fuse-horizontal-navigation-item-title {
+                    font-size: 15px;
+                    font-weight: 600;
+                    letter-spacing: -0.01em;
+                    color: var(--wise-ink);
+                }
+
+                .fuse-horizontal-navigation-item-icon {
+                    margin-right: 8px !important;
+                    color: var(--wise-ink) !important;
+                }
+            }
+        }
+
+        &:hover .fuse-horizontal-navigation-item-wrapper {
+            background: var(--color-linen-mist) !important;
+
+            .dark & {
+                background: rgba(159, 232, 112, 0.12) !important;
+            }
+        }
+    }
+
+    fuse-horizontal-navigation-basic-item .fuse-horizontal-navigation-item-wrapper {
+        .fuse-horizontal-navigation-item.fuse-horizontal-navigation-item-active,
+        .fuse-horizontal-navigation-item.fuse-horizontal-navigation-item-active-forced {
+            background: var(--color-forest-ink) !important;
+            box-shadow: none !important;
+            border-radius: 9999px !important;
+
+            .fuse-horizontal-navigation-item-title {
+                color: #ffffff !important;
+            }
+
+            .fuse-horizontal-navigation-item-icon {
+                color: var(--color-lime-voltage) !important;
+            }
+
+            .dark & {
+                background: var(--color-lime-voltage) !important;
+
+                .fuse-horizontal-navigation-item-title,
+                .fuse-horizontal-navigation-item-icon {
+                    color: var(--color-forest-ink) !important;
+                }
+            }
+        }
+    }
+
+    fuse-horizontal-navigation-branch-item {
+        .fuse-horizontal-navigation-menu-active,
+        .fuse-horizontal-navigation-menu-active-forced {
+            .fuse-horizontal-navigation-item-wrapper {
+                background: var(--color-linen-mist) !important;
+
+                .dark & {
+                    background: rgba(159, 232, 112, 0.12) !important;
+                }
+            }
+        }
+    }
+}
+
+/* Vertical (mobile drawer) navigation */
+body fuse-vertical-navigation {
+    .fuse-vertical-navigation-item {
+        border-radius: 9999px !important;
+    }
+
+    .fuse-vertical-navigation-item-active {
+        background: var(--color-lime-voltage) !important;
+
+        .fuse-vertical-navigation-item-title,
+        .fuse-vertical-navigation-item-icon,
+        .fuse-vertical-navigation-item-title span {
+            color: var(--color-forest-ink) !important;
+            opacity: 1 !important;
+        }
+    }
+}
+
+/* Fuse alerts */
+fuse-alert .fuse-alert-container {
+    border-radius: 10px !important;
+}

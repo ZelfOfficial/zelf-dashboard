@@ -403,7 +403,7 @@
     /* Default style tweaks and enhancements */
     .mat-mdc-text-field-wrapper {
         padding: 0;
-        border-radius: 6px;
+        border-radius: 10px;
         border-width: 1px;
         border-style: solid;
         @apply border-gray-300 bg-white shadow-sm dark:border-gray-500 dark:bg-black dark:bg-opacity-5 #{'!important'};
@@ -415,7 +415,7 @@
         }
 
         .mat-mdc-form-field-focus-overlay {
-            border-radius: 6px;
+            border-radius: 10px;
         }
 
         /* Form field */
@@ -423,7 +423,7 @@
             position: relative;
             display: flex;
             align-items: stretch;
-            border-radius: 6px;
+            border-radius: 10px;
             padding: 0 16px;
 
             .mat-mdc-form-field-icon-prefix,
