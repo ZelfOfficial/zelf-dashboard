@@ -42,30 +42,30 @@
 	font-weight: 650;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: rgb(113 113 122);
+	color: rgb(106 108 106);
 }
 
 :host-context(body.dark) .hap-eyebrow {
-	color: rgb(161 161 170);
+	color: rgb(134 134 133);
 }
 
 .hap-title {
 	margin: 0;
-	font-size: 1.5rem;
-	font-weight: 600;
-	letter-spacing: -0.025em;
-	line-height: 1.2;
-	color: rgb(24 24 27);
+	font-size: 2.25rem;
+	font-weight: 900;
+	letter-spacing: -0.03em;
+	line-height: 1;
+	color: rgb(22 51 0);
 }
 
 @media (min-width: 640px) {
 	.hap-title {
-		font-size: 1.75rem;
+		font-size: 2.8125rem;
 	}
 }
 
 :host-context(body.dark) .hap-title {
-	color: rgb(250 250 250);
+	color: #9fe870;
 }
 
 .hap-endpoint {
@@ -74,14 +74,14 @@
 	max-width: 100%;
 	overflow: hidden;
 	border-radius: 0.75rem;
-	border: 1px solid rgb(24 24 27 / 0.1);
-	background: rgb(24 24 27);
+	border: 1px solid rgb(22 51 0 / 0.1);
+	background: rgb(22 51 0);
 	box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset;
 }
 
 :host-context(body.dark) .hap-endpoint {
 	border-color: rgb(255 255 255 / 0.12);
-	background: rgb(9 9 11);
+	background: rgb(11 26 2);
 }
 
 .hap-endpoint-method {
@@ -91,8 +91,8 @@
 	font-size: 0.75rem;
 	font-weight: 700;
 	letter-spacing: 0.08em;
-	color: rgb(24 24 27);
-	background: rgb(253 186 116);
+	color: rgb(22 51 0);
+	background: rgb(159 232 112);
 }
 
 .hap-endpoint-path {
@@ -102,7 +102,7 @@
 	font-weight: 560;
 	letter-spacing: -0.02em;
 	line-height: 1.2;
-	color: rgb(250 250 250);
+	color: rgb(255 255 255);
 	overflow-x: auto;
 	white-space: nowrap;
 }
@@ -112,11 +112,11 @@
 	max-width: 36rem;
 	font-size: 0.875rem;
 	line-height: 1.6;
-	color: rgb(82 82 91);
+	color: rgb(69 71 69);
 }
 
 :host-context(body.dark) .hap-subtitle {
-	color: rgb(161 161 170);
+	color: rgb(134 134 133);
 }
 
 .hap-rail {
@@ -127,8 +127,8 @@
 	padding: 0.5rem;
 	list-style: none;
 	border-radius: 1rem;
-	border: 1px solid rgb(24 24 27 / 0.08);
-	background: rgb(244 244 245 / 0.7);
+	border: 1px solid rgb(22 51 0 / 0.08);
+	background: rgb(232 235 230 / 0.7);
 }
 
 @media (min-width: 640px) {
@@ -148,7 +148,7 @@
 	gap: 0.5rem;
 	padding: 0.55rem 0.7rem;
 	border-radius: 0.7rem;
-	color: rgb(113 113 122);
+	color: rgb(106 108 106);
 }
 
 .hap-rail-index {
@@ -160,8 +160,8 @@
 	border-radius: 9999px;
 	font-size: 0.6875rem;
 	font-weight: 700;
-	background: rgb(24 24 27 / 0.08);
-	color: rgb(82 82 91);
+	background: rgb(22 51 0 / 0.08);
+	color: rgb(69 71 69);
 }
 
 .hap-rail-label {
@@ -171,39 +171,39 @@
 }
 
 :host-context(body.dark) .hap-rail-item {
-	color: rgb(161 161 170);
+	color: rgb(134 134 133);
 }
 
 :host-context(body.dark) .hap-rail-index {
 	background: rgb(255 255 255 / 0.08);
-	color: rgb(212 212 216);
+	color: rgb(226 246 213);
 }
 
 .hap-rail-item--done .hap-rail-index {
-	background: rgb(24 24 27);
-	color: rgb(250 250 250);
+	background: rgb(22 51 0);
+	color: rgb(255 255 255);
 }
 
 :host-context(body.dark) .hap-rail-item--done .hap-rail-index {
-	background: rgb(250 250 250);
-	color: rgb(24 24 27);
+	background: rgb(255 255 255);
+	color: rgb(22 51 0);
 }
 
 .hap-rail-item--current {
-	background: rgb(24 24 27);
-	color: rgb(250 250 250);
+	background: rgb(22 51 0);
+	color: rgb(255 255 255);
 }
 
 .hap-rail-item--current .hap-rail-index {
-	background: rgb(253 186 116);
-	color: rgb(24 24 27);
+	background: rgb(159 232 112);
+	color: rgb(22 51 0);
 }
 
 .hap-rail-item--current .hap-rail-label {
-	color: rgb(250 250 250);
+	color: rgb(255 255 255);
 }
 
 :host-context(body.dark) .hap-rail-item--current {
-	background: rgb(250 250 250 / 0.1);
-	color: rgb(250 250 250);
+	background: rgb(255 255 255 / 0.1);
+	color: rgb(255 255 255);
 }

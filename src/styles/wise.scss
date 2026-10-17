@@ -752,3 +752,40 @@ body fuse-vertical-navigation {
 fuse-alert .fuse-alert-container {
     border-radius: 10px !important;
 }
+
+/* ----------------------------------------------------------------------------------------------------- */
+/*  Page titles: Inter 900 (Wise Sans substitute), tightly tracked, Forest Ink (lime in dark)
+/* ----------------------------------------------------------------------------------------------------- */
+.wise-page-title {
+    font-family: var(--font-wise-sans);
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--wise-ink);
+
+    @media (min-width: 960px) {
+        font-size: 45px;
+    }
+}
+
+.wise-hero-title {
+    font-family: var(--font-wise-sans);
+    font-weight: 900;
+    font-size: 44px;
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    color: var(--wise-ink);
+
+    @media (min-width: 960px) {
+        font-size: 61px;
+    }
+}
+
+.wise-section-title {
+    font-weight: 800;
+    font-size: 22px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--wise-text);
+}

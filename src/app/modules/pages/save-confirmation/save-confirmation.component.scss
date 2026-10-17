@@ -11,33 +11,33 @@
 
 // Branded Icon Holder
 .icon-holder {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.15);
+    background: #e2f6d5;
+    border: 1px solid rgba(22, 51, 0, 0.1);
+    box-shadow: 0 10px 20px -5px rgba(22, 51, 0, 0.15);
 
     .dark-mode & {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
-        border-color: rgba(59, 130, 246, 0.3);
+        background: rgba(159, 232, 112, 0.14);
+        border-color: rgba(22, 51, 0, 0.3);
     }
 }
 
 // Summary Info Card
 .summary-card {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(226, 232, 240, 0.8);
+    border: 1px solid #e8ebe6;
 
     &:hover {
-        border-color: rgba(59, 130, 246, 0.2);
-        background-color: rgba(248, 250, 252, 0.95);
+        border-color: rgba(22, 51, 0, 0.2);
+        background-color: rgba(226, 246, 213, 0.5);
     }
 
     .dark-mode & {
-        border-color: rgba(51, 65, 85, 0.5);
-        background-color: rgba(15, 23, 42, 0.5);
+        border-color: rgba(226, 246, 213, 0.14);
+        background-color: rgba(22, 51, 0, 0.6);
 
         &:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-            background-color: rgba(30, 41, 59, 0.6);
+            border-color: rgba(22, 51, 0, 0.3);
+            background-color: rgba(22, 51, 0, 0.9);
         }
     }
 }
@@ -47,20 +47,20 @@
     transition: all 0.2s ease;
     &:focus-within {
         border-color: #163300;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        box-shadow: 0 0 0 4px rgba(22, 51, 0, 0.1);
     }
 }
 
 // Primary Action Button
 .btn-primary {
-    background: linear-gradient(135deg, #0e0f0c 0%, #163300 100%);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #9fe870;
+    color: #163300 !important;
+    border-radius: 9999px !important;
+    transition: all 0.15s ease;
+    box-shadow: none;
 
     &:hover:not(:disabled) {
-        background: linear-gradient(135deg, #000000 0%, #0e0f0c 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        background: #8fdc5d;
     }
 
     &:active:not(:disabled) {
@@ -68,11 +68,11 @@
     }
 
     .dark-mode & {
-        background: linear-gradient(135deg, #ffffff 0%, #f1f3ef 100%);
+        background: #9fe870;
         color: #0e0f0c;
 
         &:hover:not(:disabled) {
-            background: linear-gradient(135deg, #f7f8f6 0%, #ffffff 100%);
+            background: #8fdc5d;
             box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
         }
     }
@@ -82,11 +82,11 @@
 .btn-secondary {
     transition: all 0.2s ease;
     &:hover {
-        background-color: rgba(241, 245, 249, 1);
+        background-color: #e2f6d5;
     }
     .dark-mode & {
         &:hover {
-            background-color: rgba(30, 41, 59, 1);
+            background-color: rgba(159, 232, 112, 0.1);
         }
     }
 }
@@ -94,16 +94,16 @@
 // Passkey Button
 .btn-passkey {
     transition: all 0.3s ease;
-    border: 1px solid rgba(191, 219, 254, 1);
+    border: 1px solid #c8eeae;
     &:hover {
         border-color: #163300;
-        background-color: rgba(219, 234, 254, 0.5);
+        background-color: rgba(226, 246, 213, 0.5);
     }
     .dark-mode & {
-        border-color: rgba(30, 58, 138, 0.5);
+        border-color: rgba(159, 232, 112, 0.3);
         &:hover {
             border-color: #163300;
-            background-color: rgba(30, 58, 138, 0.3);
+            background-color: rgba(159, 232, 112, 0.12);
         }
     }
 }
@@ -300,11 +300,11 @@ button[mat-stroked-button] {
 
 // Background colors
 .bg-blue-100 {
-    background-color: #dbeafe;
+    background-color: #e2f6d5;
 }
 
 .bg-green-50 {
-    background-color: #f0fdf4;
+    background-color: #f2f9ec;
 }
 
 .bg-red-50 {
@@ -337,7 +337,7 @@ button[mat-stroked-button] {
 }
 
 .text-green-800 {
-    color: #166534;
+    color: #163300;
 }
 
 .text-red-800 {

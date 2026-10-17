@@ -3,13 +3,13 @@
 		<!-- Header Section -->
 		<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 			<div>
-				<h2 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Team Management</h2>
+				<h2 class="wise-page-title">Team Management</h2>
 				<p class="text-gray-500 dark:text-gray-400 mt-1">Manage access and permissions for your project members</p>
 			</div>
 			<button
 				mat-flat-button
 				(click)="openInviteModal()"
-				class="!rounded-xl !px-6 !py-2.5 !bg-gray-900 dark:!bg-white !text-white dark:!text-gray-900 !font-bold hover:opacity-90 transition-opacity"
+				class="!rounded-full !px-6 !py-2.5 !bg-lime-voltage dark:!bg-lime-voltage !text-forest-ink dark:!text-forest-ink !font-semibold hover:opacity-90 transition-opacity"
 			>
 				<mat-icon class="icon-size-5 mr-2">add</mat-icon>
 				Invite Member
@@ -33,7 +33,7 @@
 					<p class="text-gray-500 dark:text-gray-400 max-w-sm mb-8">
 						Invite your colleagues to collaborate on this project. They will need to complete biometric verification to join.
 					</p>
-					<button mat-stroked-button (click)="openInviteModal()" class="!rounded-xl !px-6 !border-gray-300 dark:!border-gray-600">
+					<button mat-stroked-button (click)="openInviteModal()" class="!rounded-full !px-6 !border-gray-300 dark:!border-gray-600">
 						Invite your first member
 					</button>
 				</div>
