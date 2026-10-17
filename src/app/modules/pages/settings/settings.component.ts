@@ -66,6 +66,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
 				description: "Manage your Zelf Name Service settings",
 			},
 			{
+				id: "zelf-keys",
+				icon: "heroicons_outline:key",
+				title: "Zelf Keys",
+				description: "Manage ZelfKeys availability and storage",
+			},
+			{
 				id: "security",
 				icon: "heroicons_outline:lock-closed",
 				title: "Security",
@@ -249,6 +255,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
 				icon: "heroicons_outline:globe-alt",
 				title: "Zelf Name Service",
 				description: "Manage your Zelf Name Service settings",
+			},
+			{
+				id: "zelf-keys",
+				icon: "heroicons_outline:key",
+				title: "Zelf Keys",
+				description: "Manage ZelfKeys availability and storage",
 			},
 			{
 				id: "security",

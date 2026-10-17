@@ -30,6 +30,11 @@ export default [
 					),
 			},
 			{
+				path: "zelf-keys",
+				loadComponent: () =>
+					import("app/modules/pages/settings/zelf-keys/zelf-keys.component").then((m) => m.SettingsZelfKeysComponent),
+			},
+			{
 				path: "security",
 				loadComponent: () => import("app/modules/pages/settings/security/security.component").then((m) => m.SettingsSecurityComponent),
 			},

@@ -1,0 +1,120 @@
+<div class="flex flex-col min-h-screen w-full bg-default" *transloco="let t">
+	<!-- Main Content Container -->
+	<div class="flex-auto px-4 py-8 sm:px-6 sm:py-12 md:px-8 w-full max-w-4xl mx-auto">
+		<!-- Alert Messages -->
+		@if (showAlert) {
+			<div class="mb-6 animate-fade-in">
+				<div
+					class="flex items-center justify-between p-4 rounded-2xl shadow-sm border transaction-all duration-300"
+					[class]="
+						alertType === 'success'
+							? 'bg-green-50 border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300'
+							: 'bg-red-50 border-red-200 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-300'
+					"
+				>
+					<div class="flex items-center gap-3">
+						<div
+							class="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+							[class]="
+								alertType === 'success'
+									? 'bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-200'
+									: 'bg-red-100 text-red-600 dark:bg-red-800 dark:text-red-200'
+							"
+						>
+							<mat-icon class="icon-size-5">{{ alertType === "success" ? "check" : "priority_high" }}</mat-icon>
+						</div>
+						<span class="font-medium text-sm">{{ alertMessage }}</span>
+					</div>
+				</div>
+			</div>
+		}
+
+		<form [formGroup]="accountForm">
+			<!-- Header -->
+			<div class="mb-8">
+				<h2 class="wise-section-title">Zelf Keys</h2>
+				<div class="text-secondary text-lg mt-1">Manage the ZelfKeys section of your license: availability and where keys are stored</div>
+			</div>
+
+			<!-- Info -->
+			<div class="mb-8 p-4 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-800/30 rounded-2xl flex items-start gap-4">
+				<mat-icon class="icon-size-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0">info</mat-icon>
+				<div class="text-sm text-blue-900 dark:text-blue-200">
+					<h3 class="font-semibold mb-1">Saved to your license</h3>
+					<div class="opacity-90 space-y-1">
+						<p>These settings live in the <span class="font-mono">zelfkeys</span> section of your license and are saved with the same face confirmation as the other license settings.</p>
+						<p><span class="font-medium">Read-only:</span> ZelfKeys plans and pricing come from the license and aren't edited here.</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Feature -->
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
+				<div class="p-8 sm:p-10">
+					<div class="flex items-center gap-3 mb-6">
+						<div class="w-10 h-10 rounded-full bg-linen-mist dark:bg-lime-voltage/15 flex items-center justify-center text-forest-ink dark:text-lime-voltage">
+							<mat-icon class="icon-size-5">vpn_key</mat-icon>
+						</div>
+						<div>
+							<h2 class="wise-section-title">{{ t("license.features.zelfkeys_title") }}</h2>
+							<p class="text-sm text-gray-500 dark:text-gray-400">{{ t("license.features.zelfkeys_description") }}</p>
+						</div>
+					</div>
+					<div
+						class="flex items-center justify-between p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-all cursor-pointer"
+						(click)="accountForm.get('zelfkeysEnabled')?.setValue(!accountForm.get('zelfkeysEnabled')?.value)"
+					>
+						<div>
+							<h3 class="font-semibold text-gray-900 dark:text-white">{{ t("license.features.zelfkeys_enabled") }}</h3>
+							<p class="text-sm text-gray-500 dark:text-gray-400">{{ t("license.features.zelfkeys_description") }}</p>
+						</div>
+						<mat-slide-toggle [formControlName]="'zelfkeysEnabled'" (click)="$event.stopPropagation()"></mat-slide-toggle>
+					</div>
+				</div>
+			</div>
+
+			<!-- Storage Options (ZelfKeys) -->
+			@if (accountForm.get("zelfkeysEnabled")?.value) {
+				<zns-storage-options
+					[formGroup]="accountForm"
+					titleKey="license.storage_options.zelfkeys_title"
+					ipfsControlName="zelfkeysIpfsEnabled"
+					arweaveControlName="zelfkeysArweaveEnabled"
+					walrusControlName="zelfkeysWalrusEnabled"
+					keyPrefixControlName="zelfkeysKeyPrefix"
+				></zns-storage-options>
+			}
+
+			<!-- Bottom Actions -->
+			<div class="sticky bottom-6 z-10 mx-auto max-w-4xl">
+				<div
+					class="bg-forest-ink rounded-full p-3 pl-5 flex items-center justify-between border border-forest-ink dark:border-lime-voltage/30"
+				>
+					<button
+						(click)="cancel()"
+						[disabled]="isLoading"
+						class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors"
+					>
+						{{ t("license.actions.cancel") }}
+					</button>
+					<div class="flex items-center gap-3">
+						<button
+							(click)="saveLicense()"
+							[disabled]="isLoading || accountForm.invalid"
+							class="px-6 py-2.5 bg-lime-voltage text-forest-ink rounded-full text-sm font-semibold hover:bg-lime-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+						>
+							@if (isLoading) {
+								<mat-icon class="icon-size-4 animate-spin">refresh</mat-icon>
+								<span>{{ t("license.actions.processing") }}</span>
+							} @else {
+								<span>{{ t("license.actions.save_configuration") }}</span>
+							}
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="h-12"></div>
+		</form>
+	</div>
+</div>
