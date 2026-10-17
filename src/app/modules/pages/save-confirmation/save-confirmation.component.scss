@@ -11,33 +11,33 @@
 
 // Branded Icon Holder
 .icon-holder {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(37, 99, 235, 0.1) 100%);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.15);
+    background: #ffe9e1;
+    border: 1px solid rgba(26, 26, 46, 0.1);
+    box-shadow: 0 10px 20px -5px rgba(26, 26, 46, 0.15);
 
     .dark-mode & {
-        background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
-        border-color: rgba(59, 130, 246, 0.3);
+        background: rgba(255, 87, 33, 0.14);
+        border-color: rgba(26, 26, 46, 0.3);
     }
 }
 
 // Summary Info Card
 .summary-card {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(226, 232, 240, 0.8);
+    border: 1px solid #e5e5e5;
 
     &:hover {
-        border-color: rgba(59, 130, 246, 0.2);
-        background-color: rgba(248, 250, 252, 0.95);
+        border-color: rgba(26, 26, 46, 0.2);
+        background-color: rgba(255, 233, 225, 0.5);
     }
 
     .dark-mode & {
-        border-color: rgba(51, 65, 85, 0.5);
-        background-color: rgba(15, 23, 42, 0.5);
+        border-color: rgba(230, 233, 242, 0.14);
+        background-color: rgba(26, 26, 46, 0.6);
 
         &:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-            background-color: rgba(30, 41, 59, 0.6);
+            border-color: rgba(26, 26, 46, 0.3);
+            background-color: rgba(26, 26, 46, 0.9);
         }
     }
 }
@@ -46,21 +46,21 @@
 .input-wrapper {
     transition: all 0.2s ease;
     &:focus-within {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        border-color: #1a1a2e;
+        box-shadow: 0 0 0 4px rgba(26, 26, 46, 0.1);
     }
 }
 
 // Primary Action Button
 .btn-primary {
-    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #ff5721;
+    color: #1a1a2e !important;
+    border-radius: 9999px !important;
+    transition: all 0.15s ease;
+    box-shadow: none;
 
     &:hover:not(:disabled) {
-        background: linear-gradient(135deg, #000000 0%, #111827 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        background: #8fdc5d;
     }
 
     &:active:not(:disabled) {
@@ -68,11 +68,11 @@
     }
 
     .dark-mode & {
-        background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-        color: #111827;
+        background: #ff5721;
+        color: #010110;
 
         &:hover:not(:disabled) {
-            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            background: #8fdc5d;
             box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
         }
     }
@@ -82,11 +82,11 @@
 .btn-secondary {
     transition: all 0.2s ease;
     &:hover {
-        background-color: rgba(241, 245, 249, 1);
+        background-color: #ffe9e1;
     }
     .dark-mode & {
         &:hover {
-            background-color: rgba(30, 41, 59, 1);
+            background-color: rgba(255, 87, 33, 0.1);
         }
     }
 }
@@ -94,16 +94,16 @@
 // Passkey Button
 .btn-passkey {
     transition: all 0.3s ease;
-    border: 1px solid rgba(191, 219, 254, 1);
+    border: 1px solid #ffcfbd;
     &:hover {
-        border-color: #3b82f6;
-        background-color: rgba(219, 234, 254, 0.5);
+        border-color: #1a1a2e;
+        background-color: rgba(255, 233, 225, 0.5);
     }
     .dark-mode & {
-        border-color: rgba(30, 58, 138, 0.5);
+        border-color: rgba(255, 87, 33, 0.3);
         &:hover {
-            border-color: #3b82f6;
-            background-color: rgba(30, 58, 138, 0.3);
+            border-color: #1a1a2e;
+            background-color: rgba(255, 87, 33, 0.12);
         }
     }
 }
@@ -111,23 +111,23 @@
 // Dark mode adjustments
 .dark {
     .bg-gray-50 {
-        background-color: #111827;
+        background-color: #010110;
     }
 
     .bg-gray-800 {
-        background-color: #1f2937;
+        background-color: #1a1a2e;
     }
 
     .text-gray-900 {
-        color: #f9fafb;
+        color: #fafafa;
     }
 
     .text-gray-600 {
-        color: #d1d5db;
+        color: #d4d4d4;
     }
 
     .text-gray-400 {
-        color: #9ca3af;
+        color: #737373;
     }
 }
 
@@ -138,30 +138,30 @@ mat-form-field {
 
 // Button styling
 button[mat-flat-button] {
-    background-color: #3b82f6;
+    background-color: #1a1a2e;
     color: white;
 
     &:hover:not(:disabled) {
-        background-color: #2563eb;
+        background-color: #1a1a2e;
     }
 
     &:disabled {
-        background-color: #9ca3af;
-        color: #6b7280;
+        background-color: #737373;
+        color: #525252;
     }
 }
 
 button[mat-stroked-button] {
-    border-color: #d1d5db;
-    color: #374151;
+    border-color: #d4d4d4;
+    color: #3a3a3a;
 
     &:hover:not(:disabled) {
-        background-color: #f9fafb;
+        background-color: #fafafa;
     }
 
     &:disabled {
-        border-color: #e5e7eb;
-        color: #9ca3af;
+        border-color: #e5e5e5;
+        color: #737373;
     }
 }
 
@@ -300,11 +300,11 @@ button[mat-stroked-button] {
 
 // Background colors
 .bg-blue-100 {
-    background-color: #dbeafe;
+    background-color: #ffe9e1;
 }
 
 .bg-green-50 {
-    background-color: #f0fdf4;
+    background-color: #fff4f0;
 }
 
 .bg-red-50 {
@@ -316,28 +316,28 @@ button[mat-stroked-button] {
 }
 
 .bg-gray-50 {
-    background-color: #f9fafb;
+    background-color: #fafafa;
 }
 
 .bg-gray-800 {
-    background-color: #1f2937;
+    background-color: #1a1a2e;
 }
 
 .bg-gray-900 {
-    background-color: #111827;
+    background-color: #010110;
 }
 
 // Text colors
 .text-blue-600 {
-    color: #2563eb;
+    color: #1a1a2e;
 }
 
 .text-blue-400 {
-    color: #60a5fa;
+    color: #ff5721;
 }
 
 .text-green-800 {
-    color: #166534;
+    color: #1a1a2e;
 }
 
 .text-red-800 {
@@ -345,19 +345,19 @@ button[mat-stroked-button] {
 }
 
 .text-gray-900 {
-    color: #111827;
+    color: #010110;
 }
 
 .text-gray-600 {
-    color: #4b5563;
+    color: #525252;
 }
 
 .text-gray-500 {
-    color: #6b7280;
+    color: #525252;
 }
 
 .text-gray-400 {
-    color: #9ca3af;
+    color: #737373;
 }
 
 .text-white {
@@ -374,11 +374,11 @@ button[mat-stroked-button] {
 }
 
 .border-gray-200 {
-    border-color: #e5e7eb;
+    border-color: #e5e5e5;
 }
 
 .border-gray-700 {
-    border-color: #374151;
+    border-color: #3a3a3a;
 }
 
 // Border radius

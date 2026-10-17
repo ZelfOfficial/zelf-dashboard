@@ -46,25 +46,25 @@ import { TagRecord } from "./tags.component";
         `
             .qr-modal {
                 --modal-bg: #ffffff;
-                --modal-text: #1f2937;
-                --modal-header-bg: #f1f5f9;
-                --modal-header-text: #1f2937;
-                --modal-footer-bg: #f8fafc;
-                --modal-url-bg: #f8fafc;
-                --modal-url-text: #1f2937;
-                --modal-secondary-text: #6b7280;
-                --modal-border: #e2e8f0;
+                --modal-text: #1a1a2e;
+                --modal-header-bg: #f4f4f4;
+                --modal-header-text: #1a1a2e;
+                --modal-footer-bg: #fafafa;
+                --modal-url-bg: #fafafa;
+                --modal-url-text: #1a1a2e;
+                --modal-secondary-text: #525252;
+                --modal-border: #e5e5e5;
 
                 &.dark-mode {
-                    --modal-bg: #1e293b;
-                    --modal-text: #f1f5f9;
-                    --modal-header-bg: #334155;
-                    --modal-header-text: #f1f5f9;
-                    --modal-footer-bg: #334155;
-                    --modal-url-bg: #334155;
-                    --modal-url-text: #f1f5f9;
-                    --modal-secondary-text: #94a3b8;
-                    --modal-border: #475569;
+                    --modal-bg: #1a1a2e;
+                    --modal-text: #f4f4f4;
+                    --modal-header-bg: #2a2a45;
+                    --modal-header-text: #f4f4f4;
+                    --modal-footer-bg: #2a2a45;
+                    --modal-url-bg: #2a2a45;
+                    --modal-url-text: #f4f4f4;
+                    --modal-secondary-text: #a3a3a3;
+                    --modal-border: #525252;
                 }
 
                 .modal-content {

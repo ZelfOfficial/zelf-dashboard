@@ -4,7 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule, UntypedFormBuilder, Unty
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { Router } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { TranslocoModule, TranslocoService } from "@jsverse/transloco";
 
 import { SaveConfirmationService } from "../../../../core/services/save-confirmation.service";
@@ -24,7 +24,7 @@ export interface WhitelistItem {
 	encapsulation: ViewEncapsulation.None,
 	selector: "settings-license",
 	templateUrl: "./license.component.html",
-	imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatSlideToggleModule, MatCheckboxModule, TranslocoModule],
+	imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule, MatSlideToggleModule, MatCheckboxModule, TranslocoModule, RouterLink],
 })
 export class SettingsLicenseComponent implements OnInit, AfterViewInit {
 	accountForm: UntypedFormGroup;

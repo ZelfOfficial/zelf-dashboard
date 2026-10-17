@@ -1,10 +1,11 @@
 /* ----------------------------------------------------------------------------------------------------- */
 /*  @ Import/write your custom styles here.
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
+/*  Design system tokens and primitives live in wise.scss.
 /* ----------------------------------------------------------------------------------------------------- */
 
 /* ----------------------------------------------------------------------------------------------------- */
-/*  Horizontal nav dropdown — premium “glass” panel + stacked rows (Human Authn Play Area, etc.)
+/*  Horizontal nav dropdown (Play Area, Zelf Legacy): flat Wise panel, Linen Mist rows, Fog icon tiles
 /* ----------------------------------------------------------------------------------------------------- */
 
 .fuse-horizontal-navigation-menu-panel.mat-mdc-menu-panel {
@@ -12,19 +13,17 @@
 	max-width: min(380px, calc(100vw - 24px));
 	border-radius: 16px !important;
 	overflow: hidden;
-	border: 1px solid rgba(148, 163, 184, 0.35);
+	border: none;
 	box-shadow:
-		0 24px 48px -12px rgba(15, 23, 42, 0.28),
-		0 0 0 1px rgba(255, 255, 255, 0.06) inset !important;
-	background: rgba(255, 255, 255, 0.78) !important;
-	backdrop-filter: blur(14px) saturate(160%);
-	-webkit-backdrop-filter: blur(14px) saturate(160%);
+		rgba(1, 1, 16, 0.12) 0 0 0 1px,
+		rgba(0, 0, 0, 0.15) 0 10px 32px 0,
+		rgba(0, 0, 0, 0.04) 0 40px 40px 0 !important;
+	background: #ffffff !important;
 
 	.mat-mdc-menu-content {
-		padding: 10px !important;
+		padding: 8px !important;
 	}
 
-	/* Softer Material hover overlay — we paint our own row chrome */
 	.mat-mdc-menu-item {
 		--mat-menu-item-hover-state-layer-opacity: 0;
 		--mat-menu-item-focus-state-layer-opacity: 0;
@@ -35,8 +34,8 @@
 		min-height: 0 !important;
 		line-height: normal !important;
 		padding: 0 !important;
-		margin-bottom: 8px;
-		border-radius: 12px !important;
+		margin-bottom: 4px;
+		border-radius: 10px !important;
 		background: transparent !important;
 
 		&:last-child {
@@ -53,42 +52,31 @@
 			width: 100%;
 		}
 
-		/* Row shell */
 		.fuse-horizontal-navigation-item-wrapper {
-			border-radius: 12px;
-			transition:
-				background 0.22s ease,
-				box-shadow 0.22s ease,
-				transform 0.18s ease;
-			border: 1px solid transparent;
+			border-radius: 10px;
+			transition: background 0.15s ease;
 		}
 
 		.fuse-horizontal-navigation-item {
 			align-items: flex-start !important;
-			padding: 14px 14px !important;
+			padding: 12px !important;
 			min-height: 0 !important;
 			gap: 14px;
+			box-shadow: none !important;
+			background: transparent !important;
 		}
 
-		/* Icon tile */
 		.fuse-horizontal-navigation-item-icon {
 			flex-shrink: 0;
-			width: 44px !important;
-			height: 44px !important;
-			min-width: 44px !important;
+			width: 40px !important;
+			height: 40px !important;
+			min-width: 40px !important;
 			margin-right: 0 !important;
-			padding: 10px !important;
-			border-radius: 12px;
+			padding: 9px !important;
+			border-radius: 9999px;
 			box-sizing: border-box;
-			background: linear-gradient(
-				145deg,
-				color-mix(in srgb, var(--fuse-primary) 28%, transparent),
-				color-mix(in srgb, var(--fuse-primary) 8%, transparent)
-			);
-			box-shadow:
-				0 1px 0 rgba(255, 255, 255, 0.35) inset,
-				0 4px 14px color-mix(in srgb, var(--fuse-primary) 18%, transparent);
-			color: var(--fuse-primary) !important;
+			background: #e5e5e5;
+			color: #1a1a2e !important;
 		}
 
 		.fuse-horizontal-navigation-item-title-wrapper {
@@ -98,111 +86,105 @@
 		}
 
 		.fuse-horizontal-navigation-item-title {
-			font-size: 14px !important;
+			font-size: 15px !important;
 			font-weight: 600 !important;
-			letter-spacing: -0.025em;
+			letter-spacing: -0.01em;
 			line-height: 1.3 !important;
-			color: rgb(24 24 27) !important;
+			color: #010110 !important;
 		}
 
 		.fuse-horizontal-navigation-item-subtitle {
 			margin-top: 4px !important;
-			font-size: 12px !important;
-			font-weight: 450 !important;
-			line-height: 1.35 !important;
-			color: rgb(113 113 122) !important;
+			font-size: 13px !important;
+			font-weight: 400 !important;
+			line-height: 1.4 !important;
+			color: #525252 !important;
 			opacity: 1 !important;
 		}
 
 		&:hover:not([disabled]) .fuse-horizontal-navigation-item-wrapper {
-			background: linear-gradient(
-				120deg,
-				color-mix(in srgb, var(--fuse-primary) 14%, transparent),
-				color-mix(in srgb, var(--fuse-primary) 4%, transparent)
-			);
-			border-color: color-mix(in srgb, var(--fuse-primary) 22%, transparent);
-			box-shadow: 0 6px 18px color-mix(in srgb, var(--fuse-primary) 12%, transparent);
-			transform: translateY(-1px);
-		}
-
-		&:active:not([disabled]) .fuse-horizontal-navigation-item-wrapper {
-			transform: translateY(0);
+			background: #ffe9e1;
 		}
 
 		/* Current route */
-		.fuse-horizontal-navigation-item-active .fuse-horizontal-navigation-item-wrapper,
-		.fuse-horizontal-navigation-item-active-forced .fuse-horizontal-navigation-item-wrapper {
-			background: linear-gradient(
-				120deg,
-				color-mix(in srgb, var(--fuse-primary) 20%, transparent),
-				color-mix(in srgb, var(--fuse-primary) 6%, transparent)
-			) !important;
-			border-color: color-mix(in srgb, var(--fuse-primary) 35%, transparent) !important;
-			box-shadow:
-				0 0 0 1px color-mix(in srgb, var(--fuse-primary) 25%, transparent),
-				0 10px 26px color-mix(in srgb, var(--fuse-primary) 14%, transparent);
-		}
+		.fuse-horizontal-navigation-item-active,
+		.fuse-horizontal-navigation-item-active-forced {
+			background: #ffe9e1 !important;
+			border-radius: 10px;
 
-		.fuse-horizontal-navigation-item-active .fuse-horizontal-navigation-item-title,
-		.fuse-horizontal-navigation-item-active-forced .fuse-horizontal-navigation-item-title {
-			color: var(--fuse-primary) !important;
+			.fuse-horizontal-navigation-item-icon {
+				background: #ff5721;
+				color: #1a1a2e !important;
+			}
+
+			.fuse-horizontal-navigation-item-title {
+				color: #1a1a2e !important;
+			}
 		}
 	}
 }
 
 /* Dark theme (Fuse sets body.light / body.dark) */
 body.dark .fuse-horizontal-navigation-menu-panel.mat-mdc-menu-panel {
-	border-color: rgba(255, 255, 255, 0.1);
-	background: rgba(24, 24, 27, 0.82) !important;
+	background: #1a1a2e !important;
 	box-shadow:
-		0 24px 48px -12px rgba(0, 0, 0, 0.55),
-		0 0 0 1px rgba(255, 255, 255, 0.06) inset !important;
+		rgba(230, 233, 242, 0.14) 0 0 0 1px,
+		rgba(0, 0, 0, 0.45) 0 10px 32px 0 !important;
 
 	.fuse-horizontal-navigation-menu-item.mat-mdc-menu-item {
 		.fuse-horizontal-navigation-item-title {
-			color: rgb(244 244 245) !important;
+			color: #ffffff !important;
 		}
 
 		.fuse-horizontal-navigation-item-subtitle {
-			color: rgb(161 161 170) !important;
+			color: rgba(230, 233, 242, 0.72) !important;
 		}
 
 		.fuse-horizontal-navigation-item-icon {
-			box-shadow:
-				0 1px 0 rgba(255, 255, 255, 0.12) inset,
-				0 6px 18px rgba(0, 0, 0, 0.35);
-			color: rgb(212 212 216) !important;
+			background: rgba(255, 87, 33, 0.14);
+			color: #ff5721 !important;
 		}
 
 		&:hover:not([disabled]) .fuse-horizontal-navigation-item-wrapper {
-			background: linear-gradient(
-				120deg,
-				color-mix(in srgb, var(--fuse-primary) 22%, transparent),
-				color-mix(in srgb, var(--fuse-primary) 6%, transparent)
-			);
+			background: rgba(255, 87, 33, 0.1);
+		}
+
+		.fuse-horizontal-navigation-item-active,
+		.fuse-horizontal-navigation-item-active-forced {
+			background: rgba(255, 87, 33, 0.14) !important;
+
+			.fuse-horizontal-navigation-item-icon {
+				background: #ff5721;
+				color: #1a1a2e !important;
+			}
+
+			.fuse-horizontal-navigation-item-title {
+				color: #ff5721 !important;
+			}
 		}
 	}
 }
 
 /* Zelf ID plan badges (list + detail). Plan names come from the license; unknown plans fall back to the neutral style. */
 .plan-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    border-radius: 9999px;
-    padding: 0.125rem 0.625rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    line-height: 1.25rem;
-    background: rgba(100, 116, 139, 0.12);
-    color: #475569;
-    white-space: nowrap;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	border-radius: 9999px;
+	padding: 0.125rem 0.625rem;
+	font-size: 0.75rem;
+	font-weight: 600;
+	line-height: 1.25rem;
+	background: #e5e5e5;
+	color: #3a3a3a;
+	white-space: nowrap;
 }
-.plan-badge--free { background: rgba(100, 116, 139, 0.12); color: #475569; }
-.plan-badge--premium { background: rgba(59, 130, 246, 0.14); color: #1d4ed8; }
-.plan-badge--unlimited { background: rgba(168, 85, 247, 0.16); color: #7e22ce; }
-.plan-badge--hold { background: rgba(245, 158, 11, 0.16); color: #b45309; }
-.dark .plan-badge--free { color: #cbd5e1; }
-.dark .plan-badge--premium { color: #93c5fd; }
-.dark .plan-badge--unlimited { color: #d8b4fe; }
-.dark .plan-badge--hold { color: #fcd34d; }
+.plan-badge--free { background: #e5e5e5; color: #3a3a3a; }
+.plan-badge--premium { background: #ffe9e1; color: #1a1a2e; }
+.plan-badge--unlimited { background: #1a1a2e; color: #ff5721; }
+.plan-badge--hold { background: #dfe3ff; color: #0e26ff; }
+.dark .plan-badge,
+.dark .plan-badge--free { background: rgba(230, 233, 242, 0.12); color: #e6e9f2; }
+.dark .plan-badge--premium { background: rgba(255, 87, 33, 0.16); color: #ff5721; }
+.dark .plan-badge--unlimited { background: #ff5721; color: #1a1a2e; }
+.dark .plan-badge--hold { background: rgba(148, 161, 255, 0.18); color: #b3d5ea; }

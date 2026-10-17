@@ -38,9 +38,9 @@ export class ImpressionsChartComponent implements OnChanges {
 					enabled: true,
 				},
 			},
-			colors: ["#34D399"],
+			colors: ["#ff5721"],
 			fill: {
-				colors: ["#34D399"],
+				colors: ["#ff5721"],
 				opacity: 0.5,
 			},
 			series: this.series || [],

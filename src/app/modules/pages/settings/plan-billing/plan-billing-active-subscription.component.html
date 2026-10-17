@@ -1,29 +1,24 @@
-<div class="relative mb-8 overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-slate-900 to-indigo-950 text-white shadow-sm dark:from-slate-950 dark:to-indigo-950">
-	<div class="pointer-events-none absolute inset-0 opacity-[0.07]">
-		<svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-			<path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
-		</svg>
-	</div>
+<div class="relative mb-8 overflow-hidden rounded-3xl bg-forest-ink text-white dark:ring-1 dark:ring-white/10">
 
 	<div class="relative z-10 p-6 sm:p-8 lg:p-10">
 		<div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-start">
 			<div class="min-w-0 flex-1">
 				<div class="mb-3 flex flex-wrap items-center gap-2">
-					<span class="rounded-full border border-white/20 bg-white/10 px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-white/95">
+					<span class="rounded-full bg-lime-voltage px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide text-forest-ink">
 						{{ subscriptionStatus }}
 					</span>
 					<span class="text-xs font-medium uppercase tracking-wide text-white/60">
 						{{ "saving_operations.plan_billing_page.active_subscription.title" | transloco }}
 					</span>
 				</div>
-				<h3 class="mb-2 text-2xl font-semibold tracking-tight sm:text-3xl">{{ planName }}</h3>
+				<h3 class="mb-2 font-display text-[32px] font-black leading-none tracking-display sm:text-subheading sm:leading-none">{{ planName }}</h3>
 				@if (planDescription) {
 					<p class="max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">{{ planDescription }}</p>
 				}
 			</div>
 
-			<div class="shrink-0 rounded-xl border border-white/15 bg-white/[0.06] px-5 py-4 text-left lg:text-right">
-				<div class="text-3xl font-semibold tracking-tight sm:text-4xl">{{ formattedPrice }}</div>
+			<div class="shrink-0 rounded-wise-card bg-white/[0.06] px-5 py-4 text-left lg:text-right">
+				<div class="font-display text-[40px] font-black leading-none tracking-display text-lime-voltage sm:text-heading-sm sm:leading-none">{{ formattedPrice }}</div>
 				<div class="mt-1 text-sm text-white/65">
 					{{ "saving_operations.plan_billing_page.active_subscription.per" | transloco }}
 					{{ intervalWord }}
@@ -45,7 +40,7 @@
 					</div>
 					<div class="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between">
 						<span class="text-white/65">{{ "saving_operations.plan_billing_page.details.current_period" | transloco }}</span>
-						<span class="rounded-md bg-white/10 px-2 py-0.5 font-medium">{{ periodStartFormatted }} – {{ periodEndFormatted }}</span>
+						<span class="rounded-full bg-white/10 px-2.5 py-0.5 font-medium">{{ periodStartFormatted }} – {{ periodEndFormatted }}</span>
 					</div>
 					<div class="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:justify-between">
 						<span class="text-white/65">{{ "saving_operations.plan_billing_page.details.subscription_id" | transloco }}</span>
@@ -61,7 +56,7 @@
 				<button
 					mat-flat-button
 					type="button"
-					class="!rounded-lg !bg-white !px-5 !py-2 !font-semibold !text-slate-900 !shadow-none hover:!bg-white/90"
+					class="!rounded-full !bg-lime-voltage !px-5 !py-2 !font-semibold !text-forest-ink !shadow-none hover:!bg-lime-500"
 					(click)="onManageBilling()"
 				>
 					<mat-icon class="mr-2 !text-lg">payment</mat-icon>

@@ -63,7 +63,7 @@ export class DomainLengthChartComponent implements OnInit, OnChanges {
 					enabled: true,
 				},
 			},
-			colors: ["#334155", "#64748B", "#94A3B8", "#CBD5E1"],
+			colors: ["#1a1a2e", "#9d52ef", "#ff5721", "#ffcfbd"],
 			labels: this.labels || [],
 			plotOptions: {
 				pie: {

@@ -62,7 +62,7 @@ export class OriginChartComponent implements OnInit, OnChanges {
 					enabled: true,
 				},
 			},
-			colors: ["#57534E", "#78716C", "#A8A29E"],
+			colors: ["#1a1a2e", "#0e26ff", "#ff5721"],
 			labels: this.labels || [],
 			plotOptions: {
 				pie: {

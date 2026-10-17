@@ -1,4 +1,4 @@
-<div class="flex flex-col w-full min-h-screen p-4 sm:p-8">
+<div class="flex flex-col w-full min-h-screen p-4 sm:p-8 bg-default">
 	<div class="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
 		<!-- Header -->
 		<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -7,24 +7,24 @@
 					<mat-icon class="icon-size-4">gavel</mat-icon>
 					<span>{{ 'lawyers.zelfLegacy' | transloco }}</span>
 				</div>
-				<h2 class="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{{ 'lawyers.title' | transloco }}</h2>
+				<h2 class="wise-page-title">{{ 'lawyers.title' | transloco }}</h2>
 				<p class="text-gray-500 dark:text-gray-400 mt-1">{{ 'lawyers.subtitle' | transloco }}</p>
 			</div>
-			<button mat-flat-button (click)="openInviteDialog()" class="!rounded-xl !px-6 !py-2.5 !bg-gray-900 dark:!bg-white !text-white dark:!text-gray-900 !font-bold hover:opacity-90 transition-opacity">
+			<button mat-flat-button (click)="openInviteDialog()" class="!rounded-full !px-6 !py-2.5 !bg-lime-voltage dark:!bg-lime-voltage !text-forest-ink dark:!text-forest-ink !font-semibold hover:opacity-90 transition-opacity">
 				<mat-icon class="icon-size-5 mr-2">person_add</mat-icon>
 				{{ 'lawyers.inviteLawyer' | transloco }}
 			</button>
 		</div>
 
 		<!-- Search Bar -->
-		<div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700/50 p-4">
+		<div class="bg-white dark:bg-slate-800 rounded-2xl border border-fog dark:border-gray-700/50 p-4">
 			<div class="flex flex-col sm:flex-row gap-3">
 				<mat-form-field class="flex-1" appearance="outline" [subscriptSizing]="'dynamic'">
 					<mat-icon matPrefix class="mr-2 text-gray-400">search</mat-icon>
 					<mat-label>{{ 'lawyers.searchPlaceholder' | transloco }}</mat-label>
 					<input matInput [(ngModel)]="searchQuery" (keyup.enter)="performSearch()" />
 				</mat-form-field>
-				<button mat-flat-button (click)="performSearch()" class="!rounded-xl !px-6 !bg-blue-600 !text-white !font-semibold h-[56px]">{{ 'lawyers.search' | transloco }}</button>
+				<button mat-flat-button (click)="performSearch()" class="!rounded-full !px-6 !bg-forest-ink !text-white !font-semibold h-[56px] dark:!bg-lime-voltage dark:!text-forest-ink">{{ 'lawyers.search' | transloco }}</button>
 			</div>
 			@if (showFilters) {
 				<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700/50">
@@ -47,11 +47,11 @@
 					<mat-icon class="mr-2 icon-size-5">people</mat-icon>
 					{{ 'lawyers.tab' | transloco }}
 					@if (lawyers.length) {
-						<span class="ml-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-gray-200 dark:bg-gray-700 text-xs font-bold">{{ lawyers.length }}</span>
+						<span class="ml-2 inline-flex items-center justify-center w-6 h-6 rounded-full bg-lime-voltage text-forest-ink text-xs font-bold">{{ lawyers.length }}</span>
 					}
 				</ng-template>
 
-				<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700/50 overflow-hidden mt-4">
+				<div class="bg-white dark:bg-slate-800 rounded-3xl border border-fog dark:border-gray-700/50 overflow-hidden mt-4">
 					@if (isLoading) {
 						<div class="flex flex-col items-center justify-center p-12 space-y-4">
 							<mat-spinner diameter="40"></mat-spinner>
@@ -64,7 +64,7 @@
 							</div>
 							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ 'lawyers.empty.title' | transloco }}</h3>
 							<p class="text-gray-500 dark:text-gray-400 max-w-sm mb-8">{{ 'lawyers.empty.subtitle' | transloco }}</p>
-							<button mat-stroked-button (click)="openInviteDialog()" class="!rounded-xl !px-6 !border-gray-300 dark:!border-gray-600">{{ 'lawyers.empty.invite' | transloco }}</button>
+							<button mat-stroked-button (click)="openInviteDialog()" class="!rounded-full !px-6 !border-gray-300 dark:!border-gray-600">{{ 'lawyers.empty.invite' | transloco }}</button>
 						</div>
 					} @else {
 						<div class="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50/50 dark:bg-gray-900/50 text-xs font-semibold uppercase text-gray-500 tracking-wider">
@@ -112,7 +112,7 @@
 					}
 				</ng-template>
 
-				<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700/50 overflow-hidden mt-4">
+				<div class="bg-white dark:bg-slate-800 rounded-3xl border border-fog dark:border-gray-700/50 overflow-hidden mt-4">
 					@if (isLoading) {
 						<div class="flex flex-col items-center justify-center p-12 space-y-4">
 							<mat-spinner diameter="40"></mat-spinner>
@@ -125,7 +125,7 @@
 							</div>
 							<h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ 'lawyers.pending.empty.title' | transloco }}</h3>
 							<p class="text-gray-500 dark:text-gray-400 max-w-sm mb-8">{{ 'lawyers.pending.empty.subtitle' | transloco }}</p>
-							<button mat-stroked-button (click)="openInviteDialog()" class="!rounded-xl !px-6 !border-gray-300 dark:!border-gray-600">{{ 'lawyers.empty.invite' | transloco }}</button>
+							<button mat-stroked-button (click)="openInviteDialog()" class="!rounded-full !px-6 !border-gray-300 dark:!border-gray-600">{{ 'lawyers.empty.invite' | transloco }}</button>
 						</div>
 					} @else {
 						<div class="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50/50 dark:bg-gray-900/50 text-xs font-semibold uppercase text-gray-500 tracking-wider">
@@ -184,7 +184,7 @@
 			<div class="p-6 space-y-6">
 				<div class="text-center">
 					<div class="w-20 h-20 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-2xl font-bold mx-auto mb-3">{{ (selectedLawyer.publicData?.lawyerName || 'L').charAt(0) }}</div>
-					<h4 class="text-xl font-bold text-gray-900 dark:text-white">{{ selectedLawyer.publicData?.lawyerName }}</h4>
+					<h4 class="wise-section-title">{{ selectedLawyer.publicData?.lawyerName }}</h4>
 					@if (selectedLawyer.publicData?.lawyerZelfName) { <p class="text-sm text-indigo-500">{{ selectedLawyer.publicData.lawyerZelfName }}</p> }
 				</div>
 				<div class="space-y-3">

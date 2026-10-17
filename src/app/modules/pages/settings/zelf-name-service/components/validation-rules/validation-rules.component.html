@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50" *transloco="let t">
+<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50" *transloco="let t">
 	<div class="p-8 sm:p-10" [formGroup]="formGroup">
 		<div class="flex items-center gap-3 mb-6">
 			<div
@@ -7,7 +7,7 @@
 				<mat-icon class="icon-size-5">rule</mat-icon>
 			</div>
 			<div>
-				<h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ t("license.validation_rules.title") }}</h2>
+				<h2 class="wise-section-title">{{ t("license.validation_rules.title") }}</h2>
 				<p class="text-sm text-gray-500 dark:text-gray-400">Rules for subdomains</p>
 			</div>
 		</div>
@@ -18,7 +18,7 @@
 				<input
 					formControlName="minLength"
 					type="number"
-					class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all font-medium"
+					class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all font-medium"
 					[placeholder]="t('license.validation_rules.min_length_placeholder')"
 				/>
 			</div>
@@ -32,7 +32,7 @@
 					type="number"
 					min="1"
 					max="27"
-					class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all font-medium"
+					class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all font-medium"
 					[placeholder]="t('license.validation_rules.max_length_placeholder')"
 				/>
 				<span *ngIf="formGroup.get('maxLength')?.hasError('max')" class="text-xs text-red-500 pl-1 block mb-1">
@@ -43,7 +43,7 @@
 				<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ t("license.validation_rules.hold_suffix") }}</label>
 				<input
 					formControlName="holdSuffix"
-					class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all font-medium"
+					class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all font-medium"
 					[placeholder]="t('license.validation_rules.hold_suffix_placeholder')"
 				/>
 			</div>
@@ -70,7 +70,7 @@
 					#newReservedWord
 					type="text"
 					[placeholder]="t('license.validation_rules.add_reserved_word')"
-					class="flex-1 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
+					class="flex-1 bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"
 					(keyup.enter)="addReservedWord(newReservedWord.value); newReservedWord.value = ''"
 				/>
 				<button

@@ -53,9 +53,9 @@ export class AnalyticsComponent implements OnInit, OnDestroy {
 	onboardingProgress: AnalyticsOnboardingProgress | null = null;
 	showLiveDashboard = false;
 
-	tagLeaseLengthsColors: string[] = ["#475569", "#64748B", "#94A3B8", "#CBD5E1", "#E2E8F0", "#F1F5F9"];
-	domainLengthColors: string[] = ["#334155", "#64748B", "#94A3B8", "#CBD5E1"];
-	originColors: string[] = ["#57534E", "#78716C", "#A8A29E"];
+	tagLeaseLengthsColors: string[] = ["#1a1a2e", "#9d52ef", "#ff5721", "#ffcfbd", "#e5e5e5", "#f4f4f4"];
+	domainLengthColors: string[] = ["#1a1a2e", "#9d52ef", "#ff5721", "#ffcfbd"];
+	originColors: string[] = ["#1a1a2e", "#0e26ff", "#ff5721"];
 
 	currentDomain: string | null = null;
 

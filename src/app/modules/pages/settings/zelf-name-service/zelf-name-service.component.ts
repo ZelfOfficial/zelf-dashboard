@@ -95,10 +95,10 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 
 	constructor(
 		private _formBuilder: UntypedFormBuilder,
-		private _router: Router,
+		protected _router: Router,
 		private _activatedRoute: ActivatedRoute,
-		private _saveConfirmationService: SaveConfirmationService,
-		private _translocoService: TranslocoService,
+		protected _saveConfirmationService: SaveConfirmationService,
+		protected _translocoService: TranslocoService,
 		private _cdr: ChangeDetectorRef,
 		private _licenseService: LicenseService,
 		private _httpWrapper: HttpWrapperService,
@@ -125,7 +125,7 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 		});
 	}
 
-	private createEmptyForm(): void {
+	protected createEmptyForm(): void {
 		this.accountForm = this._formBuilder.group({
 			// Basic Information
 			domain: ["", [Validators.required, Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]$/)]],
@@ -615,7 +615,7 @@ export class SettingsZelfNameServiceComponent implements OnInit, AfterViewInit {
 		}, 5000);
 	}
 
-	private showError(message: string): void {
+	protected showError(message: string): void {
 		this.alertMessage = message;
 		this.alertType = "error";
 		this.showAlert = true;

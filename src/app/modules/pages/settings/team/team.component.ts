@@ -23,7 +23,7 @@ import { Inject } from "@angular/core";
 	template: `
 		<div class="flex flex-col">
 			<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-				<h2 class="text-xl font-bold text-gray-900 dark:text-white">Update Member Role</h2>
+				<h2 class="wise-section-title">Update Member Role</h2>
 			</div>
 			<div class="p-6">
 				<form [formGroup]="roleForm" class="space-y-4">
@@ -61,12 +61,12 @@ import { Inject } from "@angular/core";
 				</form>
 			</div>
 			<div class="bg-gray-50 dark:bg-slate-800/50 px-6 py-4 flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-800">
-				<button mat-button (click)="dialogRef.close()" class="!rounded-xl text-gray-600">Cancel</button>
+				<button mat-button (click)="dialogRef.close()" class="!rounded-full text-gray-600">Cancel</button>
 				<button
 					mat-flat-button
 					(click)="proceed()"
 					[disabled]="roleForm.invalid"
-					class="!rounded-xl !bg-gray-900 dark:!bg-white !text-white dark:!text-gray-900 !font-bold !px-6"
+					class="!rounded-full !bg-lime-voltage dark:!bg-lime-voltage !text-forest-ink dark:!text-forest-ink !font-semibold !px-6"
 				>
 					Update Role
 				</button>
@@ -352,7 +352,7 @@ export class SettingsTeamComponent implements OnInit {
 	template: `
 		<div class="flex flex-col max-h-[90vh]">
 			<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-				<h2 class="text-xl font-bold text-gray-900 dark:text-white">Invite New Member</h2>
+				<h2 class="wise-section-title">Invite New Member</h2>
 			</div>
 
 			<div class="p-6 overflow-y-auto flex-1">
@@ -449,12 +449,12 @@ export class SettingsTeamComponent implements OnInit {
 			</div>
 
 			<div class="bg-gray-50 dark:bg-slate-800/50 px-6 py-4 flex items-center justify-end gap-3 border-t border-gray-100 dark:border-gray-800">
-				<button mat-button (click)="dialogRef.close()" class="!rounded-xl text-gray-600">Cancel</button>
+				<button mat-button (click)="dialogRef.close()" class="!rounded-full text-gray-600">Cancel</button>
 				<button
 					mat-flat-button
 					(click)="proceed()"
 					[disabled]="inviteForm.invalid"
-					class="!rounded-xl !bg-gray-900 dark:!bg-white !text-white dark:!text-gray-900 !font-bold !px-6"
+					class="!rounded-full !bg-lime-voltage dark:!bg-lime-voltage !text-forest-ink dark:!text-forest-ink !font-semibold !px-6"
 				>
 					Continue
 				</button>

@@ -327,50 +327,49 @@ const theming = plugin.withOptions(
                 },
                 fuse: {
                     customProps: {
+                        /*
+                         * Wise surfaces. Light: Paper canvas, Paper cards outlined by Fog
+                         * hairlines, Linen Mist hover. Dark: the lime/forest pairing inverts —
+                         * deep forest canvas, Forest Ink cards, lime-tinted hover.
+                         */
                         background: {
                             light: {
                                 'bg-app-bar': '#FFFFFF',
                                 'bg-card': '#FFFFFF',
-                                'bg-default': colors.slate[100],
+                                'bg-default': '#FFFFFF',
                                 'bg-dialog': '#FFFFFF',
-                                'bg-hover': chroma(colors.slate[400])
-                                    .alpha(0.12)
-                                    .css(),
-                                'bg-status-bar': colors.slate[300],
+                                'bg-hover': chroma('#ff5721').alpha(0.08).css(),
+                                'bg-status-bar': '#e5e5e5',
                             },
                             dark: {
-                                'bg-app-bar': colors.slate[900],
-                                'bg-card': colors.slate[800],
-                                'bg-default': colors.slate[900],
-                                'bg-dialog': colors.slate[800],
-                                'bg-hover': 'rgba(255, 255, 255, 0.05)',
-                                'bg-status-bar': colors.slate[900],
+                                'bg-app-bar': '#010110',
+                                'bg-card': '#1a1a2e',
+                                'bg-default': '#010110',
+                                'bg-dialog': '#1a1a2e',
+                                'bg-hover': chroma('#ff5721').alpha(0.1).css(),
+                                'bg-status-bar': '#010110',
                             },
                         },
                         foreground: {
                             light: {
-                                'text-default': colors.slate[800],
-                                'text-secondary': colors.slate[500],
-                                'text-hint': colors.slate[400],
-                                'text-disabled': colors.slate[400],
-                                border: colors.slate[200],
-                                divider: colors.slate[200],
-                                icon: colors.slate[500],
-                                'mat-icon': colors.slate[500],
+                                'text-default': '#010110',
+                                'text-secondary': '#525252',
+                                'text-hint': '#737373',
+                                'text-disabled': '#a3a3a3',
+                                border: '#e5e5e5',
+                                divider: '#e5e5e5',
+                                icon: '#1a1a2e',
+                                'mat-icon': '#3a3a3a',
                             },
                             dark: {
                                 'text-default': '#FFFFFF',
-                                'text-secondary': colors.slate[400],
-                                'text-hint': colors.slate[500],
-                                'text-disabled': colors.slate[600],
-                                border: chroma(colors.slate[100])
-                                    .alpha(0.12)
-                                    .css(),
-                                divider: chroma(colors.slate[100])
-                                    .alpha(0.12)
-                                    .css(),
-                                icon: colors.slate[400],
-                                'mat-icon': colors.slate[400],
+                                'text-secondary': chroma('#e6e9f2').alpha(0.72).css(),
+                                'text-hint': chroma('#e6e9f2').alpha(0.5).css(),
+                                'text-disabled': chroma('#e6e9f2').alpha(0.36).css(),
+                                border: chroma('#e6e9f2').alpha(0.14).css(),
+                                divider: chroma('#e6e9f2').alpha(0.14).css(),
+                                icon: '#e6e9f2',
+                                'mat-icon': '#e6e9f2',
                             },
                         },
                     },

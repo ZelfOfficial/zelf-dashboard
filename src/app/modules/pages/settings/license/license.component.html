@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-gray-50/50 dark:bg-gray-900 w-full" *transloco="let t">
+<div class="flex flex-col min-h-screen w-full bg-default" *transloco="let t">
 	<!-- Main Content Container -->
 	<div class="flex-auto px-4 py-8 sm:px-6 sm:py-12 md:px-8 w-full max-w-4xl mx-auto">
 		<!-- Alert Messages -->
@@ -31,7 +31,7 @@
 
 		<form [formGroup]="accountForm">
 			<!-- Basic Information Card -->
-			<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 				<div class="p-8 sm:p-10">
 					<div class="flex items-center gap-3 mb-6">
 						<div
@@ -40,7 +40,7 @@
 							<mat-icon class="icon-size-5">info</mat-icon>
 						</div>
 						<div>
-							<h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ t("license.basic_information.title") }}</h2>
+							<h2 class="wise-section-title">{{ t("license.basic_information.title") }}</h2>
 							<p class="text-sm text-gray-500 dark:text-gray-400">General domain settings</p>
 						</div>
 					</div>
@@ -71,7 +71,7 @@
 									/>
 									<button
 										type="button"
-										class="px-4 py-2 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+										class="px-4 py-2 rounded-full bg-lime-voltage dark:bg-lime-voltage text-forest-ink dark:text-forest-ink text-sm font-semibold hover:bg-lime-500 dark:hover:bg-lime-500 transition-colors"
 										(click)="logoFileInput.click()"
 									>
 										{{ t("license.basic_information.upload_logo") }}
@@ -79,7 +79,7 @@
 									@if (logoPreviewUrl) {
 										<button
 											type="button"
-											class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+											class="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
 											(click)="clearLogo()"
 										>
 											{{ t("license.basic_information.remove_logo") }}
@@ -134,7 +134,7 @@
 							<input
 								[formControlName]="'status'"
 								readonly
-								class="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium uppercase"
+								class="w-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium uppercase"
 							/>
 						</div>
 
@@ -145,7 +145,7 @@
 							}}</label>
 							<input
 								[formControlName]="'owner'"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium dark:focus:ring-lime-voltage"
 								[placeholder]="t('license.basic_information.owner_placeholder')"
 							/>
 						</div>
@@ -162,7 +162,7 @@
 								[formControlName]="'startDate'"
 								type="date"
 								readonly
-								class="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
+								class="w-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
 							/>
 						</div>
 
@@ -177,7 +177,7 @@
 								[formControlName]="'endDate'"
 								type="date"
 								readonly
-								class="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
+								class="w-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
 							/>
 						</div>
 
@@ -189,7 +189,7 @@
 							<textarea
 								[formControlName]="'description'"
 								rows="3"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium resize-none"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium resize-none dark:focus:ring-lime-voltage"
 								[placeholder]="t('license.basic_information.description_placeholder')"
 							></textarea>
 						</div>
@@ -198,7 +198,7 @@
 			</div>
 
 			<!-- Features Configuration -->
-			<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 				<div class="p-8 sm:p-10">
 					<div class="flex items-center gap-3 mb-6">
 						<div
@@ -207,7 +207,7 @@
 							<mat-icon class="icon-size-5">extension</mat-icon>
 						</div>
 						<div>
-							<h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ t("license.features.title") }}</h2>
+							<h2 class="wise-section-title">{{ t("license.features.title") }}</h2>
 							<p class="text-sm text-gray-500 dark:text-gray-400">Enable services</p>
 						</div>
 					</div>
@@ -225,86 +225,23 @@
 							<mat-slide-toggle [formControlName]="'znsEnabled'" (click)="$event.stopPropagation()"></mat-slide-toggle>
 						</div>
 
-						<!-- ZelfKeys Toggle -->
-						<div
-							class="flex items-center justify-between p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-all cursor-pointer"
-							(click)="accountForm.get('zelfkeysEnabled')?.setValue(!accountForm.get('zelfkeysEnabled')?.value)"
+						<!-- Zelf Keys moved to its own Settings page -->
+						<a
+							routerLink="/settings/zelf-keys"
+							class="flex items-center justify-between p-5 rounded-2xl border border-gray-100 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-all"
 						>
 							<div>
 								<h3 class="font-semibold text-gray-900 dark:text-white">{{ t("license.features.zelfkeys_title") }}</h3>
-								<p class="text-sm text-gray-500 dark:text-gray-400">{{ t("license.features.zelfkeys_description") }}</p>
+								<p class="text-sm text-gray-500 dark:text-gray-400">Availability and storage are managed in Settings › Zelf Keys</p>
 							</div>
-							<mat-slide-toggle [formControlName]="'zelfkeysEnabled'" (click)="$event.stopPropagation()"></mat-slide-toggle>
-						</div>
+							<mat-icon class="icon-size-5 text-forest-ink dark:text-lime-voltage" svgIcon="heroicons_outline:arrow-right"></mat-icon>
+						</a>
 					</div>
 				</div>
 			</div>
 
-			<!-- ZelfKeys Storage -->
-			@if (accountForm.get("zelfkeysEnabled")?.value) {
-				<div class="mb-8 animate-fade-in pl-4 border-l-2 border-blue-500">
-					<div class="flex items-center gap-3 mb-6">
-						<span
-							class="px-4 py-1.5 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm font-bold border border-blue-200 dark:border-blue-800 flex items-center gap-2 shadow-sm"
-						>
-							<mat-icon class="icon-size-4">vpn_key</mat-icon>
-							ZelfKeys
-						</span>
-						<div class="h-px bg-blue-200 dark:bg-blue-800/50 flex-1"></div>
-					</div>
-					<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700/50">
-						<div class="p-8 sm:p-10">
-							<div class="flex items-center gap-3 mb-6">
-								<div
-									class="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400"
-								>
-									<mat-icon class="icon-size-5">vpn_key</mat-icon>
-								</div>
-								<div>
-									<h2 class="text-xl font-bold text-gray-900 dark:text-white">
-										{{ t("license.storage_options.title") }} (ZelfKeys)
-									</h2>
-									<p class="text-sm text-gray-500 dark:text-gray-400">Key storage settings</p>
-								</div>
-							</div>
-
-							<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-								<div class="p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/20">
-									<div class="flex justify-between items-center mb-2">
-										<span class="font-medium text-gray-900 dark:text-white">IPFS</span>
-										<mat-slide-toggle [formControlName]="'zelfkeysIpfsEnabled'"></mat-slide-toggle>
-									</div>
-								</div>
-								<div class="p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/20">
-									<div class="flex justify-between items-center mb-2">
-										<span class="font-medium text-gray-900 dark:text-white">Arweave</span>
-										<mat-slide-toggle [formControlName]="'zelfkeysArweaveEnabled'"></mat-slide-toggle>
-									</div>
-								</div>
-								<div class="p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-900/20">
-									<div class="flex justify-between items-center mb-2">
-										<span class="font-medium text-gray-900 dark:text-white">Walrus</span>
-										<mat-slide-toggle [formControlName]="'zelfkeysWalrusEnabled'"></mat-slide-toggle>
-									</div>
-								</div>
-							</div>
-
-							<div class="space-y-1.5 max-w-md">
-								<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{
-									t("license.storage_options.key_prefix")
-								}}</label>
-								<input
-									[formControlName]="'zelfkeysKeyPrefix'"
-									class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
-								/>
-							</div>
-						</div>
-					</div>
-				</div>
-			}
-
 			<!-- Metadata Card -->
-			<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 				<div class="p-8 sm:p-10">
 					<div class="flex items-center gap-3 mb-6">
 						<div
@@ -313,7 +250,7 @@
 							<mat-icon class="icon-size-5">description</mat-icon>
 						</div>
 						<div>
-							<h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ t("license.metadata.title") }}</h2>
+							<h2 class="wise-section-title">{{ t("license.metadata.title") }}</h2>
 							<p class="text-sm text-gray-500 dark:text-gray-400">Additional information</p>
 						</div>
 					</div>
@@ -324,14 +261,14 @@
 							<input
 								[formControlName]="'launchDate'"
 								type="date"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
 							/>
 						</div>
 						<div class="space-y-1.5">
 							<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ t("license.metadata.version") }}</label>
 							<input
 								[formControlName]="'version'"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
 							/>
 						</div>
 						<div class="space-y-1.5">
@@ -340,7 +277,7 @@
 							}}</label>
 							<input
 								[formControlName]="'documentation'"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
 							/>
 						</div>
 						<div class="space-y-1.5">
@@ -350,7 +287,7 @@
 							<div class="relative">
 								<select
 									[formControlName]="'support'"
-									class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium appearance-none"
+									class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium appearance-none"
 								>
 									<option value="standard">{{ t("license.metadata.support_standard") }}</option>
 									<option value="premium">{{ t("license.metadata.support_premium") }}</option>
@@ -368,23 +305,23 @@
 			<!-- Bottom Actions -->
 			<div class="sticky bottom-6 z-10 mx-auto max-w-4xl">
 				<div
-					class="bg-gray-900/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-2xl p-4 flex items-center justify-between border border-white/10"
+					class="bg-forest-ink rounded-full p-3 pl-5 flex items-center justify-between border border-forest-ink dark:border-lime-voltage/30"
 				>
 					<button
 						(click)="cancel()"
 						[disabled]="isLoading"
-						class="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors"
+						class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors"
 					>
 						{{ t("license.actions.cancel") }}
 					</button>
 					<div class="flex items-center gap-3">
-						<button class="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors" [disabled]="isLoading">
+						<button class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors" [disabled]="isLoading">
 							Reset
 						</button>
 						<button
 							(click)="saveLicense()"
 							[disabled]="isLoading || accountForm.invalid"
-							class="px-6 py-2 bg-white text-gray-900 rounded-xl text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+							class="px-6 py-2.5 bg-lime-voltage text-forest-ink rounded-full text-sm font-semibold hover:bg-lime-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 						>
 							@if (isLoading) {
 								<mat-icon class="icon-size-4 animate-spin">refresh</mat-icon>

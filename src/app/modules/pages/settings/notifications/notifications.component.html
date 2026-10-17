@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-gray-50/50 dark:bg-gray-900 w-full">
+<div class="flex flex-col min-h-screen w-full bg-default">
 	<!-- Main Content Container -->
 	<div class="flex-auto px-4 py-8 sm:px-6 sm:py-12 md:px-8 w-full max-w-4xl mx-auto">
 		<!-- Loading State -->
@@ -10,7 +10,7 @@
 		} @else {
 			<form [formGroup]="notificationsForm">
 				<!-- Notification Channels Card -->
-				<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+				<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 					<div class="p-8 sm:p-10">
 						<div class="flex items-center gap-3 mb-6">
 							<div
@@ -19,7 +19,7 @@
 								<mat-icon class="icon-size-5">notifications</mat-icon>
 							</div>
 							<div>
-								<h2 class="text-xl font-bold text-gray-900 dark:text-white">Notification Channels</h2>
+								<h2 class="wise-section-title">Notification Channels</h2>
 								<p class="text-sm text-gray-500 dark:text-gray-400">Choose how you want to receive notifications</p>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 
 				<!-- Notification Categories -->
 				@for (category of notificationCategories; track category.id) {
-					<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+					<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 						<div class="p-8 sm:p-10">
 							<!-- Category Header -->
 							<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
@@ -70,7 +70,7 @@
 										<mat-icon [svgIcon]="category.icon" class="icon-size-5"></mat-icon>
 									</div>
 									<div>
-										<h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ category.title }}</h3>
+										<h3 class="wise-section-title">{{ category.title }}</h3>
 										<p class="text-sm text-gray-500 dark:text-gray-400">{{ category.description }}</p>
 									</div>
 								</div>
@@ -124,23 +124,23 @@
 				<!-- Bottom Actions -->
 				<div class="sticky bottom-6 z-10 mx-auto max-w-4xl">
 					<div
-						class="bg-gray-900/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-2xl p-4 flex items-center justify-between border border-white/10"
+						class="bg-forest-ink rounded-full p-3 pl-5 flex items-center justify-between border border-forest-ink dark:border-lime-voltage/30"
 					>
 						<button
 							(click)="resetToDefaults()"
 							[disabled]="isSaving"
-							class="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors"
+							class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors"
 						>
 							Reset Defaults
 						</button>
 						<div class="flex items-center gap-3">
-							<button class="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors" [disabled]="isSaving">
+							<button class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors" [disabled]="isSaving">
 								Discard
 							</button>
 							<button
 								(click)="saveSettings()"
 								[disabled]="isSaving || notificationsForm.invalid"
-								class="px-6 py-2 bg-white text-gray-900 rounded-xl text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+								class="px-6 py-2.5 bg-lime-voltage text-forest-ink rounded-full text-sm font-semibold hover:bg-lime-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 							>
 								@if (isSaving) {
 									<mat-icon class="icon-size-4 animate-spin">refresh</mat-icon>
