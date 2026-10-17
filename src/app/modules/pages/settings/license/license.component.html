@@ -368,23 +368,23 @@
 			<!-- Bottom Actions -->
 			<div class="sticky bottom-6 z-10 mx-auto max-w-4xl">
 				<div
-					class="bg-gray-900/90 dark:bg-slate-800/90 backdrop-blur-md rounded-2xl shadow-2xl p-4 flex items-center justify-between border border-white/10"
+					class="bg-forest-ink rounded-full p-3 pl-5 flex items-center justify-between border border-forest-ink dark:border-lime-voltage/30"
 				>
 					<button
 						(click)="cancel()"
 						[disabled]="isLoading"
-						class="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors"
+						class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors"
 					>
 						{{ t("license.actions.cancel") }}
 					</button>
 					<div class="flex items-center gap-3">
-						<button class="px-4 py-2 text-gray-300 hover:text-white text-sm font-medium transition-colors" [disabled]="isLoading">
+						<button class="px-4 py-2 text-linen-mist hover:text-lime-voltage text-sm font-semibold underline-offset-4 hover:underline transition-colors" [disabled]="isLoading">
 							Reset
 						</button>
 						<button
 							(click)="saveLicense()"
 							[disabled]="isLoading || accountForm.invalid"
-							class="px-6 py-2 bg-white text-gray-900 rounded-full text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+							class="px-6 py-2.5 bg-lime-voltage text-forest-ink rounded-full text-sm font-semibold hover:bg-lime-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 						>
 							@if (isLoading) {
 								<mat-icon class="icon-size-4 animate-spin">refresh</mat-icon>
