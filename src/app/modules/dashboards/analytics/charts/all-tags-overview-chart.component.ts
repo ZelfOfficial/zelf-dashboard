@@ -77,12 +77,12 @@ export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
 				toolbar: { show: false },
 				zoom: { enabled: false },
 			},
-			colors: ["#2f5711"],
+			colors: ["#9d52ef"],
 			dataLabels: { enabled: false },
-			fill: { colors: ["#2f5711"], opacity: 0.15 },
+			fill: { colors: ["#9d52ef"], opacity: 0.15 },
 			grid: {
 				show: true,
-				borderColor: "#e8ebe6",
+				borderColor: "#e5e5e5",
 				strokeDashArray: 4,
 				padding: { top: 10, bottom: 60, left: 20, right: 40 },
 				position: "back",
@@ -90,7 +90,7 @@ export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
 				yaxis: { lines: { show: true } },
 			},
 			series: selectedSeries,
-			stroke: { width: 2, colors: ["#2f5711"] },
+			stroke: { width: 2, colors: ["#9d52ef"] },
 			tooltip: {
 				followCursor: true,
 				theme: "dark",
@@ -100,7 +100,7 @@ export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
 			xaxis: {
 				axisBorder: { show: false },
 				axisTicks: { show: false },
-				crosshairs: { stroke: { color: "#163300", dashArray: 0, width: 2 } },
+				crosshairs: { stroke: { color: "#1a1a2e", dashArray: 0, width: 2 } },
 				tooltip: { enabled: false },
 				type: "datetime",
 				tickPlacement: "on",
@@ -108,7 +108,7 @@ export class AllTagsOverviewChartComponent implements OnInit, OnChanges {
 				position: "bottom",
 				labels: {
 					offsetY: 0,
-					style: { colors: "#868685", fontSize: "11px" },
+					style: { colors: "#737373", fontSize: "11px" },
 					rotate: -45,
 					trim: false,
 					hideOverlappingLabels: false,

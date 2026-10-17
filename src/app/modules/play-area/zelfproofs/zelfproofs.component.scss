@@ -16,11 +16,11 @@
 	font-weight: 650;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: rgb(106 108 106);
+	color: rgb(82 82 82);
 }
 
 :host-context(body.dark) .zp-play-area .zp-eyebrow {
-	color: rgb(134 134 133);
+	color: rgb(115 115 115);
 }
 
 .zp-endpoint {
@@ -29,14 +29,14 @@
 	max-width: 100%;
 	overflow: hidden;
 	border-radius: 0.75rem;
-	border: 1px solid rgb(22 51 0 / 0.1);
-	background: rgb(22 51 0);
+	border: 1px solid rgb(26 26 46 / 0.1);
+	background: rgb(26 26 46);
 	box-shadow: 0 1px 0 rgb(255 255 255 / 0.06) inset;
 }
 
 :host-context(body.dark) .zp-play-area .zp-endpoint {
 	border-color: rgb(255 255 255 / 0.12);
-	background: rgb(11 26 2);
+	background: rgb(1 1 16);
 }
 
 .zp-endpoint-method {
@@ -46,8 +46,8 @@
 	font-size: 0.75rem;
 	font-weight: 700;
 	letter-spacing: 0.08em;
-	color: rgb(22 51 0);
-	background: rgb(159 232 112);
+	color: rgb(26 26 46);
+	background: rgb(255 87 33);
 }
 
 .zp-endpoint-path {
@@ -67,7 +67,7 @@
 	font-weight: 560;
 	padding: 0.1em 0.35em;
 	border-radius: 0.35rem;
-	background: rgb(22 51 0 / 0.06);
+	background: rgb(26 26 46 / 0.06);
 }
 
 :host-context(body.dark) .zp-play-area .zp-inline-code {
@@ -80,11 +80,11 @@
 	font-size: 0.8125rem;
 	font-weight: 500;
 	letter-spacing: -0.01em;
-	color: rgb(106 108 106);
+	color: rgb(82 82 82);
 }
 
 :host-context(body.dark) .zp-play-area .zp-panel-endpoint {
-	color: rgb(134 134 133);
+	color: rgb(115 115 115);
 }
 
 @media (min-width: 640px) {
@@ -99,8 +99,8 @@
 }
 
 .zp-inset {
-	background: rgba(232, 235, 230, 0.75);
-	border: 1px solid rgba(22, 51, 0, 0.06);
+	background: rgba(229, 229, 229, 0.75);
+	border: 1px solid rgba(26, 26, 46, 0.06);
 }
 
 :host-context(body.dark) .zp-play-area .zp-inset {
@@ -109,8 +109,8 @@
 }
 
 .zp-callout {
-	background: rgba(232, 235, 230, 0.65);
-	border: 1px solid rgba(22, 51, 0, 0.05);
+	background: rgba(229, 229, 229, 0.65);
+	border: 1px solid rgba(26, 26, 46, 0.05);
 }
 
 :host-context(body.dark) .zp-play-area .zp-callout {
@@ -120,13 +120,13 @@
 
 .zp-pre {
 	background: #fff;
-	border: 1px solid rgba(22, 51, 0, 0.06);
+	border: 1px solid rgba(26, 26, 46, 0.06);
 }
 
 :host-context(body.dark) .zp-play-area .zp-pre {
 	background: rgba(0, 0, 0, 0.35);
 	border-color: rgba(255, 255, 255, 0.06);
-	color: rgb(232 235 230);
+	color: rgb(229 229 229);
 }
 
 .zp-status-dot {
@@ -184,7 +184,7 @@ pre {
 }
 
 :host-context(body.light) .zp-play-area .zp-how-toggle:hover {
-	background: rgb(22 51 0 / 0.04);
+	background: rgb(26 26 46 / 0.04);
 }
 
 :host-context(body.dark) .zp-play-area .zp-how-toggle:hover {
@@ -198,7 +198,7 @@ pre {
 	font-weight: 600;
 	font-size: 0.9375rem;
 	letter-spacing: -0.02em;
-	color: rgb(22 51 0);
+	color: rgb(26 26 46);
 }
 
 :host-context(body.dark) .zp-how-toggle-label {
@@ -314,14 +314,14 @@ mat-form-field {
 :host-context(body.dark) .zp-play-area {
 	.zp-panel.mat-mdc-card,
 	.zp-panel.mat-card {
-		background: rgb(22 51 0 / 0.55) !important;
+		background: rgb(26 26 46 / 0.55) !important;
 		border: 1px solid rgb(255 255 255 / 0.06) !important;
 		border-radius: 1rem !important;
 		box-shadow:
 			0 1px 0 rgb(255 255 255 / 0.04) inset,
 			0 12px 48px rgb(0 0 0 / 0.35) !important;
 		backdrop-filter: blur(12px);
-		color: rgb(232 235 230);
+		color: rgb(229 229 229);
 	}
 
 	.zp-status-payment.zp-panel {
@@ -360,7 +360,7 @@ mat-form-field {
 		&.mat-focused .mdc-notched-outline .mdc-notched-outline__leading,
 		&.mat-focused .mdc-notched-outline .mdc-notched-outline__notch,
 		&.mat-focused .mdc-notched-outline .mdc-notched-outline__trailing {
-			border-color: rgb(232 235 230 / 0.35) !important;
+			border-color: rgb(229 229 229 / 0.35) !important;
 		}
 	}
 
@@ -375,8 +375,8 @@ mat-form-field {
 	/* Primary CTAs: light pill on dark */
 	::ng-deep .zp-btn-primary.mat-mdc-raised-button.mat-primary:not(:disabled),
 	::ng-deep .zp-btn-primary.mat-mdc-unelevated-button.mat-primary:not(:disabled) {
-		background-color: #f7f8f6 !important;
-		color: #0e0f0c !important;
+		background-color: #fafafa !important;
+		color: #010110 !important;
 		border-radius: 9999px !important;
 		box-shadow: none !important;
 		font-weight: 600;
@@ -385,14 +385,14 @@ mat-form-field {
 
 	::ng-deep .zp-btn-primary.mat-mdc-raised-button.mat-primary:not(:disabled):hover,
 	::ng-deep .zp-btn-primary.mat-mdc-unelevated-button.mat-primary:not(:disabled):hover {
-		background-color: #e8ebe6 !important;
+		background-color: #e5e5e5 !important;
 	}
 
 	/* Ghost / secondary outlined */
 	::ng-deep .zp-btn-secondary.mat-mdc-outlined-button {
 		border-radius: 9999px !important;
 		border-color: rgb(255 255 255 / 0.12) !important;
-		color: rgb(232 235 230) !important;
+		color: rgb(229 229 229) !important;
 		background: transparent !important;
 		font-weight: 500;
 		letter-spacing: -0.01em;
@@ -405,11 +405,11 @@ mat-form-field {
 
 	/* Muted icon buttons */
 	::ng-deep .zp-icon-muted.mat-mdc-icon-button {
-		color: rgb(134 134 133) !important;
+		color: rgb(115 115 115) !important;
 	}
 
 	::ng-deep .zp-icon-muted.mat-mdc-icon-button:hover {
-		color: rgb(232 235 230) !important;
+		color: rgb(229 229 229) !important;
 		background: rgb(255 255 255 / 0.05) !important;
 	}
 
@@ -425,7 +425,7 @@ mat-form-field {
 		border: none !important;
 		border-radius: 9999px !important;
 		background: transparent !important;
-		color: rgb(134 134 133) !important;
+		color: rgb(115 115 115) !important;
 	}
 
 	::ng-deep .zp-toggle-group .mat-button-toggle-checked {
@@ -438,7 +438,7 @@ mat-form-field {
 :host-context(body.light) .zp-play-area {
 	.zp-panel.mat-mdc-card {
 		border-radius: 1rem;
-		border: 1px solid rgb(22 51 0 / 0.06);
+		border: 1px solid rgb(26 26 46 / 0.06);
 		box-shadow: 0 1px 3px rgb(0 0 0 / 0.05);
 	}
 
@@ -447,7 +447,7 @@ mat-form-field {
 	}
 
 	.zp-status-success.zp-panel {
-		border-left: 3px solid rgb(61 138 28 / 0.75);
+		border-left: 3px solid rgb(5 150 105 / 0.75);
 	}
 
 	.zp-status-error.zp-panel {
@@ -461,9 +461,9 @@ mat-form-field {
 
 	::ng-deep .zp-toggle-group.mat-button-toggle-group {
 		border-radius: 14px !important;
-		background: rgb(232 235 230) !important;
+		background: rgb(229 229 229) !important;
 		padding: 6px !important;
-		border: 1px solid rgb(232 235 230) !important;
+		border: 1px solid rgb(229 229 229) !important;
 	}
 
 	::ng-deep .zp-toggle-group .mat-button-toggle {
@@ -509,7 +509,7 @@ mat-form-field {
 	transition:
 		border-color 0.15s ease,
 		box-shadow 0.15s ease;
-	caret-color: rgb(22 51 0);
+	caret-color: rgb(26 26 46);
 }
 
 .zp-pin-box--masked {
@@ -518,17 +518,17 @@ mat-form-field {
 
 :host-context(body.light) .zp-play-area .zp-pin-box {
 	background: #fff;
-	border: 2px solid rgb(226 246 213);
-	box-shadow: 0 1px 2px rgb(22 51 0 / 0.05);
-	color: rgb(22 51 0);
+	border: 2px solid rgb(230 233 242);
+	box-shadow: 0 1px 2px rgb(26 26 46 / 0.05);
+	color: rgb(26 26 46);
 }
 
 :host-context(body.light) .zp-play-area .zp-pin-box:focus {
 	outline: none;
-	border-color: rgb(69 71 69);
+	border-color: rgb(58 58 58);
 	box-shadow:
-		0 0 0 3px rgb(22 51 0 / 0.07),
-		0 1px 2px rgb(22 51 0 / 0.06);
+		0 0 0 3px rgb(26 26 46 / 0.07),
+		0 1px 2px rgb(26 26 46 / 0.06);
 }
 
 :host-context(body.dark) .zp-play-area .zp-pin-box {
@@ -540,6 +540,6 @@ mat-form-field {
 
 :host-context(body.dark) .zp-play-area .zp-pin-box:focus {
 	outline: none;
-	border-color: rgb(232 235 230 / 0.55);
+	border-color: rgb(229 229 229 / 0.55);
 	box-shadow: 0 0 0 3px rgb(255 255 255 / 0.09);
 }

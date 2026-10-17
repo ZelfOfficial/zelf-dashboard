@@ -8,17 +8,17 @@
 
 :root {
     /* Colors */
-    --color-forest-ink: #163300;
-    --color-lime-voltage: #9fe870;
-    --color-spruce: #054d28;
-    --color-linen-mist: #e2f6d5;
-    --color-signal-blue: #0b4c72;
+    --color-forest-ink: #1a1a2e;
+    --color-lime-voltage: #ff5721;
+    --color-spruce: #9d52ef;
+    --color-linen-mist: #ffe9e1;
+    --color-signal-blue: #0e26ff;
     --color-alarm-red: #cb272f;
-    --color-charcoal: #454745;
-    --color-obsidian: #0e0f0c;
-    --color-pebble: #868685;
-    --color-slate: #6a6c6a;
-    --color-fog: #e8ebe6;
+    --color-charcoal: #3a3a3a;
+    --color-obsidian: #010110;
+    --color-pebble: #737373;
+    --color-slate: #525252;
+    --color-fog: #e5e5e5;
     --color-paper: #ffffff;
 
     /* Typography */
@@ -96,17 +96,17 @@
     --radius-navsegments: 9999px;
 
     /* Shadows */
-    --shadow-subtle: rgba(14, 15, 12, 0.12) 0px 0px 0px 1px;
-    --shadow-subtle-2: rgb(134, 134, 133) 0px 0px 0px 1px inset;
+    --shadow-subtle: rgba(1, 1, 16, 0.12) 0px 0px 0px 1px;
+    --shadow-subtle-2: rgb(115, 115, 115) 0px 0px 0px 1px inset;
     --shadow-xl: rgba(0, 0, 0, 0.15) 0px 10px 32px 0px, rgba(0, 0, 0, 0.04) 0px 40px 40px 0px;
     --shadow-lg: rgba(0, 0, 0, 0.08) 0px 6px 20px 0px;
 
     /* Surfaces */
     --surface-paper: #ffffff;
-    --surface-fog: #e8ebe6;
-    --surface-linen-mist: #e2f6d5;
-    --surface-lime-voltage: #9fe870;
-    --surface-forest-ink: #163300;
+    --surface-fog: #e5e5e5;
+    --surface-linen-mist: #ffe9e1;
+    --surface-lime-voltage: #ff5721;
+    --surface-forest-ink: #1a1a2e;
 
     /* Semantic aliases (flip in dark mode) */
     --wise-ink: var(--color-forest-ink);
@@ -116,10 +116,10 @@
     --wise-surface: var(--color-paper);
     --wise-surface-soft: var(--color-fog);
     --wise-surface-tint: var(--color-linen-mist);
-    --wise-hairline: rgba(14, 15, 12, 0.12);
+    --wise-hairline: rgba(1, 1, 16, 0.12);
     --wise-cta-bg: var(--color-lime-voltage);
     --wise-cta-text: var(--color-forest-ink);
-    --wise-cta-hover: #8fdc5d;
+    --wise-cta-hover: #ff6b3d;
     --wise-focus: var(--color-forest-ink);
 
     /* Angular Material shape tokens */
@@ -139,12 +139,12 @@
 .dark {
     --wise-ink: var(--color-lime-voltage);
     --wise-text: #ffffff;
-    --wise-text-body: rgba(226, 246, 213, 0.86);
-    --wise-text-muted: rgba(226, 246, 213, 0.64);
+    --wise-text-body: rgba(230, 233, 242, 0.86);
+    --wise-text-muted: rgba(230, 233, 242, 0.64);
     --wise-surface: var(--color-forest-ink);
-    --wise-surface-soft: #1c3d06;
-    --wise-surface-tint: rgba(159, 232, 112, 0.12);
-    --wise-hairline: rgba(226, 246, 213, 0.14);
+    --wise-surface-soft: #26263d;
+    --wise-surface-tint: rgba(255, 87, 33, 0.12);
+    --wise-hairline: rgba(230, 233, 242, 0.14);
     --wise-focus: var(--color-lime-voltage);
 }
 
@@ -369,8 +369,8 @@ a:not([class]) {
         --mdc-protected-button-label-text-color: var(--color-forest-ink);
         --mat-filled-button-state-layer-color: var(--color-forest-ink);
         --mat-protected-button-state-layer-color: var(--color-forest-ink);
-        --mat-filled-button-ripple-color: rgba(22, 51, 0, 0.12);
-        --mat-protected-button-ripple-color: rgba(22, 51, 0, 0.12);
+        --mat-filled-button-ripple-color: rgba(26, 26, 46, 0.12);
+        --mat-protected-button-ripple-color: rgba(26, 26, 46, 0.12);
 
         .mat-icon {
             color: var(--color-forest-ink) !important;
@@ -546,7 +546,7 @@ a:not([class]) {
     --mdc-switch-selected-focus-handle-color: var(--color-lime-voltage);
     --mdc-switch-selected-pressed-handle-color: var(--color-lime-voltage);
     --mdc-switch-selected-icon-color: var(--color-forest-ink);
-    --mdc-switch-unselected-track-color: #d4d9d0;
+    --mdc-switch-unselected-track-color: #d4d4d4;
     --mdc-switch-unselected-handle-color: #ffffff;
     --mdc-switch-unselected-hover-handle-color: #ffffff;
     --mdc-switch-unselected-focus-handle-color: #ffffff;
@@ -561,7 +561,7 @@ a:not([class]) {
         --mdc-switch-selected-focus-handle-color: var(--color-forest-ink);
         --mdc-switch-selected-pressed-handle-color: var(--color-forest-ink);
         --mdc-switch-selected-icon-color: var(--color-lime-voltage);
-        --mdc-switch-unselected-track-color: #2a5e0c;
+        --mdc-switch-unselected-track-color: #3a3a52;
     }
 }
 
@@ -704,7 +704,7 @@ body.dark fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
         }
 
         &:hover .fuse-horizontal-navigation-item-wrapper {
-            background: rgba(159, 232, 112, 0.12) !important;
+            background: rgba(255, 87, 33, 0.12) !important;
         }
     }
 
@@ -724,7 +724,7 @@ body.dark fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
         .fuse-horizontal-navigation-menu-active,
         .fuse-horizontal-navigation-menu-active-forced {
             .fuse-horizontal-navigation-item-wrapper {
-                background: rgba(159, 232, 112, 0.12) !important;
+                background: rgba(255, 87, 33, 0.12) !important;
             }
         }
     }

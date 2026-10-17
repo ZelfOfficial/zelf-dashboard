@@ -56,7 +56,7 @@
 				margin: 0 auto 24px;
 				border-radius: 16px;
 				overflow: hidden;
-				box-shadow: 0 0 0 1px rgba(14, 15, 12, 0.12);
+				box-shadow: 0 0 0 1px rgba(1, 1, 16, 0.12);
 				background: #000;
 
 				webcam {
@@ -117,19 +117,19 @@
 				}
 
 				.biometric__instructions {
-					background: #e2f6d5;
-					border: 1px solid #c5f1a5;
+					background: #ffe9e1;
+					border: 1px solid #ffcfbd;
 					border-radius: 8px;
 					padding: 16px;
 
 					.biometric__instruction-title {
 						font-weight: 600;
-						color: #163300;
+						color: #1a1a2e;
 						margin-bottom: 4px;
 					}
 
 					.biometric__instruction-subtitle {
-						color: #163300;
+						color: #1a1a2e;
 						font-size: 14px;
 					}
 				}
@@ -139,12 +139,12 @@
 				margin-bottom: 24px;
 
 				p {
-					color: #6a6c6a;
+					color: #525252;
 					font-size: 14px;
 					margin: 0;
 
 					:host-context(.dark) & {
-						color: #868685;
+						color: #737373;
 					}
 				}
 			}
@@ -193,7 +193,7 @@
 
 					.form-label {
 						font-weight: 600;
-						color: #0e0f0c;
+						color: #010110;
 						margin: 0;
 					}
 
@@ -231,21 +231,21 @@
 					input {
 						width: 100%;
 						padding: 12px 16px;
-						border: 1px solid #d4d9d0;
+						border: 1px solid #d4d4d4;
 						border-radius: 8px;
 						font-size: 14px;
 						transition: all 0.2s ease;
 
 						&:focus {
 							outline: none;
-							border-color: #163300;
-							box-shadow: 0 0 0 3px rgba(159, 232, 112, 0.45);
+							border-color: #1a1a2e;
+							box-shadow: 0 0 0 3px rgba(255, 87, 33, 0.45);
 						}
 					}
 
 					small {
 						display: block;
-						color: #6a6c6a;
+						color: #525252;
 						font-size: 12px;
 						margin-top: 4px;
 					}
@@ -301,21 +301,21 @@
 					}
 
 					.btn-retry {
-						background: #9fe870;
-						color: #163300;
+						background: #ff5721;
+						color: #1a1a2e;
 
 						&:hover {
-							background: #b8ef94;
+							background: #ff6b3d;
 						}
 					}
 
 					.btn-back-error {
 						background: #ffffff;
-						color: #163300;
-						border: 1px solid #163300;
+						color: #1a1a2e;
+						border: 1px solid #1a1a2e;
 
 						&:hover {
-							background: #e2f6d5;
+							background: #ffe9e1;
 						}
 					}
 				}
@@ -329,7 +329,7 @@
 			.processing-message {
 				margin-top: 24px;
 				font-size: 16px;
-				color: #6a6c6a;
+				color: #525252;
 			}
 		}
 
@@ -343,18 +343,18 @@
 				width: 48px;
 				height: 48px;
 				margin-bottom: 24px;
-				color: #6a6c6a;
+				color: #525252;
 			}
 
 			.error-title {
 				font-size: 20px;
 				font-weight: 600;
-				color: #0e0f0c;
+				color: #010110;
 				margin: 0 0 12px 0;
 			}
 
 			.error-description {
-				color: #6a6c6a;
+				color: #525252;
 				font-size: 14px;
 				margin: 0 0 24px 0;
 			}
@@ -370,24 +370,24 @@
 				width: 48px;
 				height: 48px;
 				margin-bottom: 24px;
-				color: #6a6c6a;
+				color: #525252;
 			}
 
 			.permission-title {
 				font-size: 20px;
 				font-weight: 600;
-				color: #0e0f0c;
+				color: #010110;
 				margin: 0 0 12px 0;
 			}
 
 			.permission-description {
-				color: #6a6c6a;
+				color: #525252;
 				font-size: 14px;
 				margin: 0 0 24px 0;
 			}
 
 			.btn-retry {
-				background: #163300;
+				background: #1a1a2e;
 				border: none;
 				border-radius: 8px;
 				padding: 12px 24px;
@@ -662,12 +662,12 @@
 	text-align: center;
 	margin: 24px 0;
 	padding: 20px;
-	background: #f7f8f6;
+	background: #fafafa;
 	border-radius: 12px;
-	border: 1px solid #e8ebe6;
+	border: 1px solid #e5e5e5;
 
 	.btn-liveness {
-		background: #163300;
+		background: #1a1a2e;
 		border: none;
 		border-radius: 8px;
 		padding: 12px 24px;
@@ -685,7 +685,7 @@
 	}
 
 	small {
-		color: #6a6c6a;
+		color: #525252;
 		font-size: 12px;
 	}
 }
@@ -694,13 +694,13 @@
 	text-align: center;
 	margin: 24px 0;
 	padding: 24px;
-	background: #f7f8f6;
+	background: #fafafa;
 	border-radius: 12px;
-	border: 1px solid #e8ebe6;
+	border: 1px solid #e5e5e5;
 
 	h3 {
 		margin: 0 0 20px 0;
-		color: #454745;
+		color: #3a3a3a;
 		font-size: 18px;
 		font-weight: 600;
 	}
@@ -719,12 +719,12 @@
 			padding: 16px;
 			border-radius: 8px;
 			background: white;
-			border: 2px solid #e8ebe6;
+			border: 2px solid #e5e5e5;
 			min-width: 80px;
 			transition: all 0.3s ease;
 
 			&.active {
-				border-color: #163300;
+				border-color: #1a1a2e;
 				background: #e3f2fd;
 				transform: scale(1.05);
 			}
@@ -743,13 +743,13 @@
 
 				.step-name {
 					font-weight: 600;
-					color: #454745;
+					color: #3a3a3a;
 					font-size: 12px;
 					margin-bottom: 4px;
 				}
 
 				.step-angle {
-					color: #6a6c6a;
+					color: #525252;
 					font-size: 10px;
 				}
 			}
@@ -760,17 +760,17 @@
 		background: white;
 		padding: 16px;
 		border-radius: 8px;
-		border: 1px solid #e8ebe6;
+		border: 1px solid #e5e5e5;
 
 		.current-step {
 			font-weight: 600;
-			color: #454745;
+			color: #3a3a3a;
 			margin-bottom: 8px;
 			font-size: 14px;
 		}
 
 		.hold-instruction {
-			color: #163300;
+			color: #1a1a2e;
 			font-weight: 500;
 			font-size: 14px;
 		}

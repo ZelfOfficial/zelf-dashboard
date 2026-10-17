@@ -62,7 +62,7 @@ export class TagLeaseLengthsChartComponent implements OnInit, OnChanges {
 					enabled: true,
 				},
 			},
-			colors: ["#163300", "#2f5711", "#9fe870", "#c5f1a5", "#e8ebe6", "#f1f3ef"],
+			colors: ["#1a1a2e", "#9d52ef", "#ff5721", "#ffcfbd", "#e5e5e5", "#f4f4f4"],
 			labels: this.labels || [],
 			plotOptions: {
 				pie: {

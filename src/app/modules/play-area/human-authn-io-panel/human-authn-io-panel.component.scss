@@ -8,14 +8,14 @@
 	gap: 1.25rem;
 	padding: 1.25rem 1.15rem 1.4rem;
 	border-radius: 1rem;
-	border: 1px solid rgb(22 51 0 / 0.06);
+	border: 1px solid rgb(26 26 46 / 0.06);
 	background: #fff;
 	box-shadow: 0 1px 3px rgb(0 0 0 / 0.05);
 }
 
 :host-context(body.dark) .hap-io {
 	border-color: rgb(255 255 255 / 0.06);
-	background: rgb(22 51 0 / 0.55);
+	background: rgb(26 26 46 / 0.55);
 	box-shadow:
 		0 1px 0 rgb(255 255 255 / 0.04) inset,
 		0 12px 48px rgb(0 0 0 / 0.35);
@@ -39,7 +39,7 @@
 	font-weight: 700;
 	letter-spacing: 0.14em;
 	text-transform: uppercase;
-	color: rgb(134 134 133);
+	color: rgb(115 115 115);
 }
 
 .hap-io-title {
@@ -48,7 +48,7 @@
 	font-size: 0.9375rem;
 	font-weight: 600;
 	letter-spacing: -0.02em;
-	color: rgb(22 51 0);
+	color: rgb(26 26 46);
 }
 
 :host-context(body.dark) .hap-io-title {
@@ -57,18 +57,18 @@
 
 .hap-io-copy {
 	margin-left: auto;
-	color: rgb(106 108 106);
+	color: rgb(82 82 82);
 }
 
 .hap-io-hint {
 	margin: 0 0 0.65rem;
 	font-size: 0.75rem;
 	line-height: 1.5;
-	color: rgb(106 108 106);
+	color: rgb(82 82 82);
 }
 
 :host-context(body.dark) .hap-io-hint {
-	color: rgb(134 134 133);
+	color: rgb(115 115 115);
 }
 
 .hap-io-pre {
@@ -82,15 +82,15 @@
 	white-space: pre-wrap;
 	word-break: break-word;
 	border-radius: 0.75rem;
-	border: 1px solid rgb(22 51 0 / 0.06);
-	background: rgb(232 235 230 / 0.8);
-	color: rgb(22 51 0);
+	border: 1px solid rgb(26 26 46 / 0.06);
+	background: rgb(229 229 229 / 0.8);
+	color: rgb(26 26 46);
 }
 
 :host-context(body.dark) .hap-io-pre {
 	border-color: rgb(255 255 255 / 0.06);
 	background: rgb(0 0 0 / 0.35);
-	color: rgb(232 235 230);
+	color: rgb(229 229 229);
 }
 
 .hap-io-pre--muted {
@@ -116,13 +116,13 @@
 	margin: 0 0 0.75rem;
 	padding: 0.75rem 0.85rem;
 	border-radius: 0.75rem;
-	border: 1px solid rgb(22 51 0 / 0.06);
-	background: rgb(159 232 112 / 0.18);
+	border: 1px solid rgb(26 26 46 / 0.06);
+	background: rgb(255 87 33 / 0.18);
 }
 
 :host-context(body.dark) .hap-io-callout {
-	border-color: rgb(159 232 112 / 0.18);
-	background: rgb(159 232 112 / 0.08);
+	border-color: rgb(255 87 33 / 0.18);
+	background: rgb(255 87 33 / 0.08);
 }
 
 .hap-io-callout-text {
@@ -144,7 +144,7 @@
 	padding: 1rem;
 	border-radius: 1rem;
 	background: #fff;
-	border: 1px solid rgb(22 51 0 / 0.06);
+	border: 1px solid rgb(26 26 46 / 0.06);
 }
 
 .hap-io-qr img {

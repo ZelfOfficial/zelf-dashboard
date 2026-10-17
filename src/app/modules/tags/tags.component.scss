@@ -181,7 +181,7 @@
 	}
 
 	.tags-table tbody tr:hover {
-		background-color: rgba(226, 246, 213, 0.45);
+		background-color: rgba(255, 233, 225, 0.45);
 	}
 
 	.tags-table td {
@@ -204,7 +204,7 @@
 	}
 
 	.tags-table__status-dot--hold {
-		background-color: #3d8a1c;
+		background-color: #059669;
 	}
 
 	.tags-table__status-dot--active {
@@ -359,12 +359,12 @@
 
 	option {
 		background: white;
-		color: #0e0f0c;
+		color: #010110;
 	}
 }
 
 .dark .tags-page select option {
-	background: #163300;
+	background: #1a1a2e;
 	color: #ffffff;
 }
 
@@ -386,5 +386,5 @@
 }
 
 .dark .tags-page .tags-table tbody tr:hover {
-	background-color: rgba(159, 232, 112, 0.08);
+	background-color: rgba(255, 87, 33, 0.08);
 }

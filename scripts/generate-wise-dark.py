@@ -12,11 +12,11 @@ Re-run after adding new dark: neutral utilities:  python3 scripts/generate-wise-
 import re, pathlib
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SURFACE = {50: "#2a5e0c", 100: "#2a5e0c", 200: "#2a5e0c", 300: "#3d8a1c", 400: "#3d8a1c", 500: "#2a5e0c",
-           600: "#1f4704", 700: "#1f4704", 800: "#163300", 900: "#0b1a02", 950: "#050d01"}
+SURFACE = {50: "#3a3a52", 100: "#3a3a52", 200: "#3a3a52", 300: "#4a4a6a", 400: "#4a4a6a", 500: "#3a3a52",
+           600: "#2a2a45", 700: "#2a2a45", 800: "#1a1a2e", 900: "#010110", 950: "#000008"}
 TEXT_A = {50: 1, 100: 1, 200: .94, 300: .86, 400: .7, 500: .58, 600: .46, 700: .36, 800: .3, 900: .24, 950: .2}
 LINE_A = {50: .3, 100: .3, 200: .3, 300: .3, 400: .3, 500: .26, 600: .2, 700: .14, 800: .1, 900: .08, 950: .06}
-MIST = (226, 246, 213)
+MIST = (230, 233, 242)  # Moon (landing #e6e9f2)
 
 pat = re.compile(r'dark:((?:hover|focus|group-hover|placeholder|disabled):)?(bg|text|border|divide|ring|from|to|via)-(gray|slate|zinc|neutral|stone)-(\d+)(?:/(\d+))?')
 found = set()
