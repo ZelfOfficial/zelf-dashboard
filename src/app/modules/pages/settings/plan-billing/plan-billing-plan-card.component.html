@@ -1,9 +1,9 @@
 <div
-	class="flex min-h-full flex-col rounded-2xl border bg-white transition-shadow duration-200 bg-default"
+	class="flex min-h-full flex-col rounded-2xl border bg-white transition-colors duration-200 dark:bg-forest-ink"
 	[ngClass]="
 		highlighted
-			? 'border-gray-900 shadow-md ring-1 ring-gray-900/10 dark:border-gray-100 dark:ring-white/10'
-			: 'border-gray-200 shadow-sm hover:border-gray-300 hover:shadow-md dark:border-gray-700 dark:hover:border-gray-600'
+			? 'border-forest-ink ring-1 ring-forest-ink dark:border-lime-voltage dark:ring-lime-voltage'
+			: 'border-gray-300 hover:border-forest-ink dark:border-gray-700 dark:hover:border-lime-voltage'
 	"
 >
 	<div class="flex flex-1 flex-col px-5 pb-4 pt-6 sm:px-6 sm:pt-7">
@@ -12,7 +12,7 @@
 
 		@if (price && formattedPrice) {
 			<div class="mt-5 flex flex-wrap items-baseline gap-x-1 gap-y-0">
-				<span class="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ formattedPrice }}</span>
+				<span class="font-display text-[40px] font-black leading-none tracking-display text-forest-ink dark:text-lime-voltage">{{ formattedPrice }}</span>
 				<span class="text-sm text-gray-500 dark:text-gray-400">/ {{ price.recurring.interval }}</span>
 			</div>
 		}
@@ -20,7 +20,7 @@
 		<ul class="mt-6 flex flex-1 flex-col gap-2.5">
 			@for (row of featureRows; track trackFeatureRow($index, row)) {
 				<li class="flex items-start gap-2.5">
-					<mat-icon class="icon-size-5 mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-500">check_circle</mat-icon>
+					<mat-icon class="icon-size-5 mt-0.5 shrink-0 text-forest-ink dark:text-lime-voltage">check_circle</mat-icon>
 					<span class="text-sm leading-snug text-gray-600 dark:text-gray-300">
 						@if (row.mode === 'unlimited_encryptions') {
 							<b>{{ featureKey(row) | transloco }}</b>
@@ -45,7 +45,7 @@
 				class="w-full !rounded-full !py-2 !font-semibold"
 				[ngClass]="
 					highlighted
-						? '!border-gray-900 !bg-gray-900 !text-white dark:!border-white dark:!bg-white dark:!text-gray-900'
+						? '!border-forest-ink !bg-forest-ink !text-white dark:!border-lime-voltage dark:!bg-lime-voltage dark:!text-forest-ink'
 						: '!border-gray-300 dark:!border-gray-600'
 				"
 				(click)="onUpgrade()"
@@ -59,7 +59,7 @@
 				class="w-full !rounded-full !py-2.5 !font-semibold"
 				[ngClass]="
 					highlighted
-						? '!bg-gray-900 !text-white hover:!bg-gray-800 dark:!bg-white dark:!text-gray-900 dark:hover:!bg-gray-100'
+						? '!bg-lime-voltage !text-forest-ink hover:!bg-lime-500 dark:!bg-lime-voltage dark:!text-forest-ink dark:hover:!bg-lime-500'
 						: '!bg-gray-100 !text-gray-900 hover:!bg-gray-200 dark:!bg-gray-800 dark:!text-gray-100 dark:hover:!bg-gray-700'
 				"
 				[disabled]="subscribing && subscribingPlanId === plan.id"
