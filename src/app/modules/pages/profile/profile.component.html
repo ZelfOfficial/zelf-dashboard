@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-gray-50/50 dark:bg-gray-900 w-full">
+<div class="flex flex-col min-h-screen w-full bg-default">
 	<div class="flex-auto px-4 py-8 sm:px-6 sm:py-12 md:px-8 w-full max-w-4xl mx-auto">
 		<!-- Header -->
 		<div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -33,7 +33,7 @@
 		}
 
 		<!-- Profile Card -->
-		<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+		<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 			<div *ngIf="loading" class="flex flex-col items-center justify-center h-96">
 				<mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
 				<span class="mt-4 text-gray-500 font-medium">{{ 'profile.loadingShort' | transloco }}</span>
@@ -49,7 +49,7 @@
 								<span *ngIf="!photoPreviewUrl && !userPhoto">{{ user?.name?.[0] || displayName[0] }}</span>
 							</div>
 							<input type="file" id="photoInput" accept="image/*" (change)="onPhotoSelected($event)" class="hidden" />
-							<button *ngIf="isEditing" (click)="triggerPhotoUpload()" type="button" class="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors shadow-md">
+							<button *ngIf="isEditing" (click)="triggerPhotoUpload()" type="button" class="absolute bottom-0 right-0 w-8 h-8 bg-lime-voltage text-forest-ink rounded-full flex items-center justify-center hover:bg-lime-500 transition-colors">
 								<mat-icon class="icon-size-4">camera_alt</mat-icon>
 							</button>
 						</div>
@@ -63,12 +63,12 @@
 							</div>
 						</div>
 						<div class="flex items-center gap-3 mt-4 sm:mt-0 pb-2">
-							<button *ngIf="!isEditing" (click)="toggleEditMode()" class="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-gray-900 rounded-xl font-medium text-sm transition-all shadow-sm flex items-center gap-2">
+							<button *ngIf="!isEditing" (click)="toggleEditMode()" class="px-5 py-2.5 bg-lime-voltage hover:bg-lime-500 dark:bg-lime-voltage dark:hover:bg-lime-500 text-forest-ink dark:text-forest-ink rounded-full font-semibold text-sm transition-all flex items-center gap-2">
 								<mat-icon class="icon-size-4">edit</mat-icon><span>{{ 'profile.edit' | transloco }}</span>
 							</button>
 							<ng-container *ngIf="isEditing">
-								<button (click)="toggleEditMode()" class="px-5 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-transparent dark:border-gray-600 dark:text-white dark:hover:bg-gray-800 text-gray-700 rounded-xl font-medium text-sm transition-all flex items-center gap-2"><span>{{ 'profile.cancel' | transloco }}</span></button>
-								<button *ngIf="hasChanges" (click)="saveProfile()" class="px-5 py-2.5 bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-200 text-white dark:text-gray-900 rounded-xl font-medium text-sm transition-all shadow-lg flex items-center gap-2">
+								<button (click)="toggleEditMode()" class="px-5 py-2.5 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-transparent dark:border-gray-600 dark:text-white dark:hover:bg-gray-800 text-gray-700 rounded-full font-medium text-sm transition-all flex items-center gap-2"><span>{{ 'profile.cancel' | transloco }}</span></button>
+								<button *ngIf="hasChanges" (click)="saveProfile()" class="px-5 py-2.5 bg-lime-voltage hover:bg-lime-500 dark:bg-lime-voltage dark:hover:bg-lime-500 text-forest-ink dark:text-forest-ink rounded-full font-semibold text-sm transition-all flex items-center gap-2">
 									<mat-icon class="icon-size-4">check</mat-icon><span>{{ 'profile.save' | transloco }}</span>
 								</button>
 							</ng-container>
@@ -83,16 +83,16 @@
 						<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
 							<div class="space-y-1.5">
 								<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.information.fullName' | transloco }}</label>
-								<input type="text" formControlName="name" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.information.yourName' | transloco }}" />
+								<input type="text" formControlName="name" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.information.yourName' | transloco }}" />
 							</div>
 							<div class="space-y-1.5" *ngIf="!isLawyer && user?.accountType !== 'staff_account'">
 								<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.information.company' | transloco }}</label>
-								<input type="text" formControlName="company" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" [placeholder]="'profile.information.company_placeholder' | transloco" />
+								<input type="text" formControlName="company" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" [placeholder]="'profile.information.company_placeholder' | transloco" />
 							</div>
 							<!-- Contact Email for lawyers -->
 							<div class="space-y-1.5" *ngIf="isLawyer">
 								<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.contactEmail' | transloco }}</label>
-								<input type="email" formControlName="contactEmail" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_contactEmail' | transloco }}" />
+								<input type="email" formControlName="contactEmail" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_contactEmail' | transloco }}" />
 							</div>
 							<!-- Phone -->
 							<div class="md:col-span-2 space-y-1.5">
@@ -100,7 +100,7 @@
 								<div class="flex gap-3">
 									<div class="w-36 relative country-code-field">
 										<div class="relative">
-											<input #countryInput type="text" formControlName="countryCode" [(ngModel)]="countryCodeSearchTerm" (input)="filterCountryCodes(); onFormChange()" (focus)="toggleCountryDropdown()" [placeholder]="'profile.information.phoneCode' | transloco" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" />
+											<input #countryInput type="text" formControlName="countryCode" [(ngModel)]="countryCodeSearchTerm" (input)="filterCountryCodes(); onFormChange()" (focus)="toggleCountryDropdown()" [placeholder]="'profile.information.phoneCode' | transloco" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" />
 											<div class="absolute right-3 top-3 text-gray-400 cursor-pointer" (click)="countryInput.focus(); toggleCountryDropdown()"><mat-icon class="icon-size-5">keyboard_arrow_down</mat-icon></div>
 										</div>
 										<div *ngIf="showCountryDropdown && filteredCountryCodes.length > 0" class="absolute z-50 w-64 mt-2 bg-white dark:bg-slate-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-xl max-h-60 overflow-y-auto py-2">
@@ -112,7 +112,7 @@
 										</div>
 									</div>
 									<div class="flex-1">
-										<input type="tel" formControlName="phone" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" [placeholder]="'profile.information.phone_placeholder' | transloco" />
+										<input type="tel" formControlName="phone" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" [placeholder]="'profile.information.phone_placeholder' | transloco" />
 									</div>
 								</div>
 							</div>
@@ -121,7 +121,7 @@
 								<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.information.email' | transloco }}</label>
 								<div class="relative">
 									<mat-icon class="absolute left-4 top-3.5 icon-size-5 text-gray-400">mail</mat-icon>
-									<input type="email" formControlName="email" (input)="onFormChange()" class="w-full pl-12 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" [placeholder]="'profile.information.email_placeholder' | transloco" />
+									<input type="email" formControlName="email" (input)="onFormChange()" class="w-full pl-12 bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" [placeholder]="'profile.information.email_placeholder' | transloco" />
 								</div>
 							</div>
 						</div>
@@ -137,31 +137,31 @@
 								<!-- Zelf Name -->
 								<div class="space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.zelfName' | transloco }}</label>
-									<input type="text" formControlName="zelfName" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_zelfName' | transloco }}" />
+									<input type="text" formControlName="zelfName" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_zelfName' | transloco }}" />
 								</div>
 								<!-- License Number -->
 								<div class="space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.licenseNumber' | transloco }}</label>
-									<input type="text" formControlName="licenseNumber" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_license' | transloco }}" />
+									<input type="text" formControlName="licenseNumber" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_license' | transloco }}" />
 								</div>
 								<!-- Professional ID -->
 								<div class="space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.professionalId' | transloco }}</label>
-									<input type="text" formControlName="professionalId" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_professionalId' | transloco }}" />
+									<input type="text" formControlName="professionalId" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_professionalId' | transloco }}" />
 								</div>
 								<!-- Hourly Rate -->
 								<div class="space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.hourlyRate' | transloco }}</label>
-									<input type="number" formControlName="hourlyRate" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_hourlyRate' | transloco }}" />
+									<input type="number" formControlName="hourlyRate" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_hourlyRate' | transloco }}" />
 								</div>
 								<!-- Location -->
 								<div class="space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.city' | transloco }}</label>
-									<input type="text" formControlName="locationCity" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_city' | transloco }}" />
+									<input type="text" formControlName="locationCity" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_city' | transloco }}" />
 								</div>
 								<div class="space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.country' | transloco }}</label>
-									<input type="text" formControlName="locationCountry" (input)="onFormChange()" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed" placeholder="{{ 'profile.lawyer.placeholder_country' | transloco }}" />
+									<input type="text" formControlName="locationCountry" (input)="onFormChange()" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_country' | transloco }}" />
 								</div>
 								<!-- Specializations -->
 								<div class="md:col-span-2 space-y-1.5">
@@ -175,14 +175,14 @@
 										}
 									</div>
 									<div *ngIf="isEditing" class="flex gap-2">
-										<input type="text" [(ngModel)]="specializationInput" [ngModelOptions]="{ standalone: true }" (keyup.enter)="addSpecialization()" class="flex-1 bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium" placeholder="{{ 'profile.lawyer.placeholder_specialization' | transloco }}" />
-										<button type="button" (click)="addSpecialization()" class="px-4 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-medium text-sm hover:opacity-90 transition-opacity"><mat-icon class="icon-size-4">add</mat-icon></button>
+										<input type="text" [(ngModel)]="specializationInput" [ngModelOptions]="{ standalone: true }" (keyup.enter)="addSpecialization()" class="flex-1 bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_specialization' | transloco }}" />
+										<button type="button" (click)="addSpecialization()" class="px-4 py-3 bg-lime-voltage dark:bg-lime-voltage text-forest-ink dark:text-forest-ink rounded-full font-semibold text-sm hover:opacity-90 transition-opacity"><mat-icon class="icon-size-4">add</mat-icon></button>
 									</div>
 								</div>
 								<!-- Bio -->
 								<div class="md:col-span-2 space-y-1.5">
 									<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ 'profile.lawyer.bio' | transloco }}</label>
-									<textarea formControlName="bio" (input)="onFormChange()" rows="4" class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed resize-none" placeholder="{{ 'profile.lawyer.placeholder_bio' | transloco }}"></textarea>
+									<textarea formControlName="bio" (input)="onFormChange()" rows="4" class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium disabled:opacity-60 disabled:cursor-not-allowed resize-none dark:focus:ring-lime-voltage" placeholder="{{ 'profile.lawyer.placeholder_bio' | transloco }}"></textarea>
 								</div>
 							</div>
 						</div>
@@ -201,7 +201,7 @@
 		</div>
 
 		<!-- Account Access Card -->
-		<div *ngIf="!loading" class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+		<div *ngIf="!loading" class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 			<div class="px-8 py-6 border-b border-gray-100 dark:border-gray-700">
 				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ 'profile.accountAccess.title' | transloco }}</h3>
 			</div>

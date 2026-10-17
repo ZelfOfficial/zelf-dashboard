@@ -117,9 +117,9 @@ import { AnalyticsSummary } from "./analytics.utils";
 						<div class="mt-3 flex items-center justify-between text-sm text-secondary">
 							<span>{{ (page - 1) * pageSize + 1 }}–{{ (page - 1) * pageSize + rows.length }} of {{ total }}</span>
 							<span class="flex items-center gap-2">
-								<button class="rounded-lg border px-3 py-1 disabled:opacity-40" [disabled]="page <= 1 || loading" (click)="go(page - 1)">Previous</button>
+								<button class="rounded-full border px-3 py-1 disabled:opacity-40" [disabled]="page <= 1 || loading" (click)="go(page - 1)">Previous</button>
 								<span>Page {{ page }} / {{ totalPages }}</span>
-								<button class="rounded-lg border px-3 py-1 disabled:opacity-40" [disabled]="page >= totalPages || loading" (click)="go(page + 1)">Next</button>
+								<button class="rounded-full border px-3 py-1 disabled:opacity-40" [disabled]="page >= totalPages || loading" (click)="go(page + 1)">Next</button>
 							</span>
 						</div>
 					}

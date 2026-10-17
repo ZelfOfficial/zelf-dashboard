@@ -106,7 +106,7 @@
 
 					.biometric__error-title {
 						font-weight: 600;
-						color: #c53030;
+						color: #cb272f;
 						margin-bottom: 4px;
 					}
 
@@ -139,12 +139,12 @@
 				margin-bottom: 24px;
 
 				p {
-					color: #666;
+					color: #6a6c6a;
 					font-size: 14px;
 					margin: 0;
 
 					:host-context(.dark) & {
-						color: #9ca3af;
+						color: #868685;
 					}
 				}
 			}
@@ -193,7 +193,7 @@
 
 					.form-label {
 						font-weight: 600;
-						color: #171717;
+						color: #0e0f0c;
 						margin: 0;
 					}
 
@@ -238,14 +238,14 @@
 
 						&:focus {
 							outline: none;
-							border-color: #667eea;
+							border-color: #163300;
 							box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 						}
 					}
 
 					small {
 						display: block;
-						color: #666;
+						color: #6a6c6a;
 						font-size: 12px;
 						margin-top: 4px;
 					}
@@ -273,7 +273,7 @@
 				.error-title {
 					font-size: 20px;
 					font-weight: 600;
-					color: #c53030;
+					color: #cb272f;
 					margin: 0 0 12px 0;
 				}
 
@@ -301,7 +301,7 @@
 					}
 
 					.btn-retry {
-						background: #667eea;
+						background: #163300;
 						color: white;
 
 						&:hover {
@@ -312,7 +312,7 @@
 					.btn-back-error {
 						background: #f7fafc;
 						color: #4a5568;
-						border: 1px solid #e2e8f0;
+						border: 1px solid #e8ebe6;
 
 						&:hover {
 							background: #edf2f7;
@@ -329,7 +329,7 @@
 			.processing-message {
 				margin-top: 24px;
 				font-size: 16px;
-				color: #666;
+				color: #6a6c6a;
 			}
 		}
 
@@ -343,18 +343,18 @@
 				width: 48px;
 				height: 48px;
 				margin-bottom: 24px;
-				color: #666;
+				color: #6a6c6a;
 			}
 
 			.error-title {
 				font-size: 20px;
 				font-weight: 600;
-				color: #171717;
+				color: #0e0f0c;
 				margin: 0 0 12px 0;
 			}
 
 			.error-description {
-				color: #666;
+				color: #6a6c6a;
 				font-size: 14px;
 				margin: 0 0 24px 0;
 			}
@@ -370,24 +370,24 @@
 				width: 48px;
 				height: 48px;
 				margin-bottom: 24px;
-				color: #666;
+				color: #6a6c6a;
 			}
 
 			.permission-title {
 				font-size: 20px;
 				font-weight: 600;
-				color: #171717;
+				color: #0e0f0c;
 				margin: 0 0 12px 0;
 			}
 
 			.permission-description {
-				color: #666;
+				color: #6a6c6a;
 				font-size: 14px;
 				margin: 0 0 24px 0;
 			}
 
 			.btn-retry {
-				background: #667eea;
+				background: #163300;
 				border: none;
 				border-radius: 8px;
 				padding: 12px 24px;
@@ -662,12 +662,12 @@
 	text-align: center;
 	margin: 24px 0;
 	padding: 20px;
-	background: #f8f9fa;
+	background: #f7f8f6;
 	border-radius: 12px;
-	border: 1px solid #e9ecef;
+	border: 1px solid #e8ebe6;
 
 	.btn-liveness {
-		background: #007bff;
+		background: #163300;
 		border: none;
 		border-radius: 8px;
 		padding: 12px 24px;
@@ -685,7 +685,7 @@
 	}
 
 	small {
-		color: #6c757d;
+		color: #6a6c6a;
 		font-size: 12px;
 	}
 }
@@ -694,13 +694,13 @@
 	text-align: center;
 	margin: 24px 0;
 	padding: 24px;
-	background: #f8f9fa;
+	background: #f7f8f6;
 	border-radius: 12px;
-	border: 1px solid #e9ecef;
+	border: 1px solid #e8ebe6;
 
 	h3 {
 		margin: 0 0 20px 0;
-		color: #495057;
+		color: #454745;
 		font-size: 18px;
 		font-weight: 600;
 	}
@@ -719,12 +719,12 @@
 			padding: 16px;
 			border-radius: 8px;
 			background: white;
-			border: 2px solid #e9ecef;
+			border: 2px solid #e8ebe6;
 			min-width: 80px;
 			transition: all 0.3s ease;
 
 			&.active {
-				border-color: #007bff;
+				border-color: #163300;
 				background: #e3f2fd;
 				transform: scale(1.05);
 			}
@@ -743,13 +743,13 @@
 
 				.step-name {
 					font-weight: 600;
-					color: #495057;
+					color: #454745;
 					font-size: 12px;
 					margin-bottom: 4px;
 				}
 
 				.step-angle {
-					color: #6c757d;
+					color: #6a6c6a;
 					font-size: 10px;
 				}
 			}
@@ -760,17 +760,17 @@
 		background: white;
 		padding: 16px;
 		border-radius: 8px;
-		border: 1px solid #e9ecef;
+		border: 1px solid #e8ebe6;
 
 		.current-step {
 			font-weight: 600;
-			color: #495057;
+			color: #454745;
 			margin-bottom: 8px;
 			font-size: 14px;
 		}
 
 		.hold-instruction {
-			color: #007bff;
+			color: #163300;
 			font-weight: 500;
 			font-size: 14px;
 		}

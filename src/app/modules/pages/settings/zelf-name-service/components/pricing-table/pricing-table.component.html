@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50" *transloco="let t">
+<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50" *transloco="let t">
 	<div class="p-8 sm:p-10">
 		<div class="flex items-center justify-between mb-6">
 			<div class="flex items-center gap-3">
@@ -16,7 +16,7 @@
 				<button
 					type="button"
 					(click)="resetDefault.emit()"
-					class="text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+					class="text-xs font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1"
 				>
 					<mat-icon class="icon-size-4">refresh</mat-icon>
 					Reload from license
@@ -24,7 +24,7 @@
 				<button
 					type="button"
 					(click)="saveRequested.emit()"
-					class="text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1"
+					class="text-xs font-semibold text-white bg-purple-600 hover:bg-purple-700 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1"
 				>
 					<mat-icon class="icon-size-4">save</mat-icon>
 					Save configuration
@@ -37,7 +37,7 @@
 				type="button"
 				*ngFor="let plan of plans"
 				(click)="selectTab(plan)"
-				class="text-xs font-semibold px-3 py-1.5 rounded-lg transition-colors capitalize"
+				class="text-xs font-semibold px-3 py-1.5 rounded-full transition-colors capitalize"
 				[class]="
 					currentPlan === plan
 						? 'bg-purple-600 text-white'
@@ -104,11 +104,11 @@
 
 		<div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
 			<input [(ngModel)]="newPlan" [ngModelOptions]="{ standalone: true }" placeholder="new plan id" class="w-32 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent" />
-			<button type="button" (click)="addPlan()" class="px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700">Add plan</button>
+			<button type="button" (click)="addPlan()" class="px-2 py-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700">Add plan</button>
 			<input [(ngModel)]="newGroup" [ngModelOptions]="{ standalone: true }" placeholder="length group e.g. 6-15" class="w-36 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent" />
-			<button type="button" (click)="addGroup()" class="px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700">Add length group</button>
+			<button type="button" (click)="addGroup()" class="px-2 py-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700">Add length group</button>
 			<input [(ngModel)]="newDuration" [ngModelOptions]="{ standalone: true }" placeholder="duration e.g. 2 or lifetime" class="w-40 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md bg-transparent" />
-			<button type="button" (click)="addDuration()" class="px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-gray-700">Add duration</button>
+			<button type="button" (click)="addDuration()" class="px-2 py-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700">Add duration</button>
 			@if (inputError) {
 				<span class="text-red-600 dark:text-red-300">{{ inputError }}</span>
 			}

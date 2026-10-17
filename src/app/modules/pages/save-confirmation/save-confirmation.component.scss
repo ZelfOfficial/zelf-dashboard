@@ -46,19 +46,19 @@
 .input-wrapper {
     transition: all 0.2s ease;
     &:focus-within {
-        border-color: #3b82f6;
+        border-color: #163300;
         box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
     }
 }
 
 // Primary Action Button
 .btn-primary {
-    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    background: linear-gradient(135deg, #0e0f0c 0%, #163300 100%);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
     &:hover:not(:disabled) {
-        background: linear-gradient(135deg, #000000 0%, #111827 100%);
+        background: linear-gradient(135deg, #000000 0%, #0e0f0c 100%);
         transform: translateY(-1px);
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
@@ -68,11 +68,11 @@
     }
 
     .dark-mode & {
-        background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
-        color: #111827;
+        background: linear-gradient(135deg, #ffffff 0%, #f1f3ef 100%);
+        color: #0e0f0c;
 
         &:hover:not(:disabled) {
-            background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+            background: linear-gradient(135deg, #f7f8f6 0%, #ffffff 100%);
             box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
         }
     }
@@ -96,13 +96,13 @@
     transition: all 0.3s ease;
     border: 1px solid rgba(191, 219, 254, 1);
     &:hover {
-        border-color: #3b82f6;
+        border-color: #163300;
         background-color: rgba(219, 234, 254, 0.5);
     }
     .dark-mode & {
         border-color: rgba(30, 58, 138, 0.5);
         &:hover {
-            border-color: #3b82f6;
+            border-color: #163300;
             background-color: rgba(30, 58, 138, 0.3);
         }
     }
@@ -111,23 +111,23 @@
 // Dark mode adjustments
 .dark {
     .bg-gray-50 {
-        background-color: #111827;
+        background-color: #0e0f0c;
     }
 
     .bg-gray-800 {
-        background-color: #1f2937;
+        background-color: #163300;
     }
 
     .text-gray-900 {
-        color: #f9fafb;
+        color: #f7f8f6;
     }
 
     .text-gray-600 {
-        color: #d1d5db;
+        color: #d4d9d0;
     }
 
     .text-gray-400 {
-        color: #9ca3af;
+        color: #868685;
     }
 }
 
@@ -138,30 +138,30 @@ mat-form-field {
 
 // Button styling
 button[mat-flat-button] {
-    background-color: #3b82f6;
+    background-color: #163300;
     color: white;
 
     &:hover:not(:disabled) {
-        background-color: #2563eb;
+        background-color: #163300;
     }
 
     &:disabled {
-        background-color: #9ca3af;
-        color: #6b7280;
+        background-color: #868685;
+        color: #6a6c6a;
     }
 }
 
 button[mat-stroked-button] {
-    border-color: #d1d5db;
-    color: #374151;
+    border-color: #d4d9d0;
+    color: #454745;
 
     &:hover:not(:disabled) {
-        background-color: #f9fafb;
+        background-color: #f7f8f6;
     }
 
     &:disabled {
-        border-color: #e5e7eb;
-        color: #9ca3af;
+        border-color: #e8ebe6;
+        color: #868685;
     }
 }
 
@@ -316,24 +316,24 @@ button[mat-stroked-button] {
 }
 
 .bg-gray-50 {
-    background-color: #f9fafb;
+    background-color: #f7f8f6;
 }
 
 .bg-gray-800 {
-    background-color: #1f2937;
+    background-color: #163300;
 }
 
 .bg-gray-900 {
-    background-color: #111827;
+    background-color: #0e0f0c;
 }
 
 // Text colors
 .text-blue-600 {
-    color: #2563eb;
+    color: #163300;
 }
 
 .text-blue-400 {
-    color: #60a5fa;
+    color: #9fe870;
 }
 
 .text-green-800 {
@@ -345,19 +345,19 @@ button[mat-stroked-button] {
 }
 
 .text-gray-900 {
-    color: #111827;
+    color: #0e0f0c;
 }
 
 .text-gray-600 {
-    color: #4b5563;
+    color: #6a6c6a;
 }
 
 .text-gray-500 {
-    color: #6b7280;
+    color: #6a6c6a;
 }
 
 .text-gray-400 {
-    color: #9ca3af;
+    color: #868685;
 }
 
 .text-white {
@@ -374,11 +374,11 @@ button[mat-stroked-button] {
 }
 
 .border-gray-200 {
-    border-color: #e5e7eb;
+    border-color: #e8ebe6;
 }
 
 .border-gray-700 {
-    border-color: #374151;
+    border-color: #454745;
 }
 
 // Border radius

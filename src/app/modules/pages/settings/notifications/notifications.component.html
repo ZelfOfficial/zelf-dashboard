@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-gray-50/50 dark:bg-gray-900 w-full">
+<div class="flex flex-col min-h-screen w-full bg-default">
 	<!-- Main Content Container -->
 	<div class="flex-auto px-4 py-8 sm:px-6 sm:py-12 md:px-8 w-full max-w-4xl mx-auto">
 		<!-- Loading State -->
@@ -10,7 +10,7 @@
 		} @else {
 			<form [formGroup]="notificationsForm">
 				<!-- Notification Channels Card -->
-				<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+				<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 					<div class="p-8 sm:p-10">
 						<div class="flex items-center gap-3 mb-6">
 							<div
@@ -54,7 +54,7 @@
 
 				<!-- Notification Categories -->
 				@for (category of notificationCategories; track category.id) {
-					<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+					<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 						<div class="p-8 sm:p-10">
 							<!-- Category Header -->
 							<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
@@ -140,7 +140,7 @@
 							<button
 								(click)="saveSettings()"
 								[disabled]="isSaving || notificationsForm.invalid"
-								class="px-6 py-2 bg-white text-gray-900 rounded-xl text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+								class="px-6 py-2 bg-white text-gray-900 rounded-full text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 							>
 								@if (isSaving) {
 									<mat-icon class="icon-size-4 animate-spin">refresh</mat-icon>

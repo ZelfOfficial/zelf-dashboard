@@ -22,7 +22,7 @@
 	<!-- Main Content -->
 	<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 		<!-- Left Side: Order Details -->
-		<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+		<div class="bg-white dark:bg-gray-800 rounded-lg p-8 border border-fog dark:border-gray-700">
 			<h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">{{ "checkout.orderDetails" | transloco }}</h2>
 
 			<!-- {{ "checkout.domainToPurchase" | transloco }} -->
@@ -110,12 +110,12 @@
 									type="email"
 									[placeholder]="'checkout.enterYourEmail' | transloco"
 									[(ngModel)]="receiptEmail"
-									class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400"
+									class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-lime-voltage"
 								/>
 								<button
 									(click)="sendReceipt()"
 									[disabled]="isSendingReceipt()"
-									class="px-6 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+									class="px-6 py-2 bg-lime-voltage hover:bg-lime-500 dark:bg-lime-voltage dark:hover:bg-lime-500 text-forest-ink font-semibold rounded-full transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 								>
 									@if (isSendingReceipt()) {
 										<span class="animate-spin">⏳</span>
@@ -133,7 +133,7 @@
 
 		@if (!quoteError() && !isQuoting()) {
 		<!-- Right Side: Payment QR Code and Details -->
-		<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+		<div class="bg-white dark:bg-gray-800 rounded-lg p-8 border border-fog dark:border-gray-700">
 			<h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100 text-center">
 				{{ "checkout.payWith" | transloco }} {{ paymentMethod() }}
 			</h2>
@@ -156,7 +156,7 @@
 						{{ "checkout.uniquePaymentAddress" | transloco }}
 						<button
 							(click)="copyAddress()"
-							class="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1 rounded transition"
+							class="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1 rounded-full transition"
 						>
 							{{ "checkout.copy" | transloco }}
 						</button>
@@ -172,7 +172,7 @@
 						{{ "checkout.amountToPay" | transloco }}
 						<button
 							(click)="copyAmount()"
-							class="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1 rounded transition"
+							class="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1 rounded-full transition"
 						>
 							{{ "checkout.copy" | transloco }}
 						</button>

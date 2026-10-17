@@ -1,16 +1,17 @@
 .tag-detail-page {
-	@apply mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-10;
+	@apply mx-auto w-full max-w-[1200px] px-4 py-8 sm:px-6 sm:py-12;
 
 	.tag-detail-page__title {
-		@apply text-2xl font-semibold tracking-tight text-default;
+		@apply break-all font-display text-[32px] font-black leading-none tracking-display sm:text-subheading sm:leading-none md:text-heading-sm md:leading-none;
+		color: var(--wise-ink);
 	}
 
 	.tag-detail-section-label {
-		@apply text-xs font-medium uppercase tracking-wide text-secondary;
+		@apply text-xs font-semibold uppercase tracking-wide text-secondary;
 	}
 
 	.tag-detail-panel {
-		@apply rounded-lg border bg-card;
+		@apply rounded-wise-card border bg-card;
 	}
 
 	.tag-detail-panel--centered {
@@ -18,7 +19,7 @@
 	}
 
 	.tag-detail-panel--success {
-		@apply border-green-200 dark:border-green-700/50;
+		@apply border-linen-mist bg-linen-mist/40 dark:border-lime-voltage/30;
 	}
 
 	.tag-detail-panel__header {
@@ -38,7 +39,7 @@
 	}
 
 	.tag-detail-back {
-		@apply mb-2 inline-flex items-center gap-1.5 text-sm font-medium text-secondary transition-colors hover:text-default;
+		@apply mb-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 -ml-3 text-sm font-semibold text-forest-ink transition-colors hover:bg-linen-mist dark:text-lime-voltage dark:hover:bg-hover;
 
 		mat-icon {
 			@apply h-4 w-4;
@@ -47,70 +48,70 @@
 	}
 
 	.tag-detail-empty-icon {
-		@apply flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800;
+		@apply flex h-12 w-12 items-center justify-center rounded-full bg-linen-mist dark:bg-hover;
 	}
 
 	.tag-detail-price-box {
-		@apply inline-block rounded-lg border bg-gray-50 px-6 py-4 dark:bg-gray-900/30;
+		@apply inline-block rounded-wise-card bg-white px-6 py-4 dark:bg-forest-ink;
 	}
 
 	.tag-detail-btn-primary {
-		@apply inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-on-primary transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50;
+		@apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full bg-lime-voltage px-6 py-2 text-sm font-semibold text-forest-ink transition-colors hover:bg-lime-500 disabled:cursor-not-allowed disabled:opacity-50;
 	}
 
 	.tag-detail-btn-ghost {
-		@apply inline-flex items-center gap-1 rounded-md border px-2.5 py-1.5 text-xs font-medium text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply inline-flex items-center gap-1 rounded-full border border-forest-ink px-3 py-1.5 text-xs font-semibold text-forest-ink transition-colors hover:bg-linen-mist dark:border-lime-voltage dark:text-lime-voltage dark:hover:bg-hover;
 	}
 
 	.tag-detail-icon-btn {
-		@apply flex h-8 w-8 items-center justify-center rounded-md border text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 text-forest-ink transition-colors hover:bg-linen-mist dark:border-gray-600 dark:text-lime-voltage dark:hover:bg-hover;
 
 		&--active {
-			@apply border-green-200 text-green-600 dark:border-green-800 dark:text-green-400;
+			@apply border-lime-voltage bg-lime-voltage text-forest-ink dark:text-forest-ink;
 		}
 	}
 
 	.tag-detail-badge {
-		@apply inline-flex items-center gap-1.5 rounded-md border px-2 py-0.5 text-xs font-medium text-secondary;
+		@apply inline-flex items-center gap-1.5 rounded-full bg-fog px-2.5 py-0.5 text-xs font-semibold text-charcoal dark:bg-hover dark:text-linen-mist;
 
 		&__dot {
 			@apply h-1.5 w-1.5 rounded-full bg-gray-400 dark:bg-gray-500;
 		}
 
 		&--hold {
-			@apply border-amber-200 text-amber-700 dark:border-amber-800 dark:text-amber-400;
+			@apply bg-[#d8eaf5] text-signal-blue dark:bg-[#7fb6d8]/20 dark:text-[#b3d5ea];
 
 			.tag-detail-badge__dot {
-				@apply bg-amber-500;
+				@apply bg-signal-blue dark:bg-[#b3d5ea];
 			}
 		}
 
 		&--active {
-			@apply border-green-200 text-green-700 dark:border-green-800 dark:text-green-400;
+			@apply bg-linen-mist text-forest-ink dark:bg-lime-voltage/15 dark:text-lime-voltage;
 
 			.tag-detail-badge__dot {
-				@apply bg-green-500;
+				@apply bg-forest-500 dark:bg-lime-voltage;
 			}
 		}
 
 		&--muted {
-			@apply border-transparent bg-gray-100 text-secondary dark:bg-gray-800;
+			@apply bg-fog text-charcoal dark:bg-hover dark:text-linen-mist;
 		}
 	}
 
 	.lease-strip {
-		@apply flex items-center gap-2 rounded-md border px-3 py-2.5;
+		@apply flex items-center gap-2 rounded-wise-card px-4 py-3;
 
 		&--ok {
-			@apply border-green-200 bg-green-50 text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400;
+			@apply bg-linen-mist text-forest-ink dark:bg-lime-voltage/10 dark:text-lime-voltage;
 		}
 
 		&--warning {
-			@apply border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-800 dark:bg-amber-900/20 dark:text-amber-400;
+			@apply bg-amber-50 text-amber-800 dark:bg-amber-900/20 dark:text-amber-300;
 		}
 
 		&--expired {
-			@apply border-red-200 bg-red-50 text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400;
+			@apply bg-red-50 text-alarm-red dark:bg-red-900/20 dark:text-red-300;
 		}
 	}
 
@@ -143,22 +144,22 @@
 	}
 
 	.copy-btn {
-		@apply flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-secondary transition-colors hover:bg-gray-100 dark:hover:bg-gray-800;
+		@apply flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-forest-ink transition-colors hover:bg-linen-mist dark:text-lime-voltage dark:hover:bg-hover;
 	}
 
 	.balance-skeleton {
-		@apply inline-block h-2.5 w-20 animate-pulse rounded bg-gray-200 dark:bg-gray-700;
+		@apply inline-block h-2.5 w-20 animate-pulse rounded-full bg-fog dark:bg-white/10;
 	}
 
 	.wallet-balances-refresh.mat-mdc-outlined-button {
-		@apply rounded-md;
+		@apply rounded-full;
 	}
 
 	.chain-dot {
 		@apply h-2 w-2 shrink-0 rounded-full;
 
 		&--eth {
-			@apply bg-indigo-500;
+			@apply bg-signal-blue;
 		}
 
 		&--btc {
@@ -166,32 +167,32 @@
 		}
 
 		&--sol {
-			@apply bg-purple-500;
+			@apply bg-forest-500;
 		}
 
 		&--avax {
-			@apply bg-red-500;
+			@apply bg-alarm-red;
 		}
 
 		&--bdag {
-			@apply bg-sky-500;
+			@apply bg-spruce;
 		}
 	}
 
 	.chain-pill {
-		@apply inline-flex rounded-md border px-2 py-0.5 text-[11px] font-medium text-secondary;
+		@apply inline-flex rounded-full bg-fog px-2.5 py-0.5 text-[11px] font-semibold text-charcoal dark:bg-hover dark:text-linen-mist;
 	}
 
 	.duration-chip {
-		@apply rounded-md border px-3 py-1.5 text-sm font-medium text-secondary transition-colors hover:bg-gray-50 dark:hover:bg-gray-800;
+		@apply rounded-full border border-gray-300 px-4 py-1.5 text-sm font-semibold text-charcoal transition-colors hover:bg-linen-mist dark:border-gray-600 dark:text-linen-mist dark:hover:bg-hover;
 
 		&--active {
-			@apply border-primary bg-primary text-on-primary hover:opacity-90;
+			@apply border-forest-ink bg-forest-ink text-white hover:bg-forest-ink dark:border-lime-voltage dark:bg-lime-voltage dark:text-forest-ink;
 		}
 	}
 
 	.extra-param-cell {
-		@apply relative rounded-md border p-3;
+		@apply relative rounded-wise-card bg-gray-50 p-3 dark:bg-white/5;
 
 		&__label {
 			@apply mb-1 text-[10px] font-semibold uppercase tracking-wide text-secondary;
@@ -208,12 +209,12 @@
 		}
 
 		&__copy {
-			@apply absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded text-secondary transition-colors hover:bg-gray-100 dark:hover:bg-gray-800;
+			@apply absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full text-forest-ink transition-colors hover:bg-linen-mist dark:text-lime-voltage dark:hover:bg-hover;
 		}
 	}
 
 	.payment-option {
-		@apply flex cursor-pointer flex-col rounded-lg border bg-card p-4 transition-colors hover:border-primary/40;
+		@apply flex cursor-pointer flex-col rounded-wise-card border bg-card p-4 transition-colors hover:border-forest-ink dark:hover:border-lime-voltage;
 
 		&__header {
 			@apply mb-3 flex w-full items-center justify-between;
@@ -224,7 +225,7 @@
 		}
 
 		&__qr {
-			@apply mx-auto mb-3 flex h-[140px] w-[140px] items-center justify-center rounded-md border bg-white dark:bg-gray-900;
+			@apply mx-auto mb-3 flex h-[140px] w-[140px] items-center justify-center rounded-wise-card border bg-white;
 		}
 
 		&__qr-inner {
@@ -232,7 +233,7 @@
 		}
 
 		&__amount {
-			@apply text-center text-lg font-semibold text-default;
+			@apply text-center font-display text-2xl font-black tracking-heading text-default;
 		}
 
 		&__rate {
@@ -249,11 +250,11 @@
 		@apply my-6 flex items-center gap-4;
 
 		&__line {
-			@apply h-px flex-1 bg-gray-200 dark:bg-gray-700;
+			@apply h-px flex-1 bg-fog dark:bg-white/15;
 		}
 
 		&__text {
-			@apply whitespace-nowrap text-xs font-medium uppercase tracking-wide text-secondary;
+			@apply whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-secondary;
 		}
 	}
 
@@ -266,7 +267,7 @@
 	}
 
 	.loading-ring {
-		@apply h-10 w-10 animate-spin rounded-full border-2 border-gray-200 border-t-primary dark:border-gray-700;
+		@apply h-10 w-10 animate-spin rounded-full border-2 border-fog border-t-forest-ink dark:border-white/10 dark:border-t-lime-voltage;
 	}
 }
 

@@ -43,8 +43,8 @@ const wiseNeutral = {
 	500: "#868685", // Pebble
 	600: "#6a6c6a", // Slate
 	700: "#454745", // Charcoal
-	800: "#1c2b12",
-	900: "#112008",
+	800: "#163300", // Forest Ink (primary copy on light surfaces)
+	900: "#0e0f0c", // Obsidian (display headlines)
 	950: "#0e0f0c", // Obsidian
 };
 const wiseForest = {

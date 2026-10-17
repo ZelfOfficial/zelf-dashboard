@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50" *transloco="let t">
+<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50" *transloco="let t">
 	<div class="p-8 sm:p-10" [formGroup]="formGroup">
 		<div class="flex items-center gap-3 mb-6">
 			<div
@@ -55,7 +55,7 @@
 				<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ t("license.storage_options.key_prefix") }}</label>
 				<input
 					[formControlName]="keyPrefixControlName"
-					class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-medium"
+					class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink transition-all font-medium dark:focus:ring-lime-voltage"
 					[placeholder]="t('license.storage_options.key_prefix_placeholder')"
 				/>
 			</div>

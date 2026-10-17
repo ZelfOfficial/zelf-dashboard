@@ -1,4 +1,4 @@
-<div class="flex flex-col min-h-screen bg-gray-50/50 dark:bg-gray-900 w-full" *transloco="let t">
+<div class="flex flex-col min-h-screen w-full bg-default" *transloco="let t">
 	<!-- Main Content Container -->
 	<div class="flex-auto px-4 py-8 sm:px-6 sm:py-12 md:px-8 w-full max-w-4xl mx-auto">
 		<!-- Alert Messages -->
@@ -31,7 +31,7 @@
 
 		<form [formGroup]="accountForm">
 			<!-- Basic Information Card -->
-			<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 				<div class="p-8 sm:p-10">
 					<div class="flex items-center gap-3 mb-6">
 						<div
@@ -71,7 +71,7 @@
 									/>
 									<button
 										type="button"
-										class="px-4 py-2 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-colors"
+										class="px-4 py-2 rounded-full bg-lime-voltage dark:bg-lime-voltage text-forest-ink dark:text-forest-ink text-sm font-semibold hover:bg-lime-500 dark:hover:bg-lime-500 transition-colors"
 										(click)="logoFileInput.click()"
 									>
 										{{ t("license.basic_information.upload_logo") }}
@@ -79,7 +79,7 @@
 									@if (logoPreviewUrl) {
 										<button
 											type="button"
-											class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+											class="px-4 py-2 rounded-full border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
 											(click)="clearLogo()"
 										>
 											{{ t("license.basic_information.remove_logo") }}
@@ -134,7 +134,7 @@
 							<input
 								[formControlName]="'status'"
 								readonly
-								class="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium uppercase"
+								class="w-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium uppercase"
 							/>
 						</div>
 
@@ -145,7 +145,7 @@
 							}}</label>
 							<input
 								[formControlName]="'owner'"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium dark:focus:ring-lime-voltage"
 								[placeholder]="t('license.basic_information.owner_placeholder')"
 							/>
 						</div>
@@ -162,7 +162,7 @@
 								[formControlName]="'startDate'"
 								type="date"
 								readonly
-								class="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
+								class="w-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
 							/>
 						</div>
 
@@ -177,7 +177,7 @@
 								[formControlName]="'endDate'"
 								type="date"
 								readonly
-								class="w-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
+								class="w-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 cursor-not-allowed font-medium"
 							/>
 						</div>
 
@@ -189,7 +189,7 @@
 							<textarea
 								[formControlName]="'description'"
 								rows="3"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-gray-900 dark:focus:ring-gray-100 transition-all font-medium resize-none"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink dark:focus:ring-gray-100 transition-all font-medium resize-none dark:focus:ring-lime-voltage"
 								[placeholder]="t('license.basic_information.description_placeholder')"
 							></textarea>
 						</div>
@@ -198,7 +198,7 @@
 			</div>
 
 			<!-- Features Configuration -->
-			<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 				<div class="p-8 sm:p-10">
 					<div class="flex items-center gap-3 mb-6">
 						<div
@@ -252,7 +252,7 @@
 						</span>
 						<div class="h-px bg-blue-200 dark:bg-blue-800/50 flex-1"></div>
 					</div>
-					<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700/50">
+					<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-fog dark:border-gray-700/50">
 						<div class="p-8 sm:p-10">
 							<div class="flex items-center gap-3 mb-6">
 								<div
@@ -295,7 +295,7 @@
 								}}</label>
 								<input
 									[formControlName]="'zelfkeysKeyPrefix'"
-									class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium"
+									class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-forest-ink transition-all font-medium dark:focus:ring-lime-voltage"
 								/>
 							</div>
 						</div>
@@ -304,7 +304,7 @@
 			}
 
 			<!-- Metadata Card -->
-			<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100 dark:border-gray-700/50">
+			<div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden mb-8 border border-fog dark:border-gray-700/50">
 				<div class="p-8 sm:p-10">
 					<div class="flex items-center gap-3 mb-6">
 						<div
@@ -324,14 +324,14 @@
 							<input
 								[formControlName]="'launchDate'"
 								type="date"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
 							/>
 						</div>
 						<div class="space-y-1.5">
 							<label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">{{ t("license.metadata.version") }}</label>
 							<input
 								[formControlName]="'version'"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
 							/>
 						</div>
 						<div class="space-y-1.5">
@@ -340,7 +340,7 @@
 							}}</label>
 							<input
 								[formControlName]="'documentation'"
-								class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
+								class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium"
 							/>
 						</div>
 						<div class="space-y-1.5">
@@ -350,7 +350,7 @@
 							<div class="relative">
 								<select
 									[formControlName]="'support'"
-									class="w-full bg-gray-50 dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium appearance-none"
+									class="w-full bg-white dark:bg-gray-900/50 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-cyan-500 transition-all font-medium appearance-none"
 								>
 									<option value="standard">{{ t("license.metadata.support_standard") }}</option>
 									<option value="premium">{{ t("license.metadata.support_premium") }}</option>
@@ -384,7 +384,7 @@
 						<button
 							(click)="saveLicense()"
 							[disabled]="isLoading || accountForm.invalid"
-							class="px-6 py-2 bg-white text-gray-900 rounded-xl text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+							class="px-6 py-2 bg-white text-gray-900 rounded-full text-sm font-bold hover:bg-gray-100 transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 						>
 							@if (isLoading) {
 								<mat-icon class="icon-size-4 animate-spin">refresh</mat-icon>

@@ -1,7 +1,7 @@
-<div class="flex flex-col min-h-screen bg-gray-50/50 dark:bg-gray-900 w-full items-center justify-center p-4">
+<div class="flex flex-col min-h-screen w-full items-center justify-center p-4 bg-default">
     <div class="w-full max-w-md animate-fade-in">
         <!-- Main Card -->
-        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700/50">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-fog dark:border-gray-700/50">
             <!-- Header -->
             <div class="p-8 pb-0 text-center">
                 <div
@@ -250,7 +250,7 @@
                             <button
                                 type="button"
                                 (click)="onPasskeyLogin()"
-                                class="btn-passkey w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-blue-50/50 dark:bg-blue-900/10 text-blue-700 dark:text-blue-300 rounded-xl font-bold shadow-sm"
+                                class="btn-passkey w-full flex items-center justify-center gap-3 px-4 py-3.5 bg-blue-50/50 dark:bg-blue-900/10 text-blue-700 dark:text-blue-300 rounded-full font-bold shadow-sm"
                             >
                                 <mat-icon class="icon-size-5">fingerprint</mat-icon>
                                 {{ "saving_operations.continue_with_passkey" | transloco }}
@@ -268,7 +268,7 @@
                     <!-- Password Form -->
                     <form (ngSubmit)="proceedToBiometric()" class="animate-fade-in">
                         <div class="space-y-2 mb-8">
-                            <label class="text-xs font-black text-gray-400 dark:text-gray-500 ml-1 uppercase tracking-widest">{{
+                            <label class="text-sm font-black text-gray-700 dark:text-gray-200 ml-1">{{
                                 "saving_operations.master_password_label" | transloco
                             }}</label>
                             <div
@@ -303,14 +303,14 @@
                             <button
                                 type="button"
                                 (click)="goBack()"
-                                class="btn-secondary px-6 py-3.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-bold tracking-tight"
+                                class="btn-secondary px-6 py-3.5 rounded-full border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-bold tracking-tight"
                             >
                                 {{ "saving_operations.cancel" | transloco }}
                             </button>
                             <button
                                 type="submit"
                                 [disabled]="!masterPassword.trim()"
-                                class="btn-primary px-6 py-3.5 rounded-xl text-white font-bold tracking-tight shadow-lg disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed"
+                                class="btn-primary px-6 py-3.5 rounded-full text-white font-bold tracking-tight shadow-lg disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed"
                             >
                                 {{ "saving_operations.continue" | transloco }}
                             </button>
@@ -325,7 +325,7 @@
             <div
                 class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-opacity duration-300 animate-fade-in"
             >
-                <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-6xl max-h-[92vh] overflow-hidden shadow-2xl flex flex-col">
+                <div class="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-6xl max-h-[92vh] overflow-hidden flex flex-col">
                     <!-- Header -->
                     <div class="px-6 py-5 flex items-center justify-between shrink-0 border-b border-gray-100 dark:border-gray-800">
                         <div class="flex flex-col">

@@ -663,10 +663,6 @@ body fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
 
         &:hover .fuse-horizontal-navigation-item-wrapper {
             background: var(--color-linen-mist) !important;
-
-            .dark & {
-                background: rgba(159, 232, 112, 0.12) !important;
-            }
         }
     }
 
@@ -684,15 +680,6 @@ body fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
             .fuse-horizontal-navigation-item-icon {
                 color: var(--color-lime-voltage) !important;
             }
-
-            .dark & {
-                background: var(--color-lime-voltage) !important;
-
-                .fuse-horizontal-navigation-item-title,
-                .fuse-horizontal-navigation-item-icon {
-                    color: var(--color-forest-ink) !important;
-                }
-            }
         }
     }
 
@@ -701,10 +688,43 @@ body fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
         .fuse-horizontal-navigation-menu-active-forced {
             .fuse-horizontal-navigation-item-wrapper {
                 background: var(--color-linen-mist) !important;
+            }
+        }
+    }
+}
 
-                .dark & {
-                    background: rgba(159, 232, 112, 0.12) !important;
-                }
+body.dark fuse-horizontal-navigation .fuse-horizontal-navigation-wrapper {
+    fuse-horizontal-navigation-basic-item,
+    fuse-horizontal-navigation-branch-item {
+        .fuse-horizontal-navigation-item-wrapper .fuse-horizontal-navigation-item {
+            .fuse-horizontal-navigation-item-title,
+            .fuse-horizontal-navigation-item-icon {
+                color: var(--color-lime-voltage) !important;
+            }
+        }
+
+        &:hover .fuse-horizontal-navigation-item-wrapper {
+            background: rgba(159, 232, 112, 0.12) !important;
+        }
+    }
+
+    fuse-horizontal-navigation-basic-item .fuse-horizontal-navigation-item-wrapper {
+        .fuse-horizontal-navigation-item.fuse-horizontal-navigation-item-active,
+        .fuse-horizontal-navigation-item.fuse-horizontal-navigation-item-active-forced {
+            background: var(--color-lime-voltage) !important;
+
+            .fuse-horizontal-navigation-item-title,
+            .fuse-horizontal-navigation-item-icon {
+                color: var(--color-forest-ink) !important;
+            }
+        }
+    }
+
+    fuse-horizontal-navigation-branch-item {
+        .fuse-horizontal-navigation-menu-active,
+        .fuse-horizontal-navigation-menu-active-forced {
+            .fuse-horizontal-navigation-item-wrapper {
+                background: rgba(159, 232, 112, 0.12) !important;
             }
         }
     }

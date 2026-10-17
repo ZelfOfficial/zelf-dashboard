@@ -375,8 +375,8 @@ mat-form-field {
 	/* Primary CTAs: light pill on dark */
 	::ng-deep .zp-btn-primary.mat-mdc-raised-button.mat-primary:not(:disabled),
 	::ng-deep .zp-btn-primary.mat-mdc-unelevated-button.mat-primary:not(:disabled) {
-		background-color: #fafafa !important;
-		color: #18181b !important;
+		background-color: #f7f8f6 !important;
+		color: #0e0f0c !important;
 		border-radius: 9999px !important;
 		box-shadow: none !important;
 		font-weight: 600;
@@ -385,7 +385,7 @@ mat-form-field {
 
 	::ng-deep .zp-btn-primary.mat-mdc-raised-button.mat-primary:not(:disabled):hover,
 	::ng-deep .zp-btn-primary.mat-mdc-unelevated-button.mat-primary:not(:disabled):hover {
-		background-color: #e4e4e7 !important;
+		background-color: #e8ebe6 !important;
 	}
 
 	/* Ghost / secondary outlined */

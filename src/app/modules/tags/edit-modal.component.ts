@@ -98,23 +98,23 @@ import { TagRecord } from "./tags.component";
 		`
 			.edit-modal {
 				--modal-bg: #ffffff;
-				--modal-text: #1f2937;
-				--modal-header-bg: #f1f5f9;
-				--modal-header-text: #1f2937;
-				--modal-footer-bg: #f8fafc;
-				--modal-card-bg: #f8fafc;
-				--modal-secondary-text: #6b7280;
-				--modal-border: #e2e8f0;
+				--modal-text: #163300;
+				--modal-header-bg: #f1f3ef;
+				--modal-header-text: #163300;
+				--modal-footer-bg: #f7f8f6;
+				--modal-card-bg: #f7f8f6;
+				--modal-secondary-text: #6a6c6a;
+				--modal-border: #e8ebe6;
 
 				&.dark-mode {
-					--modal-bg: #1e293b;
-					--modal-text: #f1f5f9;
-					--modal-header-bg: #334155;
-					--modal-header-text: #f1f5f9;
-					--modal-footer-bg: #334155;
-					--modal-card-bg: #334155;
-					--modal-secondary-text: #94a3b8;
-					--modal-border: #475569;
+					--modal-bg: #163300;
+					--modal-text: #f1f3ef;
+					--modal-header-bg: #1f4704;
+					--modal-header-text: #f1f3ef;
+					--modal-footer-bg: #1f4704;
+					--modal-card-bg: #1f4704;
+					--modal-secondary-text: #a3a6a1;
+					--modal-border: #6a6c6a;
 				}
 
 				.modal-content {
@@ -291,52 +291,52 @@ import { TagRecord } from "./tags.component";
 			::ng-deep .dark .edit-modal,
 			::ng-deep body.dark .edit-modal {
 				.modal-content {
-					background: var(--fuse-card, #1e293b);
-					color: var(--fuse-text, #f1f5f9);
+					background: var(--fuse-card, #163300);
+					color: var(--fuse-text, #f1f3ef);
 
 					.modal-header {
-						background: var(--fuse-accent-100, #334155);
-						color: var(--fuse-text, #f1f5f9);
+						background: var(--fuse-accent-100, #1f4704);
+						color: var(--fuse-text, #f1f3ef);
 
 						h2 {
-							color: var(--fuse-text, #f1f5f9);
+							color: var(--fuse-text, #f1f3ef);
 						}
 					}
 
 					.modal-body {
-						background: var(--fuse-card, #1e293b);
-						color: var(--fuse-text, #f1f5f9);
+						background: var(--fuse-card, #163300);
+						color: var(--fuse-text, #f1f3ef);
 					}
 
 					.form-container {
 						.tag-info {
-							background: var(--fuse-accent-50, #334155);
-							border-color: var(--fuse-border, #475569);
+							background: var(--fuse-accent-50, #1f4704);
+							border-color: var(--fuse-border, #6a6c6a);
 
 							.tag-name {
-								color: var(--fuse-text, #f1f5f9);
+								color: var(--fuse-text, #f1f3ef);
 							}
 
 							.tag-description {
-								color: var(--fuse-text-secondary, #94a3b8);
+								color: var(--fuse-text-secondary, #a3a6a1);
 							}
 						}
 
 						.cost-info {
 							.cost-card {
-								background: var(--fuse-accent-50, #334155);
-								border-color: var(--fuse-border, #475569);
+								background: var(--fuse-accent-50, #1f4704);
+								border-color: var(--fuse-border, #6a6c6a);
 
 								.cost-header {
-									color: var(--fuse-text, #f1f5f9);
+									color: var(--fuse-text, #f1f3ef);
 								}
 
 								.cost-amount {
-									color: var(--fuse-text, #f1f5f9);
+									color: var(--fuse-text, #f1f3ef);
 								}
 
 								.cost-breakdown {
-									color: var(--fuse-text-secondary, #94a3b8);
+									color: var(--fuse-text-secondary, #a3a6a1);
 								}
 							}
 						}
@@ -350,7 +350,7 @@ import { TagRecord } from "./tags.component";
 							}
 
 							.warning-text {
-								color: var(--fuse-text, #f1f5f9);
+								color: var(--fuse-text, #f1f3ef);
 
 								strong {
 									color: var(--fuse-warn, #fbbf24);
@@ -360,17 +360,17 @@ import { TagRecord } from "./tags.component";
 					}
 
 					.action-buttons {
-						background: var(--fuse-accent-50, #334155);
-						border-top-color: var(--fuse-border, #475569);
+						background: var(--fuse-accent-50, #1f4704);
+						border-top-color: var(--fuse-border, #6a6c6a);
 
 						.cancel-btn {
-							color: var(--fuse-text, #f1f5f9);
-							border-color: var(--fuse-border, #475569);
+							color: var(--fuse-text, #f1f3ef);
+							border-color: var(--fuse-border, #6a6c6a);
 						}
 
 						.confirm-btn {
-							background: var(--fuse-success, #34d399);
-							color: var(--fuse-on-success, #0f172a);
+							background: var(--fuse-success, #9fe870);
+							color: var(--fuse-on-success, #0b1a02);
 						}
 					}
 				}
@@ -383,54 +383,54 @@ import { TagRecord } from "./tags.component";
 			body.dark .cdk-overlay-container .edit-modal .modal-content,
 			html.dark .mat-mdc-dialog-container .edit-modal .modal-content,
 			body.dark .mat-mdc-dialog-container .edit-modal .modal-content {
-				background: #1e293b !important;
-				color: #f1f5f9 !important;
+				background: #163300 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .modal-header,
 			body.dark .cdk-overlay-container .edit-modal .modal-header {
-				background: #334155 !important;
-				color: #f1f5f9 !important;
+				background: #1f4704 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .modal-header h2,
 			body.dark .cdk-overlay-container .edit-modal .modal-header h2 {
-				color: #f1f5f9 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .tag-name,
 			body.dark .cdk-overlay-container .edit-modal .tag-name {
-				color: #f1f5f9 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .tag-description,
 			body.dark .cdk-overlay-container .edit-modal .tag-description {
-				color: #94a3b8 !important;
+				color: #a3a6a1 !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .cost-header,
 			body.dark .cdk-overlay-container .edit-modal .cost-header {
-				color: #f1f5f9 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .cost-amount,
 			body.dark .cdk-overlay-container .edit-modal .cost-amount {
-				color: #f1f5f9 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .cost-breakdown,
 			body.dark .cdk-overlay-container .edit-modal .cost-breakdown {
-				color: #94a3b8 !important;
+				color: #a3a6a1 !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .warning-text,
 			body.dark .cdk-overlay-container .edit-modal .warning-text {
-				color: #f1f5f9 !important;
+				color: #f1f3ef !important;
 			}
 
 			html.dark .cdk-overlay-container .edit-modal .cancel-btn,
 			body.dark .cdk-overlay-container .edit-modal .cancel-btn {
-				color: #f1f5f9 !important;
+				color: #f1f3ef !important;
 			}
 		`,
 	],
