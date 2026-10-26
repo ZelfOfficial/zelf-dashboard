@@ -828,10 +828,10 @@
             "newExpiry": "new expiry",
             "downgradeBlocked": "Can't move to a lower plan while the current one is active",
             "quoteErrors": {
-                "plan_downgrade_not_allowed": "This Zelf ID already has a higher plan. You can't buy a lower plan while it's active.",
-                "lifetime_already_owned": "This Zelf ID already has a lifetime lease on this plan. There's nothing to extend.",
-                "plan_not_offered_for_name": "The license doesn't offer this plan for a name of this length.",
-                "plan_duration_not_offered_by_license": "The license doesn't offer this duration for this plan.",
+                "PLAN_DOWNGRADE_NOT_ALLOWED": "This Zelf ID already has a higher plan. You can't buy a lower plan while it's active.",
+                "LIFETIME_ALREADY_OWNED": "This Zelf ID already has a lifetime lease on this plan. There's nothing to extend.",
+                "PLAN_NOT_OFFERED_FOR_NAME": "The license doesn't offer this plan for a name of this length.",
+                "PLAN_DURATION_NOT_OFFERED_BY_LICENSE": "The license doesn't offer this duration for this plan.",
                 "quote_failed": "Couldn't get a quote. Try again."
             }
         },

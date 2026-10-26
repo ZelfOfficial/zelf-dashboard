@@ -1,3 +1,4 @@
+import { planErrorCodeIncludes, responseHasPlanErrorCode } from "app/core/i18n/plan-error-code";
 import { parseDurationParam } from "app/core/pricing/license-pricing.utils";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, ViewEncapsulation, signal, ElementRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -77,8 +78,8 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
     quoteErrorText(): string {
         const code = this.quoteError() || "";
         if (code === "missing_selection") return "No name selected. Go back and search for a name first.";
-        if (code.includes("tag_not_found")) return "This name hasn't been created yet. Create it in the Zelf app or extension first, then come back to pay.";
-        if (code.includes("plan_duration_not_offered_by_license")) return "This plan and duration are not offered for this name. Go back and pick another option.";
+        if (planErrorCodeIncludes(code, "TAG_NOT_FOUND")) return "This name hasn't been created yet. Create it in the Zelf app or extension first, then come back to pay.";
+        if (planErrorCodeIncludes(code, "PLAN_DURATION_NOT_OFFERED_BY_LICENSE")) return "This plan and duration are not offered for this name. Go back and pick another option.";
         if (code === "payment_method_not_available") return "This payment method isn't available for this name. Go back and pick another one.";
         return "This name / plan / duration can't be quoted right now. Go back and pick another option.";
     }
@@ -124,7 +125,8 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
             const data = response?.data;
 
             if (!data || "error" in data || !data.prices) {
-                this.quoteError.set(data?.error || response?.validationError || "quote_unavailable");
+                const raw = data?.error || response?.validationError || "";
+                this.quoteError.set(responseHasPlanErrorCode(raw, "TAG_NOT_FOUND") ? "TAG_NOT_FOUND" : raw || "quote_unavailable");
                 return;
             }
 
@@ -146,7 +148,8 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
             this.startPaymentChecking();
         } catch (error: any) {
             console.error("Error loading checkout quote:", error);
-            this.quoteError.set(error?.error?.message || error?.error?.validationError || "quote_unavailable");
+            const raw = error?.error?.message || error?.error?.validationError || "";
+            this.quoteError.set(responseHasPlanErrorCode(error, "TAG_NOT_FOUND") ? "TAG_NOT_FOUND" : raw || "quote_unavailable");
         } finally {
             this.isQuoting.set(false);
             this.cdr.markForCheck();

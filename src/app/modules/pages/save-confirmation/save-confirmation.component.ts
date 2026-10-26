@@ -12,6 +12,7 @@ import { Subject, takeUntil } from "rxjs";
 import { TranslocoService, TranslocoModule } from "@jsverse/transloco";
 import { DataBiometricsComponent, BiometricData } from "../../auth/biometric-verification/biometric-verification.component";
 import { isBiometricApiError } from "app/core/i18n/api-error-codes";
+import { responseHasPlanErrorCode } from "app/core/i18n/plan-error-code";
 import { SaveConfirmationService, SaveConfirmationData } from "../../../core/services/save-confirmation.service";
 import { HttpWrapperService } from "../../../http-wrapper.service";
 import { PasskeyService } from "../../../core/services/passkey.service";
@@ -839,7 +840,7 @@ export class SaveConfirmationComponent implements OnInit, OnDestroy {
                     errorMessage = "You do not own this domain.";
                 } else if (error.message.includes("license_not_found")) {
                     errorMessage = "License not found. Please verify your credentials.";
-                } else if (error.message.includes("tag_not_found")) {
+                } else if (responseHasPlanErrorCode(error, "TAG_NOT_FOUND")) {
                     errorMessage = "Tag not found.";
                 } else if (error.message.includes("error_decrypting")) {
                     errorMessage = "Biometric verification failed. Please check your face image and master password.";

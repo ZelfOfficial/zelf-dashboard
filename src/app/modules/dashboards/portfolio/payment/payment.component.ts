@@ -8,6 +8,7 @@ import { TranslocoModule, TranslocoService } from "@jsverse/transloco";
 import { TagsService } from "../../../tags/tags.service";
 import { LicensePricingService } from "app/core/pricing/license-pricing.service";
 import { SessionService } from "app/core/services/session.service";
+import { planErrorCodeIncludes, responseHasPlanErrorCode } from "app/core/i18n/plan-error-code";
 
 @Component({
 	selector: "portfolio-payment",
@@ -214,11 +215,11 @@ export class PortfolioPaymentComponent implements OnInit {
 			const apiError: string = error?.error?.validationError || error?.error?.message || error?.validationError || "";
 			const status = error?.status;
 
-			if (status === 404 || apiError === "tag_not_found") {
+			if (status === 404 || planErrorCodeIncludes(apiError, "TAG_NOT_FOUND") || responseHasPlanErrorCode(error, "TAG_NOT_FOUND")) {
 				this.handleSearchError("tag_not_found");
-			} else if (apiError.includes("plan_not_offered_for_name")) {
+			} else if (planErrorCodeIncludes(apiError, "PLAN_NOT_OFFERED_FOR_NAME")) {
 				this.handleSearchError("This plan is not offered for a name of this length.");
-			} else if (apiError.includes("plan_duration_not_offered_by_license")) {
+			} else if (planErrorCodeIncludes(apiError, "PLAN_DURATION_NOT_OFFERED_BY_LICENSE")) {
 				this.handleSearchError("This duration is not offered for the selected plan.");
 			} else {
 				// Never report a failed quote as "name available".
@@ -228,7 +229,7 @@ export class PortfolioPaymentComponent implements OnInit {
 	}
 
 	private handleSearchError(error: string): void {
-		if (error === "tag_not_found") {
+		if (planErrorCodeIncludes(error, "TAG_NOT_FOUND")) {
 			// Tag not found means the name is available!
 			this.showNameAvailable.set(true);
 			this.searchError.set(null);
