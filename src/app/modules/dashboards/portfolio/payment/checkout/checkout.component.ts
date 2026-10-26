@@ -1,3 +1,4 @@
+import { planErrorCodeIncludes } from "app/core/i18n/plan-error-code";
 import { parseDurationParam } from "app/core/pricing/license-pricing.utils";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, OnDestroy, ViewEncapsulation, signal, ElementRef } from "@angular/core";
 import { CommonModule } from "@angular/common";
@@ -78,7 +79,7 @@ export class PortfolioPaymentCheckoutComponent implements OnInit, OnDestroy {
         const code = this.quoteError() || "";
         if (code === "missing_selection") return "No name selected. Go back and search for a name first.";
         if (code.includes("tag_not_found")) return "This name hasn't been created yet. Create it in the Zelf app or extension first, then come back to pay.";
-        if (code.includes("plan_duration_not_offered_by_license")) return "This plan and duration are not offered for this name. Go back and pick another option.";
+        if (planErrorCodeIncludes(code, "PLAN_DURATION_NOT_OFFERED_BY_LICENSE")) return "This plan and duration are not offered for this name. Go back and pick another option.";
         if (code === "payment_method_not_available") return "This payment method isn't available for this name. Go back and pick another one.";
         return "This name / plan / duration can't be quoted right now. Go back and pick another option.";
     }

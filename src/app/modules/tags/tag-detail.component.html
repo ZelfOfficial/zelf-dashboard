@@ -430,7 +430,7 @@
                             </div>
                         }
                         @if (nothingToExtend()) {
-                            <p class="text-sm text-secondary" data-testid="nothing-to-extend">{{ "tags.detail.quoteErrors.lifetime_already_owned" | transloco }}</p>
+                            <p class="text-sm text-secondary" data-testid="nothing-to-extend">{{ "tags.detail.quoteErrors.LIFETIME_ALREADY_OWNED" | transloco }}</p>
                         }
                         <div class="flex flex-wrap gap-2" [class.hidden]="nothingToExtend()">
                             @for (opt of durationOptions; track opt.value) {

@@ -15,6 +15,7 @@ import { SaveConfirmationService } from "../../core/services/save-confirmation.s
 import { FuseConfigService } from "@fuse/services/config";
 import { TranslocoService } from "@jsverse/transloco";
 import { PermissionService } from "../../core/auth/permission.service";
+import { knownPlanQuoteError } from "app/core/i18n/plan-error-code";
 import { Subject, takeUntil } from "rxjs";
 
 export interface TagPreviewData {
@@ -88,7 +89,7 @@ export class TagDetailComponent implements OnInit, OnDestroy {
     /** Paid plans the license prices for this name length (cheapest first). */
     planOptions: string[] = [];
     selectedPlan: string = "";
-    /** API refusal for the selected plan/duration (e.g. plan_downgrade_not_allowed). */
+    /** API refusal for the selected plan/duration (uppercase `tags.detail.quoteErrors` key). */
     quoteError: string = "";
     isLoadingPayment = false;
     showTechnical = false;
@@ -566,8 +567,7 @@ export class TagDetailComponent implements OnInit, OnDestroy {
             console.error("Payment options error", e);
             this.paymentOptions = null;
             const code = String(e?.error?.message || e?.error?.validationError || "").trim();
-            const known = ["plan_downgrade_not_allowed", "lifetime_already_owned", "plan_not_offered_for_name", "plan_duration_not_offered_by_license"];
-            this.quoteError = known.includes(code) ? code : "quote_failed";
+            this.quoteError = knownPlanQuoteError(code) || "quote_failed";
         } finally {
             this.isLoadingPayment = false;
             this.cdr.markForCheck();

@@ -1,0 +1,1 @@
+var t=["PLAN_DOWNGRADE_NOT_ALLOWED","LIFETIME_ALREADY_OWNED","PLAN_NOT_OFFERED_FOR_NAME","PLAN_DURATION_NOT_OFFERED_BY_LICENSE"];function o(n){return String(n??"").trim().toUpperCase()}function E(n,r){let e=o(r);return e.length>0&&o(n).includes(e)}function _(n){let r=o(n);return r?t.find(e=>r.includes(e))??null:null}export{E as a,_ as b};
