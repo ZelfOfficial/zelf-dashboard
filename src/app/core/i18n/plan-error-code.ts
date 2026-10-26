@@ -34,3 +34,20 @@ export function knownPlanQuoteError(value: string | null | undefined): (typeof P
 	if (!normalized) return null;
 	return PLAN_QUOTE_ERROR_CODES.find((code) => normalized.includes(code)) ?? null;
 }
+
+/**
+ * True when an API error string or HTTP error body carries `code` in either case.
+ * Checks `message`, `validationError`, and `code` (top level and `error` body).
+ * A generic `code` such as `NotFound` or `Conflict` does not match a specific plan code.
+ */
+export function responseHasPlanErrorCode(error: unknown, code: string): boolean {
+	if (typeof error === "string") return planErrorCodeIncludes(error, code);
+	if (!error || typeof error !== "object") return false;
+	const record = error as { message?: unknown; validationError?: unknown; code?: unknown; error?: unknown };
+	const fields = [record.message, record.validationError, record.code];
+	if (fields.some((field) => typeof field === "string" && planErrorCodeIncludes(field, code))) return true;
+	const body = record.error;
+	if (!body || body === error || typeof body !== "object") return false;
+	const inner = body as { message?: unknown; validationError?: unknown; code?: unknown };
+	return [inner.message, inner.validationError, inner.code].some((field) => typeof field === "string" && planErrorCodeIncludes(field, code));
+}
