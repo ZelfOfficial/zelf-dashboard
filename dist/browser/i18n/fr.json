@@ -58,6 +58,8 @@
         "phone_already_exists": "Ce numéro de téléphone est déjà enregistré. Veuillez utiliser un numéro différent ou essayer de vous connecter.",
         "email_already_exists": "Cette adresse e-mail est déjà enregistrée. Veuillez utiliser un e-mail différent ou essayer de vous connecter.",
         "client_not_found": "Aucun compte trouvé avec les identifiants fournis. Veuillez vérifier vos informations et réessayer.",
+        "could_not_sign_in": "Connexion impossible. Vérifiez vos informations et réessayez.",
+        "sign_in_capture_face_again": "Veuillez capturer à nouveau votre visage pour continuer la connexion.",
         "client_invalid_api_key": "Clé API invalide. Veuillez contacter le support.",
         "unknown_error": "Quelque chose s'est mal passé, veuillez réessayer.",
         "network_error": "Erreur réseau. Veuillez vérifier votre connexion et réessayer.",
