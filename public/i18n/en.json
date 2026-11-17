@@ -58,6 +58,8 @@
         "phone_already_exists": "This phone number is already registered. Please use a different phone number or try signing in.",
         "email_already_exists": "This email address is already registered. Please use a different email or try signing in.",
         "client_not_found": "No account found with the provided credentials. Please check your information and try again.",
+        "could_not_sign_in": "Could not sign in. Check your details and try again.",
+        "sign_in_capture_face_again": "Please capture your face again to continue signing in.",
         "client_invalid_api_key": "Invalid API key. Please contact support.",
         "invalid_password": "The provided password is invalid.",
         "unknown_error": "Something went wrong, please try again.",

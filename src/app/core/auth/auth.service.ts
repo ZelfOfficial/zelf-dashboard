@@ -1,16 +1,14 @@
 import { ApiKeyVault, AuthStorage } from "app/core/auth/auth-storage";
-import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
 import { AuthUtils } from "app/core/auth/auth.utils";
 import { UserService } from "app/core/user/user.service";
 import { HttpWrapperService } from "app/http-wrapper.service";
-import { catchError, Observable, of, switchMap, throwError } from "rxjs";
+import { Observable, of } from "rxjs";
 import { environment } from "../../../environments/environment";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
 	private _authenticated: boolean = false;
-	private _httpClient = inject(HttpClient);
 	private _userService = inject(UserService);
 	private _httpWrapper = inject(HttpWrapperService);
 
@@ -125,10 +123,10 @@ export class AuthService {
 		email?: string;
 		countryCode?: string;
 		phone?: string;
-		zelfProof: string;
+		zelfProof?: string;
 		faceBase64: string;
-		masterPassword: string;
-		identificationMethod: string;
+		masterPassword?: string;
+		identificationMethod?: string;
 	}): Promise<any> {
 		// Throw error, if the user is already logged in
 		if (this._authenticated) {
@@ -276,9 +274,5 @@ export class AuthService {
 
 	setAccessToken(token: string): void {
 		AuthStorage.setItem("accessToken", token);
-	}
-
-	verifyClientExists(user: { email: string; phone: string }): Observable<any> {
-		return this._httpClient.get(`${environment.apiUrl}${environment.endpoints.auth.verifyClientExists}`, { params: user });
 	}
 }

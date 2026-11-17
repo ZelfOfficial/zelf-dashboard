@@ -6,7 +6,6 @@ export const endpoints = {
 	auth: {
 		signUp: "/api/clients",
 		signIn: "/api/clients/auth",
-		verifyClientExists: "/api/clients",
 	},
 	security: {
 		changePassword: "/api/clients/sync/password",

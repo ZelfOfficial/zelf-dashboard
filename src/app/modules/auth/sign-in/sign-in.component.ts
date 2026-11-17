@@ -20,6 +20,7 @@ import { DataBiometricsComponent, BiometricData } from "../biometric-verificatio
 import { TranslocoService, TranslocoModule } from "@jsverse/transloco";
 import { cleanedCountryCodes } from "app/core/cleaned_country_codes";
 import { translocoKeyForApiErrorCode } from "app/core/i18n/api-error-codes";
+import { attemptDashboardSignIn, SIGN_IN_GENERIC_ERROR_KEY, SIGN_IN_RECAPTURE_KEY } from "./sign-in-flow";
 
 @Component({
 	selector: "auth-sign-in",
@@ -55,8 +56,6 @@ export class AuthSignInComponent implements OnInit {
 	signInForm: UntypedFormGroup;
 	showAlert: boolean = false;
 	showBiometricVerification: boolean = false;
-	/** True when the identifier belongs to a staff account (signs in via /api/staff/auth). */
-	private _isStaffSignIn = false;
 	showPasskeyLogin: boolean = false;
 	showPasskeyPrompt: boolean = false;
 	userData: any = {};
@@ -262,89 +261,10 @@ export class AuthSignInComponent implements OnInit {
 			};
 		}
 
-		/**
-		 * {
-    "data": {
-        "id": "7de688a7-302d-4a32-962b-9e37d0b716d4",
-        "ipfs_pin_hash": "bafkreif43dolp3yedc2cos6kkhlho6zriglmyi3owetx65xvimualqh5ju",
-        "size": 1189,
-        "user_id": "622f63b9-c03d-4702-9679-5d1409ae5e20",
-        "date_pinned": "2025-09-11T16:32:04.266Z",
-        "date_unpinned": null,
-        "metadata": {
-			"type": "client_account",
-			"email": "emery.garcia@icloud.com",
-			"phone": "8131259467",
-			"company": "Smart Contracts Ltd",
-			"zelfProof": "A5boXuG+IXX0FsSzEmPfXQLCT7dP2qKum81DZqaDkInIYNkO6mmYFIo9j7dgsAaF5fA4TuRYeewTOXuiF4k2+L6USP2qC7lpMiOUr8cqWshWaqCROorkA9+cJ2AAYY0bJIuTcoSUWX5tec9HoYHC1TGcoMOnYvIX7IMiDQpkdbD59TA+BD6H3yAa6vCS6bp5Enezyj474jg8ODy5CJHDuh1jRs9X+UE41j5IQGecKR64zKMjc4SflfvkdrLuXKfrsxuKBO/q15EllywddDNyH8DnLsGi8BYYXAiJ3V4n3J26nJhyIs1v0gVMXpxHd3P30pZOIQFXWYDr3kcKGoLOFBfPsqf8gSoD61cMtm4Bso9mh6WMkCk8zlEhQrqH8W7O6+dbkc6dlWJAC6stLAQAC0lyiReiEif5HXKSwRbMxh5di73IeQVl2VPD4OXP7nHV0/u3rMjXrh7ZZ4pMQWjgsbirko6roO/at9KegvOODD0LSgFAEbUM+hq3bGkGiisQNjYYV595Z9onflJxWUYu9Xv+upsEo99tYfO4soqmANlNcEtDC6OPOIQ6CpRpHxyzDbbdckWMl4QASI2uuHmlUAhuQ84UzrLiPdHDc9dOvK2E8gewm9adQXlej/MOtLcU+T7h4o8lqyTYYorlooTLinlmmh3aM/+rxaCTc3i5LAMIoSFN1vI5KsoGfIm4T6XTObB2/BKMCFgcUlXsKqi5LEKf3UvLZ4ZrJWFX6M2pRsDTMre2xLckyjg3XwK6ywoiRL2agxSMuh+5hVq1AwVUmw5W1XVdSpxMDtn+I7KpP3Vn7YcyGQOhrG6lTkjl6haqldJ2J1aFqql8jNwoZVUS28ImOkiWJUwugLwrnwU02BkeybceYsKzzSC/zYY3sf32bDDx0OYgThxqSc2hCdLBKWaeG3wBaMnkFX4r5nFmnoD/8IqFY5F/B34Io1JZAA==",
-			"countryCode": "+64",
-			"subscriptionId": "free" 
-        },
-        "regions": [
-            {
-                "regionId": "pinata",
-                "currentReplicationCount": 1,
-                "desiredReplicationCount": 1
-            }
-        ],
-        "mime_type": "false",
-        "number_of_files": 1,
-        "url": "https://blush-selective-earwig-920.mypinata.cloud/ipfs/bafkreif43dolp3yedc2cos6kkhlho6zriglmyi3owetx65xvimualqh5ju"
-    }
-}
-		 */
-
-		// here we will need to call the backend to try to find the client using the identification method and the identifier
-		this._authService.verifyClientExists(this.userData).subscribe(
-			(response) => {
-				const publicData = response.data?.publicData;
-				// The API stores staff records as either "staff" or "staff_account"; accept both.
-				const isStaffAccount = publicData?.accountType === "staff_account" || publicData?.accountType === "staff";
-				this._isStaffSignIn = isStaffAccount;
-
-				// Handle both client and staff accounts
-				if (isStaffAccount) {
-					// Staff account - use staffEmail, staffPhone, staffCountryCode
-					this.userData = {
-						...this.userData, // Preserve original userData including masterPassword and identificationMethod
-						email: publicData?.staffEmail,
-						phone: publicData?.staffPhone,
-						countryCode: publicData?.staffCountryCode,
-					};
-				} else {
-					// Client account - use accountEmail, accountPhone, accountCountryCode
-					this.userData = {
-						...this.userData, // Preserve original userData including masterPassword and identificationMethod
-						email: publicData?.accountEmail,
-						phone: publicData?.accountPhone,
-						countryCode: publicData?.accountCountryCode,
-					};
-				}
-
-				if (publicData?.accountEmail || publicData?.staffEmail) {
-					this.showBiometricVerification = true;
-
-					this.showAlert = false;
-
-					return;
-				}
-
-				this.showAlert = true;
-
-				this.alert = {
-					type: "error",
-					message: this.getErrorMessage({ message: "Client not found" }),
-				};
-			},
-			(error) => {
-				console.error("Verify client exists error:", error);
-				this.showAlert = true;
-				this.alert = {
-					type: "error",
-					message: this.getErrorMessage(error),
-				};
-			}
-		);
+		// Capture the face next. Account lookup requires a session, so sign-in posts the
+		// captured face and password directly to client auth (with a staff-auth fallback).
+		this.showBiometricVerification = true;
+		this.showAlert = false;
 	}
 
 	/**
@@ -354,121 +274,92 @@ export class AuthSignInComponent implements OnInit {
 		// Disable the form
 		this.signInForm.disable();
 
-		// Combine user data with biometric data
 		const signInData = {
 			...this.userData,
-			masterPassword: biometricData.password,
+			masterPassword: biometricData.password || this.userData?.masterPassword,
 			faceBase64: biometricData.faceBase64,
 		};
 
-		// Staff sign in through the v4 staff endpoint; clients keep using /api/clients/auth.
-		const signInRequest =
-			this._isStaffSignIn && signInData.email
-				? this._authService.signInStaff({
-						email: signInData.email,
-						faceBase64: signInData.faceBase64,
-						masterPassword: signInData.masterPassword,
-					})
-				: this._authService.signIn(signInData);
-
-		signInRequest.then(
-			async (response) => {
-				// /api/staff/auth returns the staff IPFS record as `staffAccount` (same as accept-invite).
-				const account = response.data?.zelfAccount || response.data?.staffAccount;
-
-				// Check if we have all required data for authentication
-				if (response.data?.token && response.data?.zelfProof && account) {
-					// Set session data
-					this._authService.setSession({
-						zelfProof: response.data.zelfProof,
-						zelfAccount: account,
-					});
-
-					// Set access token
-					this._authService.setAccessToken(response.data.token);
-
-					// Save wallet data to localStorage if available
-					if (response.data?.wallet) {
-						AuthStorage.setItem("wallet", JSON.stringify(response.data.wallet));
-					}
-
-					// POC: Prompt to save with Passkey
-					const identifier = this._getCurrentIdentifier();
-					const password = this.signInForm.get("masterPassword")?.value;
-
-					if (identifier && password) {
-						const hasPasskey = await this._passkeyService.getPasskeyMetadata(identifier);
-
-						if (!hasPasskey) {
-							this.showPasskeyPrompt = true;
-						} else {
-							this._router.navigateByUrl("/analytics");
-						}
-					} else {
-						// Navigate to dashboard
-						this._router.navigateByUrl("/analytics");
-					}
-				} else {
-					// Handle case where required data is missing
-					console.error("Sign in response missing required authentication data:", response);
-
-					// Show error message
-					this.alert = {
-						type: "error",
-						message: this.getErrorMessage({ message: "Incomplete authentication data received" }),
-					};
-					this.showAlert = true;
-
-					// Re-enable the form
-					this.signInForm.enable();
-					this.showBiometricVerification = false;
-				}
-			},
-			(error) => {
-				console.error("Sign in error:", error);
-
-				const { message: apiMessage, code: apiCode } = this._httpErrorBody(error);
-				const apiLower = apiMessage.toLowerCase();
-				const isBiometricError =
-					!!apiMessage &&
-					(apiLower.includes("multiple face") ||
-						apiLower.includes("no face detected") ||
-						apiLower.includes("face not recognized") ||
-						apiLower.includes("biometric") ||
-						apiLower.includes("face quality") ||
-						apiLower.includes("face is not central") ||
-						apiLower.includes("not central") ||
-						apiMessage.includes("LIVENESS") ||
-						apiLower.includes("liveness") ||
-						(!!apiCode && (apiCode === "ERR_LIVENESS_FAILED" || apiCode.includes("FACE_"))));
-
-				if (isBiometricError && this.biometricVerification) {
-					this.biometricVerification.handleApiError(error);
-					return;
-				}
-
-				// Re-enable the form
-				this.signInForm.enable();
-
-				// Reset the form
-				this.signInNgForm.resetForm();
-
-				// Hide biometric verification
-				this.showBiometricVerification = false;
-
-				// Get translated error message
-				const errorMessage = this.getErrorMessage(error);
-
-				// Set the alert with translated message
-				this.alert = {
-					type: "error",
-					message: errorMessage,
-				};
-
-				// Show the alert
-				this.showAlert = true;
+		attemptDashboardSignIn(signInData, {
+			signIn: (credentials) => this._authService.signIn(credentials),
+			signInStaff: (credentials) => this._authService.signInStaff(credentials),
+		}).then((outcome) => {
+			if (outcome.kind === "success") {
+				void this._finishSignIn(outcome.response);
+				return;
 			}
-		);
+
+			if (outcome.kind === "biometric") {
+				this.signInForm.enable();
+				this.biometricVerification?.handleApiError(outcome.error);
+				return;
+			}
+
+			if (outcome.kind === "recapture") {
+				this.signInForm.enable();
+				const message = this._translocoService.translate(SIGN_IN_RECAPTURE_KEY);
+				this.alert = { type: "error", message };
+				this.showAlert = true;
+				this.showBiometricVerification = true;
+				this.biometricVerification?.handleApiError({ error: { message } });
+				return;
+			}
+
+			this.signInForm.enable();
+			this.signInNgForm.resetForm();
+			this.showBiometricVerification = false;
+			this.alert = {
+				type: "error",
+				message:
+					outcome.kind === "generic"
+						? this._translocoService.translate(SIGN_IN_GENERIC_ERROR_KEY)
+						: this.getErrorMessage(outcome.error),
+			};
+			this.showAlert = true;
+		});
+	}
+
+	/**
+	 * Store the session from either client auth (`zelfAccount`) or staff auth (`staffAccount`).
+	 */
+	private async _finishSignIn(response: any): Promise<void> {
+		const account = response?.data?.zelfAccount || response?.data?.staffAccount;
+
+		if (response?.data?.token && response?.data?.zelfProof && account) {
+			this._authService.setSession({
+				zelfProof: response.data.zelfProof,
+				zelfAccount: account,
+			});
+			this._authService.setAccessToken(response.data.token);
+
+			if (response.data?.wallet) {
+				AuthStorage.setItem("wallet", JSON.stringify(response.data.wallet));
+			}
+
+			const identifier = this._getCurrentIdentifier();
+			const password = this.signInForm.get("masterPassword")?.value;
+
+			if (identifier && password) {
+				const hasPasskey = await this._passkeyService.getPasskeyMetadata(identifier);
+				if (!hasPasskey) {
+					this.showPasskeyPrompt = true;
+				} else {
+					this._router.navigateByUrl("/analytics");
+				}
+			} else {
+				this._router.navigateByUrl("/analytics");
+			}
+			return;
+		}
+
+		console.error("Sign in response missing required authentication data:", response);
+		this.alert = {
+			type: "error",
+			message: this.getErrorMessage({ message: "Incomplete authentication data received" }),
+		};
+		this.showAlert = true;
+		this.signInForm.enable();
+		this.showBiometricVerification = false;
 	}
 
 	/**
@@ -564,9 +455,11 @@ export class AuthSignInComponent implements OnInit {
 
 		// Map error codes to translation keys
 		const errorMapping: { [key: string]: string } = {
-			client_not_found: "errors.client_not_found",
+			client_not_found: SIGN_IN_GENERIC_ERROR_KEY,
+			staff_not_found: SIGN_IN_GENERIC_ERROR_KEY,
+			CLIENT_NOT_FOUND: SIGN_IN_GENERIC_ERROR_KEY,
 			client_invalid_api_key: "errors.client_invalid_api_key",
-			"403:client_not_found": "errors.client_not_found",
+			"403:client_not_found": SIGN_IN_GENERIC_ERROR_KEY,
 			"403:client_invalid_api_key": "errors.client_invalid_api_key",
 			Forbidden: "errors.unknown_error", // Generic 403 error
 			Conflict: "errors.unknown_error", // Generic 409 error
@@ -581,14 +474,17 @@ export class AuthSignInComponent implements OnInit {
 
 		// Check if it's a specific error message that contains our error codes
 		if (errorMessage) {
-			if (errorMessage.includes("client_not_found")) {
-				return this._translocoService.translate("errors.client_not_found");
+			if (
+				errorMessage.includes("client_not_found") ||
+				errorMessage.includes("staff_not_found") ||
+				errorMessage.includes("CLIENT_NOT_FOUND") ||
+				errorMessage.toUpperCase().includes("THE PROVIDED PASSWORD IS INVALID") ||
+				errorMessage.includes("error_decrypting")
+			) {
+				return this._translocoService.translate(SIGN_IN_GENERIC_ERROR_KEY);
 			}
 			if (errorMessage.includes("client_invalid_api_key")) {
 				return this._translocoService.translate("errors.client_invalid_api_key");
-			}
-			if (errorMessage.toUpperCase().includes("THE PROVIDED PASSWORD IS INVALID")) {
-				return this._translocoService.translate("errors.invalid_password");
 			}
 			if (errorMessage.includes("Incomplete authentication data received")) {
 				return this._translocoService.translate("errors.incomplete_auth_data");

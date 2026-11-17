@@ -59,6 +59,8 @@
         "phone_already_exists": "此电话号码已注册。请使用不同的电话号码或尝试登录。",
         "email_already_exists": "此电子邮件地址已注册。请使用不同的电子邮件或尝试登录。",
         "client_not_found": "未找到使用提供的凭据的账户。请检查您的信息并重试。",
+        "could_not_sign_in": "无法登录。请检查您的信息后重试。",
+        "sign_in_capture_face_again": "请重新拍摄面部以继续登录。",
         "client_invalid_api_key": "无效的API密钥。请联系支持。",
         "unknown_error": "出现错误，请重试。",
         "network_error": "网络错误。请检查您的连接并重试。",

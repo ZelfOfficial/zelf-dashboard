@@ -59,6 +59,8 @@
         "phone_already_exists": "Este número de teléfono ya está registrado. Por favor usa un número diferente o intenta iniciar sesión.",
         "email_already_exists": "Esta dirección de email ya está registrada. Por favor usa un email diferente o intenta iniciar sesión.",
         "client_not_found": "No se encontró ninguna cuenta con las credenciales proporcionadas. Por favor verifica tu información e intenta de nuevo.",
+        "could_not_sign_in": "No se pudo iniciar sesión. Revisa tus datos e inténtalo de nuevo.",
+        "sign_in_capture_face_again": "Vuelve a capturar tu rostro para continuar con el inicio de sesión.",
         "client_invalid_api_key": "Clave API inválida. Por favor contacta soporte.",
         "unknown_error": "Algo salió mal, por favor intenta de nuevo.",
         "network_error": "Error de red. Por favor verifica tu conexión e intenta de nuevo.",

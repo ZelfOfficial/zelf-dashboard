@@ -1,12 +1,19 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { AuthStorage } from "app/core/auth/auth-storage";
+import { firstValueFrom } from "rxjs";
 import { HttpWrapperService } from "../../http-wrapper.service";
 import { environment } from "environments/environment";
+import { clientLookupHeaders } from "./client-lookup";
 
 @Injectable({
 	providedIn: "root",
 })
 export class ClientService {
-	constructor(private _httpWrapper: HttpWrapperService) {}
+	constructor(
+		private _httpWrapper: HttpWrapperService,
+		private _http: HttpClient
+	) {}
 
 	/**
 	 * Update client profile
@@ -17,11 +24,16 @@ export class ClientService {
 	}
 
 	/**
-	 * Get client profile by email
+	 * Get client profile by email. Requires the signed-in session JWT.
 	 */
 	async getProfile(email: string): Promise<any> {
-		const url = `${environment.apiUrl}/api/clients?email=${email}`;
+		const url = `${environment.apiUrl}/api/clients`;
 
-		return this._httpWrapper.sendRequest("get", url);
+		return firstValueFrom(
+			this._http.get(url, {
+				params: { email },
+				headers: clientLookupHeaders(AuthStorage.getItem("accessToken")),
+			})
+		);
 	}
 }
